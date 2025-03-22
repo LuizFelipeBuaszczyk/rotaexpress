@@ -4,7 +4,7 @@ CREATE TABLE User (
     id_user nvarchar(32) PRIMARY KEY,
     name nvarchar(50),
     cpf nvarchar(14) UNIQUE,
-    password nvarchar(50),
+    password nvarchar(200),
     email nvarchar(100),
     phone_number nvarchar(20)
 );
