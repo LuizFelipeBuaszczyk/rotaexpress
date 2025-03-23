@@ -1,11 +1,12 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #e4d1aa; /* Fundo neutro */
+    background-color: #ffffff; /* Fundo neutro */
+    overflow-x: hidden;
 }
 .container {
     text-align: center;
@@ -18,12 +19,104 @@ body {
     border: 2px solid #8B7D70;
 }
 
-.saudacao {
-    font-size: 1.5em;
-    color: #60041A;
-    margin-top: 10px;
+
+
+
+
+.navigation {
+    position: fixed; /* Torna a navegação fixa no topo da página */
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    padding: 15px 40px;
+    color: rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Garante que o conteúdo fique à esquerda */
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Garante que a navegação fique sobre outros elementos */
 }
 
+.navigation img {
+    height: 40px;
+    margin-right: 15px;
+}
+
+.navigation h1 {
+    margin: 0;
+    font-size: 1.7em;
+    font-family: 'Roboto', sans-serif;
+    margin-right: 50px; /* Adiciona espaço entre o título e o link */
+}
+
+.sign_up {
+    text-decoration: none;
+    color: white; /* Cor do texto em branco */
+    font-size: 1.5em;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    position: relative;
+    margin-left: auto; /* Empurra o "Sign Up" para a direita */
+    margin-right: 60px; /* Ajusta um pouco para a esquerda */
+    white-space: nowrap; /* Impede que o texto quebre em múltiplas linhas */
+    border: 2px solid #ea4c89; /* Adiciona a borda */
+    border-radius: 5px; /* Torna as bordas arredondadas */
+    padding: 5px 10px; /* Adiciona um pouco de preenchimento ao redor do texto */
+    background-color: #ea4c89; /* Preenche o fundo com a cor da borda */
+}
+
+.sign_up:hover {
+    color: white; /* Cor do texto permanece branca */
+    cursor: pointer;
+    border-color: #60041A; /* Muda a cor da borda ao passar o mouse */
+    background-color: #60041A; /* Muda a cor do fundo ao passar o mouse */
+}
+
+.sign_in {
+    text-decoration: none;
+    color: rgb(231, 11, 11); /* Cor do texto */
+    font-size: 1.5em;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    position: relative;
+    white-space: nowrap; /* Impede que o texto quebre em múltiplas linhas */
+    margin-right: 10px; /* Ajusta a distância entre o "Sign In" e o "Sign Up" */
+    margin-left: 1980px; /* Empurra o "Sign In" um pouco para a esquerda */
+}
+
+.sign_in:hover {
+    color: #60041A; /* Cor do texto permanece branca */
+    cursor: pointer;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: rgb(110, 109, 122);
+    font-size: 1em;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    position: relative;
+    top: 3px; /* Alinha o link com o título */
+    white-space: nowrap;
+}
+
+.nav-link:hover {
+    color: #60041A;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+.saudacao {
+    font-size: 1.5em;
+    color: #ffffff;
+    margin-top: 10px;
+}
 
 h1 {
     color: #331F19;
