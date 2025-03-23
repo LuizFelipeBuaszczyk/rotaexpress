@@ -90,10 +90,11 @@ body {
     left: -25px;  /* Move a lupa 20px para a esquerda */
 }
 .sign_in {
+    font-family: 'Roboto', sans-serif;
     text-decoration: none;
-    color: rgb(231, 11, 11);
-    font-size: 1.5em;
-    font-weight: bold;
+    color: #6E6D7A;
+    font-size: 1.4em;
+    font-weight: 500;
     transition: color 0.3s ease;
     white-space: nowrap;
     display: flex;
@@ -127,30 +128,3 @@ body {
 }
 
 
-.saudacao {
-    font-size: 1.5em;
-    color: #ffffff;
-    margin-top: 10px;
-}
-
-h1 {
-    color: #331F19;
-}
-p {
-    color: #331F19;
-    font-size: 1.1em;
-}
-button {
-    background-color: #60041A;
-    color: #F4F0EA;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-}
-button:hover {
-    background-color: #A34743;
-}
