@@ -32,62 +32,28 @@ body {
     padding: 15px 40px;
     color: rgb(0, 0, 0);
     display: flex;
+    justify-content: space-between; /* Garante que os dois grupos de itens fiquem nas extremidades */
     align-items: center;
-    justify-content: flex-start; /* Garante que o conteúdo fique à esquerda */
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
     z-index: 1000; /* Garante que a navegação fique sobre outros elementos */
+    box-sizing: border-box; /* Certifica-se de que o padding não vai afetar o layout */
+}
+
+.navigation .left-section {
+    display: flex;
+    align-items: center;
 }
 
 .navigation img {
     height: 40px;
-    margin-right: 15px;
+    margin-right: 15px; /* Distância entre a imagem e o título */
 }
 
 .navigation h1 {
     margin: 0;
     font-size: 1.7em;
     font-family: 'Roboto', sans-serif;
-    margin-right: 50px; /* Adiciona espaço entre o título e o link */
-}
-
-.sign_up {
-    text-decoration: none;
-    color: white; /* Cor do texto em branco */
-    font-size: 1.5em;
-    font-weight: bold;
-    transition: color 0.3s ease;
-    position: relative;
-    margin-left: auto; /* Empurra o "Sign Up" para a direita */
-    margin-right: 60px; /* Ajusta um pouco para a esquerda */
-    white-space: nowrap; /* Impede que o texto quebre em múltiplas linhas */
-    border: 2px solid #ea4c89; /* Adiciona a borda */
-    border-radius: 5px; /* Torna as bordas arredondadas */
-    padding: 5px 10px; /* Adiciona um pouco de preenchimento ao redor do texto */
-    background-color: #ea4c89; /* Preenche o fundo com a cor da borda */
-}
-
-.sign_up:hover {
-    color: white; /* Cor do texto permanece branca */
-    cursor: pointer;
-    border-color: #60041A; /* Muda a cor da borda ao passar o mouse */
-    background-color: #60041A; /* Muda a cor do fundo ao passar o mouse */
-}
-
-.sign_in {
-    text-decoration: none;
-    color: rgb(231, 11, 11); /* Cor do texto */
-    font-size: 1.5em;
-    font-weight: bold;
-    transition: color 0.3s ease;
-    position: relative;
-    white-space: nowrap; /* Impede que o texto quebre em múltiplas linhas */
-    margin-right: 10px; /* Ajusta a distância entre o "Sign In" e o "Sign Up" */
-    margin-left: 1980px; /* Empurra o "Sign In" um pouco para a esquerda */
-}
-
-.sign_in:hover {
-    color: #60041A; /* Cor do texto permanece branca */
-    cursor: pointer;
+    margin-right: 50px; /* Distância entre o título e o link "Sobre nós" */
 }
 
 .nav-link {
@@ -106,10 +72,59 @@ body {
     cursor: pointer;
 }
 
+.right-section {
+    display: flex;
+    align-items: center;
+}
 
+.lupa {
+    background-image: url('icone-loupe-gris.png');
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    display: block;
+    cursor: pointer; /* Faz com que o cursor mude ao passar em cima */
+    position: relative;  /* Definir a posição em relação ao elemento pai */
+    left: -25px;  /* Move a lupa 20px para a esquerda */
+}
+.sign_in {
+    text-decoration: none;
+    color: rgb(231, 11, 11);
+    font-size: 1.5em;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
 
+.sign_in:hover {
+    color: #60041A;
+    cursor: pointer;
+}
 
+.sign_up {
+    text-decoration: none;
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    border: 2px solid #ea4c89;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: #ea4c89;
+    margin-left: 20px;
+}
 
+.sign_up:hover {
+    color: white;
+    cursor: pointer;
+    border-color: #60041A;
+    background-color: #60041A;
+}
 
 
 .saudacao {
