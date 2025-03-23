@@ -15,4 +15,16 @@ async function createFirm(firmData) {
     return await firmRepository.create(firmData);
 }
 
-module.exports = { createFirm }
+async function getFirmByIDUser(id_user) {
+    
+    //Regras de negocio
+
+
+    
+    return await firmRepository.findByIdUser(id_user);
+}
+
+module.exports = { 
+    createFirm,
+    getFirmByIDUser
+ }

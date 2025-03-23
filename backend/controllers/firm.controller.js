@@ -10,5 +10,17 @@ async function createFirm(req, res) {
     }    
 }
 
+async function getFirmByIDUser(req, res){
+    try{
+        const firms = await firmService.getFirmByIDUser(req.params.id_user);
+        return res.json(firms);
+    }catch (error){
+        return res.status(500).json({error: error.message});
+    }
+}
 
-module.exports = { createFirm } 
+
+module.exports = { 
+    createFirm,
+    getFirmByIDUser 
+} 
