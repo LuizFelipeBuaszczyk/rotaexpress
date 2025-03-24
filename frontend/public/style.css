@@ -1,13 +1,17 @@
+/* Definir o estilo do body para garantir a rolagem */
 body {
     font-family: 'Roboto', sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    flex-direction: column; /* Empilha os elementos verticalmente */
+    justify-content: flex-start; /* Garante que o conteúdo vá para o topo */
+    min-height: 100vh; /* Faz com que o body ocupe toda a altura da tela */
     margin: 0;
-    background-color: #ffffff; /* Fundo neutro */
+    background-color: #ffffff;
     overflow-x: hidden;
+    overflow-y: auto; /* Permite rolagem vertical */
 }
+
+/* Container de conteúdo */
 .container {
     text-align: center;
     background-color: #CBBBA7;
@@ -17,12 +21,11 @@ body {
     width: 90%;
     max-width: 600px;
     border: 2px solid #8B7D70;
+    margin-bottom: 20px;
+     flex-grow: 1;
 }
 
-
-
-
-
+/* Estilo para a barra de navegação fixa */
 .navigation {
     position: fixed; /* Torna a navegação fixa no topo da página */
     top: 0;
@@ -32,13 +35,14 @@ body {
     padding: 15px 40px;
     color: rgb(0, 0, 0);
     display: flex;
-    justify-content: space-between; /* Garante que os dois grupos de itens fiquem nas extremidades */
+    justify-content: space-between;
     align-items: center;
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Garante que a navegação fique sobre outros elementos */
-    box-sizing: border-box; /* Certifica-se de que o padding não vai afetar o layout */
+    z-index: 1000;
+    box-sizing: border-box;
 }
 
+/* Estilo da seção da esquerda da navegação */
 .navigation .left-section {
     display: flex;
     align-items: center;
@@ -46,14 +50,14 @@ body {
 
 .navigation img {
     height: 40px;
-    margin-right: 15px; /* Distância entre a imagem e o título */
+    margin-right: 15px;
 }
 
 .navigation h1 {
     margin: 0;
     font-size: 1.7em;
     font-family: 'Roboto', sans-serif;
-    margin-right: 50px; /* Distância entre o título e o link "Sobre nós" */
+    margin-right: 50px;
 }
 
 .nav-link {
@@ -63,7 +67,7 @@ body {
     font-weight: bold;
     transition: color 0.3s ease;
     position: relative;
-    top: 3px; /* Alinha o link com o título */
+    top: 3px;
     white-space: nowrap;
 }
 
@@ -85,10 +89,11 @@ body {
     height: 25px;
     margin-right: 10px;
     display: block;
-    cursor: pointer; /* Faz com que o cursor mude ao passar em cima */
-    position: relative;  /* Definir a posição em relação ao elemento pai */
-    left: -25px;  /* Move a lupa 20px para a esquerda */
+    cursor: pointer;
+    position: relative;
+    left: -25px;
 }
+
 .sign_in {
     font-family: 'Roboto', sans-serif;
     text-decoration: none;
@@ -127,4 +132,99 @@ body {
     background-color: #60041A;
 }
 
+/* Ajuste do conteúdo da imagem */
+.imagemPrincipal {
+    background-image: url("imgCaminhao.png");
+    background-size: contain; /* Ajusta a imagem para caber completamente */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 70vh; /* Ajuste da altura para garantir que a imagem seja visível */
+    margin-right: 0;
+    margin-top: 65px; /* Move o elemento inteiro 100px para baixo */
+    display: block;
+    position: relative;
+    z-index: 0;
+}
 
+.textoPrincipal {
+    position:  absolute;
+    font-size: 1.3em;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    color: white;
+    text-align: center;
+    text-justify: auto;
+}
+
+.textoSecundario {
+    position:  absolute;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.8em;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    color: rgb(221, 221, 221);
+    text-align: center;
+    text-justify: auto;
+}
+
+.search-box {
+    position: absolute;
+    top: 65%; /* Coloca a caixa de pesquisa no meio da imagem */
+    left: 50%; /* Coloca a caixa de pesquisa no meio da imagem */
+    transform: translate(-50%, -50%); /* Ajusta a posição para centralizar corretamente */
+    padding: 5px;
+    font-size: 0.7em;
+    width: 30%; /* Define a largura da caixa de pesquisa */
+    height: 5%;
+    max-width: 500px; /* Define a largura máxima */
+    border: 1px solid #ffffff;
+    border-radius: 20px; /* Aumenta o valor para bordas mais arredondadas */
+    background-color: #fff;
+    color: #ffffff;
+    outline: none; 
+}
+
+/* Estilo do footer */
+.footer {
+    display: flex; /* Usando flexbox para alinhar o conteúdo na horizontal */
+    justify-content: flex-start; /* Alinha os itens à esquerda */
+    align-items: center; /* Centraliza os itens verticalmente */
+    width: 100%;
+    height: 50px; /* Ajuste da altura do footer */
+    background-color: #ffffff; /* Cor de fundo para o footer */
+
+}
+
+.footer h1 {
+    font-size: 1.7em;
+    color: #000000;
+    font-family: 'Roboto', sans-serif;
+    margin-right: 15px; /* Adiciona espaço entre o texto e a imagem */
+}
+
+.footer img {
+    height: 40px; /* Ajusta a altura da imagem */
+    margin-top: 0; /* Remove qualquer margem no topo */
+}
+
+.textoFooter {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+    height: 40px;
+    background-color: #ffffff;
+}
+
+.textoFooter p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.7em;
+    white-space: nowrap;
+    margin-top: 10px;
+}
