@@ -1,0 +1,111 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: rgb(255, 232, 206);   
+    color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 1.5rem;
+}
+
+header h1 {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    text-decoration: none;
+    color: rgb(58, 58, 58);
+    font-size: 2em;
+    padding: 0;
+    text-decoration: none;
+}
+
+
+.containerLogo {
+    display: flex;
+    align-items: center;
+    padding-left: 37%;
+}
+
+.containerLogo a {
+
+    font-weight: bold;
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-size: 2.2em;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    position: relative;
+    top: 3px;
+    white-space: nowrap;
+}
+
+.containerLogo img {
+    width: 40px;
+}
+
+
+
+.container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 2rem auto;
+    background-color: white;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h1 {
+    font-family: 'Poppins', sans-serif; /* Aplica a fonte Poppins */
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #000000;
+    text-decoration: underline;
+}
+
+p {
+    
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-family: 'Poppins', sans-serif; /* Aplica a fonte Poppins */
+    font-weight: bold;
+    color: #000000;
+    text-decoration: underline;
+}
+
+.team {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.team-member {
+    width: 30%;
+    text-align: center;
+}
+
+.team-member img {
+    width: 100px;
+    height: 100px;
+    border-radius: 15%;
+    margin-bottom: 1rem;
+    image-rendering: optimizeQuality;
+    border-style: solid;
+}
+
+footer {
+    background-color: rgba(51, 51, 51, 0.5);
+    color: white;
+    text-align: center;
+    padding: 0.3rem;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
