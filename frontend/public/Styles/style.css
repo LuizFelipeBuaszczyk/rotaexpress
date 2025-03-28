@@ -134,7 +134,7 @@ body {
 
 /* Ajuste do conteúdo da imagem */
 .imagemPrincipal {
-    background-image: url("imgCaminhao.png");
+    background-image: url("../images/imgCaminhao.png");
     background-size: contain; /* Ajusta a imagem para caber completamente */
     background-position: center; /* Centraliza a imagem */
     background-repeat: no-repeat;
