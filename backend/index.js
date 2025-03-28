@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const sequelize = require("./bd/db");
 const routes = require("./routes/routes");
-const errorHandler = require("./middlewares/error.handler");
+const errorHandler = require("./utils/error.handler");
 
 const app = express();
 const port = process.env.PORT;

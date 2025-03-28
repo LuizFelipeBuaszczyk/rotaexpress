@@ -22,7 +22,7 @@ body {
     max-width: 600px;
     border: 2px solid #8B7D70;
     margin-bottom: 20px;
-     flex-grow: 1;
+    flex-grow: 1;
 }
 
 /* Estilo para a barra de navegação fixa */
