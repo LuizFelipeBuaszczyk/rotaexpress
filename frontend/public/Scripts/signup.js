@@ -3,8 +3,25 @@ document.getElementById("submitSignUpForm").addEventListener("submit", function(
 });
 
 
+// Valida o formulário do front
 function validateFormData(formData){
 
+    // Valida o campo de nome
+    if(!isFullNameValid(formData.fullName)){
+        return false;
+    }
+
+    // Valida o campo de email
+    if(!isEmailValid(formData.email)){
+        return false;
+    }
+
+    // Valda dos campos de senha
+    if(!isPasswordValid(formData.password, formData.confirm_password)){
+        return false;
+    }
+
+    return true;
 }
 
 // Enviando requisição
@@ -21,7 +38,7 @@ function submitSignUp(event) {
         'name': fullName,
         'email': email,
         'password': password,
-        'confirm-password': confirmPassword    
+        'confirm_password': confirmPassword    
     }
 
     // Validando formulário preenchido
@@ -33,7 +50,7 @@ function submitSignUp(event) {
             'password': password
         }
 
-        fetch('http://localhost:3000/api/users/', {
+        fetch('http://localhost:3000/users/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -65,6 +82,42 @@ function submitSignUp(event) {
 
 // Trando possivel erro de resposta
 function responseAPIError(data){
-    console.log('ERRO: ');
     console.log(data);
+}
+
+// --------------------Mostrar mensagem informando o erro do usuário--------------------
+function isFullNameValid (fullName){
+    if(!fullName){
+        return false;
+    }
+    if (fullName.length < 3) {
+        return false;
+    }
+    if (fullName.length > 50){
+        return false;
+    }
+    return true;
+}
+
+function isEmailValid (email){
+    if(!email){
+        return false;
+    }
+
+    return true;
+}
+
+function isPasswordValid(password, confirmPassword){
+    if (!password || !confirmPassword){
+        return false;
+    }
+
+    if (password.length < 6){
+        return false;
+    }
+
+    if (password !== confirmPassword){
+        return false;
+    }
+    return true;
 }
