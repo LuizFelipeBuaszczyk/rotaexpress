@@ -1,11 +1,11 @@
 const express = require("express");
 const userController = require("../controllers/user.controller");
-const validateUser = require("../middlewares/user.middleware");
-const hashPassword = require("../middlewares/password.hash");
+const hashPassword = require("../utils/password.hash");
+const authMiddleware = require("../middlewares/auth.middleware");
 
 const router = express.Router();
 
-router.post("/", validateUser, hashPassword, userController.createUser);
-router.get("/", userController.getAllUsers);
+router.post("/", authMiddleware, hashPassword, userController.createUser);
+router.get("/", authMiddleware, userController.getAllUsers);
 
 module.exports = router;

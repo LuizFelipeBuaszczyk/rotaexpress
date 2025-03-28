@@ -10,7 +10,7 @@ const createUserSchema = z.object({
   password: z
     .string({ required_error: "O campo password é obrigatório" })
     .min(6)
-    .max(50),
+    .max(200),
 });
 
 module.exports = createUserSchema;
