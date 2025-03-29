@@ -2,15 +2,12 @@
 <html lang="pt-br">
 <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <link rel="stylesheet" href="Styles/signup.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     
     <meta name="description" content="Página de Cadastro - Meu Site" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Sign Up</title>
 </head>
 <body>
@@ -25,24 +22,27 @@
     <div class="signup-container">
 
 
-
         <h2>Cadastre-se</h2>
-        <form action="/submit-signup" method="POST">
+        <form id="submitSignUpForm">
             <div>
                 <label for="fullname">Nome Completo</label>
                 <input type="text" id="fullname" name="fullname" required placeholder="Digite seu nome completo">
+                <label for="fullname" id="errorMessageFullmane" class="errorMessage"></label>
             </div>
             <div>
                 <label for="email">E-mail</label>
                 <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
+                <label for="fullname" id="errorMessageEmail" class="errorMessage"></label>
             </div>
             <div>
                 <label for="password">Senha</label>
                 <input type="password" id="password" name="password" required placeholder="Digite sua senha">
+                <label for="fullname" id="errorMessagePassword" class="errorMessage"></label>
             </div>
             <div>
                 <label for="confirm-password">Repetir Senha</label>
                 <input type="password" id="confirm-password" name="confirm-password" required placeholder="Repita sua senha">
+                <label for="fullname" id="errorMessageConfirmPassword" class="errorMessage"></label>
             </div>
             <button type="submit">Cadastrar</button>
         </form>
@@ -51,10 +51,10 @@
         </div>
 
 
-
     </div>
 
 
 
+    <script src="./Scripts/signup.js" type="module"></script>
 </body>
 </html>
