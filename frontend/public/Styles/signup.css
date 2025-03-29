@@ -51,7 +51,7 @@ body {
     padding: 2rem;
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
     height: 100%;
-    max-height: 500px;
+    max-height: 525px;
     width: 100%;
     max-width: 400px;
     margin: 20px;
@@ -81,7 +81,7 @@ label {
 input {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 3px;
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
@@ -134,4 +134,9 @@ button:hover {
 
 .containerlogo a:hover {
     text-decoration: none;
+}
+
+.errorMessage{
+    min-height: 18px;
+    color: red;
 }

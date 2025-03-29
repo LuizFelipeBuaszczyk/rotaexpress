@@ -81,19 +81,6 @@ body {
     align-items: center;
 }
 
-.lupa {
-    background-image: url('icone-loupe-gris.png');
-    background-size: 25px 25px;
-    background-repeat: no-repeat;
-    width: 25px;
-    height: 25px;
-    margin-right: 10px;
-    display: block;
-    cursor: pointer;
-    position: relative;
-    left: -25px;
-}
-
 .sign_in {
     font-family: 'Roboto', sans-serif;
     text-decoration: none;
