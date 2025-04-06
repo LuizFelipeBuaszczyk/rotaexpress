@@ -1,9 +1,11 @@
 const firmRepository = require("../repositories/firm.repository");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 
-async function createFirm(firmData) {
-    
-    const existsFirmWithName = await firmRepository.findNameById(firmData.fk_id_user, firmData.name);
+async function createFirm(firmData, userData) {
+    const existsFirmWithName = await firmRepository.findNameById(userData.id_user, firmData.name);
     
     //Validações
     if (existsFirmWithName){
@@ -12,6 +14,7 @@ async function createFirm(firmData) {
         throw error;
     }
 
+    firmData.fk_id_user = userData.id_user;
     return await firmRepository.create(firmData);
 }
 
