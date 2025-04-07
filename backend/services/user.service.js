@@ -1,9 +1,9 @@
 const userRepository = require("../repositories/user.repository");
 
-async function getAllUsers() {
-  return await userRepository.findAll();
+async function getUserById(id_user) {
+  return await userRepository.findByUserId(id_user);
 }
 
 module.exports = {
-  getAllUsers,
+  getUserById,
 };

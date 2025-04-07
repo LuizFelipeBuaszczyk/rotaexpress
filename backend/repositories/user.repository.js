@@ -16,9 +16,14 @@ async function findByCPF(cpf) {
   return await User.findOne({ where: { cpf } });
 }
 
+async function findByUserId(id_user) {
+  return await User.findOne({ where: { id_user } });
+}
+
 module.exports = {
   findAll,
   create,
   findByEmail,
   findByCPF,
+  findByUserId,
 };
