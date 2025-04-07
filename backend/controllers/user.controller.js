@@ -9,13 +9,13 @@ async function createUser(req, res, next) {
   }
 }
 
-async function getAllUsers(req, res) {
+async function getUserById(req, res) {
   try {
-    const users = await userService.getAllUsers();
+    const users = await userService.getUserById(req.user.id_user);
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
 
-module.exports = { createUser, getAllUsers };
+module.exports = { createUser, getUserById };
