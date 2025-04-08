@@ -71,10 +71,9 @@ function submitSignUp(event) {
                 }
                 
             })
-            .then(data => {
-                // Processar dados recebidos
-                // e realizar login
-                console.log(data);
+            .then(data => { // Inutil??
+                alert('Conta cadastrada!')
+                window.location.href="../signin.html";
             })
             .catch(error => {
                 // Trata os erros
