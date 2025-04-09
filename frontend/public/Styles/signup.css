@@ -1,3 +1,5 @@
+@import url('root.css');
+
 /* Reset de estilo básico para garantir consistência entre os navegadores */
 * {
     margin: 0;

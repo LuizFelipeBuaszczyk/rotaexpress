@@ -1,3 +1,5 @@
+@import url('root.css');
+
 /* Reset de estilo básico para garantir consistência entre os navegadores */
 * {
     margin: 0;
@@ -17,7 +19,7 @@ body {
 }
 
 .containerlogo {
-    background-color: rgb(255, 232, 206);
+    background-color: var(--cor-bege);
     padding: 1rem;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     width: 100%;
