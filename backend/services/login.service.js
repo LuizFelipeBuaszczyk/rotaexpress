@@ -7,13 +7,22 @@ async function login(userData) {
   const user = await userRepository.findByEmail(userData.email);
 
   if (!user || !(await bcrypt.compare(userData.password, user.password))) {
-    return res.status(401).json({ message: "Credenciais inválidas" });
+    const error = new Error("Credenciais inválidas");
+    error.statusCode = 401;
+    throw error;
   }
 
   const token = jwt.sign({ id_user: user.id_user }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
-  return { token, user };
+
+  const refreshToken = jwt.sign(
+    { id_user: user.id_user },
+    process.env.JWT_REFRESH_SECRET,
+    { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN }
+  );
+
+  return { token, refreshToken, user };
 }
 
 module.exports = { login };
