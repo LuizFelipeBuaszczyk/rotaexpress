@@ -3,8 +3,12 @@ const cors = require("cors");
 const sequelize = require("./bd/db");
 const routes = require("./routes/routes");
 const errorHandler = require("./utils/error.handler");
+const cookieParser = require('cookie-parser');
 
 const app = express();
+
+app.use(cookieParser());
+
 const port = process.env.PORT;
 
 app.use(cors());

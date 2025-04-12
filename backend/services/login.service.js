@@ -22,7 +22,7 @@ async function login(userData) {
     { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN }
   );
 
-  return { token, refreshToken, user };
+  return { token, refreshToken };
 }
 
 module.exports = { login };
