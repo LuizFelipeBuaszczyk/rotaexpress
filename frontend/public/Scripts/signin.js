@@ -1,3 +1,18 @@
+window.onload = () => {
+    // Verificar se o usuário tem cookies salvos e ainda estão acessiveis para logar
+    fetch('api/login/check', {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.login)
+        if(data.login) {
+            window.location.href="../perfil.html";
+        }
+    })
+}
+
 document.getElementById("submitSignIn").addEventListener("submit", function(event){
     submitSignIn(event);
 });
@@ -28,13 +43,9 @@ function submitSignIn(event){
             case 4: // Caso tiver algum erro ele pula direto para o .catch
                 return response.json().then(err => Promise.reject(err))
             default:
-                return response.json(); 
+                window.location.href="../perfil.html"
+
         }
-    })
-    .then(data => {
-        // Possivelmente haverá mudança -- Pega o token e armazena em um token
-        document.cookie = `authToken=${data.token}; path=/`
-        window.location.href="../perfil.html"
     })
     .catch(error => {
         //Tratar erros
