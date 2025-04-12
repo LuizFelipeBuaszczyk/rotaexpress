@@ -142,3 +142,8 @@ button:hover {
 .containerlogo a:hover {
     text-decoration: none;
 }
+
+#errorResponse {
+    min-height: 18px;
+    color: red;
+}

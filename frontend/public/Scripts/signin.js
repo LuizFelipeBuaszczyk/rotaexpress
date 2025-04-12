@@ -4,6 +4,7 @@ document.getElementById("submitSignIn").addEventListener("submit", function(even
 
 function submitSignIn(event){
     event.preventDefault();
+    document.getElementById("errorResponse").innerHTML = ``;
 
     let form = new FormData(event.target);
 
@@ -11,6 +12,7 @@ function submitSignIn(event){
         'email': form.get("email"),
         'password': form.get("password")
     }
+
 
     fetch('/api/login/', {
         method: 'POST',
@@ -22,7 +24,7 @@ function submitSignIn(event){
     .then(response => {
         const status_code = response.status;
 
-        switch (status_code / 100) {
+        switch (Math.floor(status_code / 100)) {
             case 4: // Caso tiver algum erro ele pula direto para o .catch
                 return response.json().then(err => Promise.reject(err))
             default:
@@ -43,5 +45,7 @@ function submitSignIn(event){
 
 // Tratando erros de resposta da API
 function responseAPIError(error){
-    alert('Deu pau.')
+    const messageError = document.getElementById("errorResponse");
+
+    messageError.innerHTML = `<p>${error.error}</p>`;
 }

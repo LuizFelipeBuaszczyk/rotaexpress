@@ -63,7 +63,7 @@ function submitSignUp(event) {
                 // Resgatar resposta da API
                 const status_code = response.status;
 
-                switch (status_code / 100) {
+                switch (Math.floor(status_code / 100)) {
                     case 4: // Caso tiver algum erro ele pula direto para o .catch
                         return response.json().then(err => Promise.reject(err))
                     default:
