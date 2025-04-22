@@ -12,6 +12,5 @@ describe('CreateUser', () => {
 
         response = await request(app).post('/register/').send(user);
 
-        console.log(response.body);
     })
 })

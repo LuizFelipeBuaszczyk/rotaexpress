@@ -8,7 +8,7 @@ window.onload = () => {
     .then(data => {
         console.log(data.login)
         if(data.login) {
-            window.location.href="../perfil.html";
+            window.location.href="../panel.html";
         }
     })
 }

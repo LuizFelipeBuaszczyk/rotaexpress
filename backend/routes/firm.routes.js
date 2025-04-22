@@ -7,6 +7,7 @@ const validateFirmBody = require("../middlewares/firm.middleware")
 const router = express.Router();
 
 router.post("/", authMiddleware, validateFirmBody, firmController.createFirm);
+router.put("/", authMiddleware);//Tem que ser feito
 router.get("/", authMiddleware, firmController.getFirmByIDUser);
 
 module.exports = router;
