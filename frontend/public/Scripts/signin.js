@@ -43,7 +43,7 @@ function submitSignIn(event){
             case 4: // Caso tiver algum erro ele pula direto para o .catch
                 return response.json().then(err => Promise.reject(err))
             default:
-                window.location.href="../perfil.html"
+                window.location.href="../panel.html"
 
         }
     })

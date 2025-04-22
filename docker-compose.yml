@@ -7,6 +7,18 @@ services:
      - ./backend/.env
     networks:
       - net-rotaexpress
+  
+  test:
+    container_name: backend-test
+    build: ./backend
+    env_file:
+     - ./backend/tests/.env.test
+    networks:
+      - net-rotaexpress
+    profiles:
+      - test
+    command: npm run test  
+
   nginx:
     container_name: nginx
     build: ./nginx

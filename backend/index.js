@@ -24,6 +24,11 @@ sequelize
   .then(() => console.log("Conectado ao PostgreSQL com sucesso!"))
   .catch((err) => console.error("Erro ao conectar:", err));
 
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
-});
+// Verifica se foi iniciado com o comando node index 
+if(require.main === module){
+  app.listen(port, () => {
+    console.log(`Servidor rodando na porta ${port}`);
+  });
+}
+
+module.exports = app;
