@@ -28,6 +28,7 @@ function validateFormData(formData){
 
 // Enviando requisição
 function submitSignUp(event) {
+    
     event.preventDefault();
 
     let form = new FormData(event.target);
@@ -84,6 +85,7 @@ function submitSignUp(event) {
 
 // Trando possivel erro de resposta -- Se chegar nessa parte, algo de errado não esta certo
 function responseAPIError(data){
+
     let errorMessage = data.error;
     alert(errorMessage)
 
@@ -97,6 +99,7 @@ function responseAPIError(data){
 
 // --------------------Mostrar mensagem informando o erro do usuário--------------------
 function isFullNameValid (fullName){
+
     if(!fullName){
         document.getElementById('errorMessageFullmane').innerHTML = `<label for="fullname" id="errorMessageFullmane" class="errorMessage">Preencha com seu nome.</label>`
         return false;
@@ -113,6 +116,7 @@ function isFullNameValid (fullName){
 }
 
 function isEmailValid (email){
+
     if(!email){
         document.getElementById('errorMessageEmail').innerHTML = `<label for="fullname" id="errorMessageFullmane" class="errorMessage">Preencha com seu email.</label>`
         return false;
@@ -122,6 +126,7 @@ function isEmailValid (email){
 }
 
 function isPasswordValid(password, confirmPassword){
+
     if (!password || !confirmPassword){
         document.getElementById('errorMessagePassword').innerHTML = `<label for="fullname" id="errorMessagePassword" class="errorMessage">Preencha os dois campos de senha.</label>`
         return false;

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Perfil</title>
+    <link rel="stylesheet" href="Styles/profile.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Barra lateral -->
+        <div class="sidebar">
+            <div class="profile">
+        
+                <h2>Nome da Pessoa</h2>
+            </div>
+            <ul class="menu">
+                <li><a href="panel.html">Home</a></li>
+                <li><a href="">Minha Conta</a></li>
+                <li><a href="#">Empresa</a></li>
+                <li><a href="#">Configurações</a></li>
+                <li><a href="#">Notificações</a></li>
+                <li><a href="#">Sair</a></li>
+            </ul>
+        </div>
+        <!-- Conteúdo principal -->
+        <div class="main-content">
+            <div id="perfil">
+                <div id="perfil-image">
+                    <img src="./images/avatar.png" alt="imagem de perfil anonima" width="120px" height="120px">
+                    <h1>Nome do Individuo</h1>
+                </div>
+                <form id="user-data">
+
+                    <div class="user-fields"> <!-- Criando os campos -->
+                        <label for="name">Nome</label>
+                        <input type="text" id="name" name="name" readonly>
+                    </div>
+
+                    <div class="user-fields"> 
+                        <label for="email">Email</label>
+                        <input type="text" id="email" name="email" readonly>
+                    </div>
+
+                    <div class="user-fields"> 
+                        <label for="cpf">CPF</label>
+                        <input type="text" id="cpf" name="cpf" readonly>
+                    </div>
+
+                    <div class="user-fields"> 
+                        <label for="number">Telefone</label>
+                        <input type="text" id="number" name="number" readonly>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
