@@ -7,8 +7,15 @@ const createRouteSchema = z.object({
     .max(14)
     .nonempty(),
   firm_name: z
-    .string({ required_error: "O campo id_firm é obrigatório" })
+    .string({ required_error: "O campo firm_name é obrigatório" })
     .nonempty(),
+  date: z
+    .string({ required_error: "O campo date é obrigatório (YYYY-MM-DD)" })
+    .transform((val) => new Date(val))
+    .refine((val) => !isNaN(val.getTime()), {
+      message: "O formato da data deve ser YYYY-MM-DD",
+    }),
+  description: z.string().nullable(),
 });
 
 module.exports = createRouteSchema;

@@ -12,6 +12,14 @@ const Route = sequelize.define("routes", {
     type: DataTypes.STRING(14),
     allowNull: false,
   },
+  date: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING(200),
+    allowNull: true,
+  },
 });
 
 Route.belongsTo(Firm, { foreignKey: "fk_id_firm" });

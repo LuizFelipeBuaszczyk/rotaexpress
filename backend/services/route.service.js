@@ -33,8 +33,30 @@ async function getRoutes(id_user) {
   return await routeRepository.findRoutes(id_user);
 }
 
+async function updateRoutes(newData, routeId, id_user) {
+  const updatedRoute = await routeRepository.updateRoutes(
+    newData,
+    routeId,
+    id_user
+  );
+  if (updatedRoute) return updatedRoute;
+  const error = new Error("Rota não encontrada");
+  error.statusCode = 404;
+  throw error;
+}
+
+async function deleteRoutes(routeId, id_user) {
+  const route = await routeRepository.deleteRoutes(routeId, id_user);
+  if (route) return true;
+  const error = new Error("Rota não encontrada");
+  error.statusCode = 404;
+  throw error;
+}
+
 module.exports = {
   createRoute,
   getRouteByFirm,
   getRoutes,
+  updateRoutes,
+  deleteRoutes,
 };

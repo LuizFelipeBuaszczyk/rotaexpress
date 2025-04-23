@@ -1,4 +1,5 @@
 const routeService = require("../services/route.service");
+const ParamsSchema = require("../validators/uuidparam.validator");
 
 async function createRoute(req, res, next) {
   try {
@@ -24,4 +25,27 @@ async function getRoutes(req, res, next) {
   }
 }
 
-module.exports = { createRoute, getRoutes };
+async function updateRoutes(req, res, next) {
+  try {
+    const updateData = req.body;
+    const { id } = ParamsSchema.parse(req.params);
+    const { id_user } = req.user;
+    const newData = await routeService.updateRoutes(updateData, id, id_user);
+    res.json(newData);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function deleteRoutes(req, res, next) {
+  try {
+    const { id } = ParamsSchema.parse(req.params);
+    const { id_user } = req.user;
+    await routeService.deleteRoutes(id, id_user);
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { createRoute, getRoutes, updateRoutes, deleteRoutes };
