@@ -64,7 +64,7 @@
     align-items: center;
     flex: 1;
     padding: 20px;
-    background-color: white;
+    background-color: #ecf0f1;
     overflow-y: auto;
 }
 
@@ -82,6 +82,7 @@
     border: 1px solid black;
     border-radius: 20px;
     padding: 20px;
+    background-color: white;
 
 }
 
