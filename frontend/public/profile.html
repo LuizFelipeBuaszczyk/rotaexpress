@@ -30,29 +30,32 @@
                     <img src="./images/avatar.png" alt="imagem de perfil anonima" width="120px" height="120px">
                     <h1>Nome do Individuo</h1>
                 </div>
-                <form id="user-data">
+                <section id="user-data">
 
-                    <div class="user-fields"> <!-- Criando os campos -->
-                        <label for="name">Nome</label>
-                        <input type="text" id="name" name="name" readonly>
-                    </div>
+                    <form>
+                        <div class="user-fields"> <!-- Criando os campos -->
+                            <label for="name">Nome</label>
+                            <input type="text" id="name" name="name" readonly>
+                        </div>
+                        <div class="user-fields">
+                            <label for="email">Email</label>
+                            <input type="text" id="email" name="email" readonly>
+                        </div>
+                        <div class="user-fields">
+                            <label for="cpf">CPF</label>
+                            <input type="text" id="cpf" name="cpf" readonly>
+                        </div>
+                        <div class="user-fields">
+                            <label for="number">Telefone</label>
+                            <input type="text" id="number" name="number" readonly>
+                        </div>
+                    </form>
 
-                    <div class="user-fields"> 
-                        <label for="email">Email</label>
-                        <input type="text" id="email" name="email" readonly>
-                    </div>
-
-                    <div class="user-fields"> 
-                        <label for="cpf">CPF</label>
-                        <input type="text" id="cpf" name="cpf" readonly>
-                    </div>
-
-                    <div class="user-fields"> 
-                        <label for="number">Telefone</label>
-                        <input type="text" id="number" name="number" readonly>
-                    </div>
-
-                </form>
+                    <nav>
+                        <button id="edit-button"><strong>Editar</strong></button>
+                        <button id="delete-button"><strong>Excluir</strong></button>
+                    </nav>
+                </section>
             </div>
         </div>
     </div>
