@@ -6,6 +6,8 @@
     <title>Página de Perfil</title>
     <link rel="stylesheet" href="Styles/profile.css">
     <link rel="icon" href="images/logo.png" />
+
+    <script src="Scripts/profile.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -44,11 +46,11 @@
                         </div>
                         <div class="user-fields">
                             <label for="cpf">CPF</label>
-                            <input type="text" id="cpf" name="cpf" readonly>
+                            <input type="text" id="cpf" name="cpf" readonly placeholder= "XXX.XXX.XXX-XX" maxlength="14">
                         </div>
                         <div class="user-fields">
                             <label for="number">Telefone</label>
-                            <input type="text" id="number" name="number" readonly>
+                            <input type="text" id="number" name="number" readonly placeholder="(XX) XXXXX-XXXX" maxlength="15">
                         </div>
                     </form>
 

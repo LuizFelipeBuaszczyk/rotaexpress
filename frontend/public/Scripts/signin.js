@@ -6,7 +6,6 @@ window.onload = () => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data.login)
         if(data.login) {
             window.location.href="../panel.html";
         }
