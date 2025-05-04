@@ -16,8 +16,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand",
-    "docker:test": "(cd bd && docker compose down && docker compose up -d) && cd .. && docker compose run --build --rm test"
+    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "docker:test": "((cd bd && docker compose down && docker compose up -d) && cd .. && docker compose run --build --rm test) && cd bd && docker compose down"
   },
   "keywords": [],
   "author": "",
