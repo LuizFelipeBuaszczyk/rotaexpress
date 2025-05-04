@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../index');
+const { app }  = require('../index');
 
 describe('CreateUser', () => {
 
@@ -10,7 +10,7 @@ describe('CreateUser', () => {
             password: 'teste1234'
         };
 
-        response = await request(app).post('/register/').send(user);
+        const response = await request(app).post('/register/').send(user);
 
         // Valida se retornou 201 -- Gravou com sucesso
         expect(response.status).toBe(201);
@@ -27,7 +27,7 @@ describe('CreateUser', () => {
             password: 'teste1234'
         };
 
-        response = await request(app).post('/register/').send(user);
+        const response = await request(app).post('/register/').send(user);
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('messages');
 
@@ -40,6 +40,4 @@ describe('CreateUser', () => {
             ])
         )
     });
-
 })
-

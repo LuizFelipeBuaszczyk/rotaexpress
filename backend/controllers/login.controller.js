@@ -19,7 +19,7 @@ async function login(req, res, next) {
       path: "/",
       maxAge: 86400000 // 1000 * 60 * 60 * 24  -> 86.400.000ms || 1000ms * 60s * 60min * Xh || 24h
     });
-    res.status(200).json({succes: true});
+    res.status(200).json({success: true});
   } catch (error) {
     next(error);
   }
