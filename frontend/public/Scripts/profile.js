@@ -6,6 +6,8 @@ document.getElementById('edit-button').addEventListener('click', allowEditFields
 document.getElementById('cpf').addEventListener('input', inputCPFField);
 document.getElementById('number').addEventListener('input', inputNumberField);
 
+let editFields = false;
+
 /*
     Ao carregar ele tenta buscar as informações do usuário, para preencher os campos do profile
 */
@@ -15,17 +17,43 @@ window.onload = () => {
 
 
 function allowEditFields(){
-    const nameField = document.getElementById('name');
-    nameField.removeAttribute('readonly');
 
-    const emailField = document.getElementById('email');
-    emailField.removeAttribute('readonly');
+    if (editFields){
+        const nameField = document.getElementById('name');
+        nameField.setAttribute('readonly', true);
+        nameField.style.backgroundColor = "rgba(182, 182, 182, 0.288)";
 
-    const cpfField = document.getElementById('cpf');
-    cpfField.removeAttribute('readonly');
+        const emailField = document.getElementById('email');
+        emailField.setAttribute('readonly', true);
+        emailField.style.backgroundColor = "rgba(182, 182, 182, 0.288)";
 
-    const numberField = document.getElementById('number');
-    numberField.removeAttribute('readonly');
+        const cpfField = document.getElementById('cpf');
+        cpfField.setAttribute('readonly', true);
+        cpfField.style.backgroundColor = "rgba(182, 182, 182, 0.288)";
+
+        const numberField = document.getElementById('number');
+        numberField.setAttribute('readonly', true);
+        numberField.style.backgroundColor = "rgba(182, 182, 182, 0.288)";
+        editFields = false;
+        
+    }else{
+        const nameField = document.getElementById('name');
+        nameField.removeAttribute('readonly');
+        nameField.style.backgroundColor = "white";
+
+        const emailField = document.getElementById('email');
+        emailField.removeAttribute('readonly');
+        emailField.style.backgroundColor = "white";
+
+        const cpfField = document.getElementById('cpf');
+        cpfField.removeAttribute('readonly');
+        cpfField.style.backgroundColor = "white";
+
+        const numberField = document.getElementById('number');
+        numberField.removeAttribute('readonly');
+        numberField.style.backgroundColor = "white";
+        editFields = true;
+    }
 }
 
 
@@ -69,6 +97,7 @@ function getData(){
     })
     .then(data => {
         document.getElementById('name').value = data.name;
+        document.getElementById("username").textContent = data.name;
         document.getElementById('email').value = data.email;
         
         if (data.cpf !== ''){
