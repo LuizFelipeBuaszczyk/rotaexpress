@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { app }  = require('../index');
+const { app }  = require('../../index');
 
 describe('CreateUser', () => {
 
@@ -21,9 +21,8 @@ describe('CreateUser', () => {
         expect(response.body.email).toBe(user.email);
     });
 
-    it('should return 400 if name is missing', async () => {
+    it('should return 400 if name and email is missing', async () => {
         const user = {
-            email: 'teste400@email.com',
             password: 'teste1234'
         };
 
@@ -35,9 +34,25 @@ describe('CreateUser', () => {
         expect(response.body.messages).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
-                    field: 'name'
+                    field: 'name',
+                    field: 'email'
                 })
             ])
         )
     });
+
+    it('Should return 400 if user was already registered.', async () => {
+        const user = {
+            name:'Nome Teste',
+            email: 'teste@email.com',
+            password: 'teste1234'
+        };
+
+        const response = await request(app).post('/register/').send(user);
+
+        // Valida se retornou 400 e se retornou uma propriedade error
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('error');
+    });
+
 })
