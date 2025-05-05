@@ -33,7 +33,8 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: rgb(255, 255, 255);
+    height: 12%;
+    background-color: white;
     padding: 15px 40px;
     color: rgb(0, 0, 0);
     display: flex;
@@ -51,8 +52,8 @@ body {
 }
 
 .navigation img {
-    height: 40px;
-    margin-right: 15px;
+    height: 80px;
+    margin-right: 0px;
 }
 
 .navigation h1 {
@@ -124,13 +125,13 @@ body {
 /* Ajuste do conteúdo da imagem */
 .imagemPrincipal {
     background-image: url("../images/imgCaminhao.png");
-    background-size: contain; /* Ajusta a imagem para caber completamente */
-    background-position: center; /* Centraliza a imagem */
+    background-size: contain; 
+    background-position: center; 
     background-repeat: no-repeat;
     width: 100%;
-    height: 70vh; /* Ajuste da altura para garantir que a imagem seja visível */
+    height: 70vh; 
     margin-right: 0;
-    margin-top: 65px; /* Move o elemento inteiro 100px para baixo */
+    margin-top: 65px; 
     display: block;
     position: relative;
     z-index: 0;
@@ -180,34 +181,56 @@ body {
 
 /* Estilo do footer */
 .footer {
-    display: flex; /* Usando flexbox para alinhar o conteúdo na horizontal */
-    justify-content: flex-start; /* Alinha os itens à esquerda */
-    align-items: center; /* Centraliza os itens verticalmente */
+    margin-left: 0px;
+    display: flex; 
+    flex-direction: column;
+    justify-content: left; 
     width: 100%;
-    height: 50px; /* Ajuste da altura do footer */
-    background-color: #ffffff; /* Cor de fundo para o footer */
+    height: 10%; 
+    background-color: white; 
+    padding: 0;
+    margin: 0;
 
 }
 
-.footer h1 {
+.footerSuperior {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    align-self: flex-start;
+    margin: 0;
+    margin-left: 10px;
+    padding: 0;
+    background-color: #ffffff;
+    
+}
+
+.footerSuperior h1 {
     font-size: 1.7em;
     color: #000000;
     font-family: 'Roboto', sans-serif;
-    margin-right: 15px; /* Adiciona espaço entre o texto e a imagem */
+    margin-right: 0px; 
 }
 
-.footer img {
-    height: 40px; /* Ajusta a altura da imagem */
-    margin-top: 0; /* Remove qualquer margem no topo */
+.footerSuperior img {
+    height: 60px; 
+    margin-top: 0; 
+    margin-left: 0px;
+    padding-left: 0;
 }
 
 .textoFooter {
+    margin-left: 10px;
+    margin-top: 0;
+    padding-top: 0;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     text-align: left;
     width: 100%;
     height: 40px;
+    padding: 0;
     background-color: #ffffff;
 }
 
@@ -215,5 +238,6 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 0.7em;
     white-space: nowrap;
-    margin-top: 10px;
+    margin-top: 0px;
 }
+

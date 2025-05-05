@@ -20,18 +20,17 @@ body {
 }
 
 .containerlogo {
-
     display: flex;
-    flex-direction: row; /* Coloca o texto e a imagem em linha (padrão é 'row') */
+    flex-direction: row-reverse; /* Coloca o texto e a imagem em linha (padrão é 'row') */
     justify-content: center; /* Centraliza horizontalmente */
     align-items: center; /* Centraliza verticalmente */
     background-color: none;
     max-height: 100px;
     max-width: 100px;
-    margin: 0px;
     padding: 0%;
     color: #000000;
     margin: 20px;
+    margin-bottom: 5px;
 }
 
 .containerlogo h1 {
@@ -41,7 +40,7 @@ body {
 }
 
 .containerlogo img {
-    height: 40px;
+    height: 60px;
 }
 
 
