@@ -18,4 +18,17 @@ const createRouteSchema = z.object({
   description: z.string().nullable(),
 });
 
-module.exports = createRouteSchema;
+const updateRouteSchema = z.object({
+  cpf: z.string().min(11).max(14).optional(),
+  firm_name: z.string().optional(),
+  date: z
+    .string()
+    .transform((val) => new Date(val))
+    .refine((val) => !isNaN(val.getTime()), {
+      message: "O formato da data deve ser YYYY-MM-DD",
+    })
+    .optional(),
+  description: z.string().nullable().optional(),
+});
+
+module.exports = { createRouteSchema, updateRouteSchema };

@@ -1,4 +1,4 @@
-const createUserSchema = require("../validators/user.validator");
+const { createUserSchema } = require("../validators/user.validator");
 
 const validateUser = async (req, res, next) => {
   const validation = await createUserSchema.safeParseAsync(req.body);

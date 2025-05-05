@@ -1,5 +1,6 @@
 const routeRepository = require("../repositories/route.repository");
 const firmRepository = require("../repositories/firm.repository");
+const isValidCPF = require("../utils/cpf.validator");
 
 async function createRoute(routeData, id_user) {
   console.log(routeData);
@@ -9,6 +10,12 @@ async function createRoute(routeData, id_user) {
   if (!firm) {
     const error = new Error("Firma não encontrada");
     error.statusCode = 404;
+    throw error;
+  }
+
+  if (routeData.cpf && !isValidCPF(routeData.cpf)) {
+    const error = new Error("CPF inválido");
+    error.statusCode = 400;
     throw error;
   }
 
@@ -34,11 +41,17 @@ async function getRoutes(id_user) {
 }
 
 async function updateRoutes(newData, routeId, id_user) {
+  if (newData.cpf && !isValidCPF(newData.cpf)) {
+    const error = new Error("CPF inválido");
+    error.statusCode = 400;
+    throw error;
+  }
   const updatedRoute = await routeRepository.updateRoutes(
     newData,
     routeId,
     id_user
   );
+
   if (updatedRoute) return updatedRoute;
   const error = new Error("Rota não encontrada");
   error.statusCode = 404;
