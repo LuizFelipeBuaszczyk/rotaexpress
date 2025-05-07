@@ -13,4 +13,12 @@ const createUserSchema = z.object({
     .max(200),
 });
 
-module.exports = createUserSchema;
+const updateUserSchema = z.object({
+  name: z.string().min(3).max(50).optional(),
+  email: z.string().email().optional(),
+  password: z.string().min(6).max(200).optional(),
+  cpf: z.string().min(11).max(14).optional(),
+  phone_number: z.string().max(20).optional(),
+});
+
+module.exports = { createUserSchema, updateUserSchema };

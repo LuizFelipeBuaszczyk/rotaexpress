@@ -22,7 +22,7 @@ const Route = sequelize.define("routes", {
   },
 });
 
-Route.belongsTo(Firm, { foreignKey: "fk_id_firm" });
+Route.belongsTo(Firm, { foreignKey: "fk_id_firm", onDelete: "CASCADE" });
 Firm.hasMany(Route, { foreignKey: "fk_id_firm" });
 
 module.exports = Route;

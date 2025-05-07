@@ -5,7 +5,7 @@ let server;
 
 beforeAll(async () => {
     await sequelize.authenticate();
-    server = app.listen(process.env.PORT || 3001); // Inicia o servidor
+    server = app.listen(process.env.PORT); // Inicia o servidor
 });
 
 // Fechando as conexões

@@ -1,14 +1,5 @@
 const userService = require("../services/user.service");
 
-async function createUser(req, res, next) {
-  try {
-    const user = await userService.createUser(req.body);
-    res.status(201).json(user);
-  } catch (error) {
-    next(error);
-  }
-}
-
 async function getUserById(req, res) {
   try {
     const users = await userService.getUserById(req.user.id_user);
@@ -18,4 +9,28 @@ async function getUserById(req, res) {
   }
 }
 
-module.exports = { createUser, getUserById };
+async function updateUsers(req, res, next) {
+  try {
+    const updateData = req.body;
+    const { id_user } = req.user;
+    const newData = await userService.updateUser(updateData, id_user);
+    res.json(newData);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function deleteUser(req, res, next) {
+  try {
+    const { id_user } = req.user;
+    await userService.deleteUser(id_user);
+    res.clearCookie("authToken");
+    res.clearCookie("refreshToken");
+    res.status(200).json({ message: "Usuário deletado com sucesso" });
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { getUserById, updateUsers, deleteUser };
