@@ -69,6 +69,13 @@
     background-color: rgba(182, 182, 182, 0.288);
 }
 
+#user-data button{
+    width: 60%;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
 #user-data nav {
     display: flex;
     flex-direction: row;
@@ -79,26 +86,35 @@
 #user-data nav button{
     width: 20%;
     height: 30px;
+    border-radius: 5px;
+    border: 1px solid black;
 }
 
 #edit-button {
-    border: 1px solid black;
-    border-radius: 5px;
-    color: white;
-    background-color: rgb(52, 52, 206);
+    
+    color: rgb(52, 52, 206);
 }
 
 #edit-button:hover {
+    color: white;
     background-color: rgba(52, 52, 206, 0.747);
 }
 
 #delete-button {
     border: 1px solid black;
-    border-radius: 5px;
-    color: white;
-    background-color: red;
+    color: red;
 }
 
 #delete-button:hover {
+    color: white;
     background-color: rgba(255, 0, 0, 0.74);
+}
+
+#save-button {
+    color: green;
+}
+
+#save-button:hover{
+    color: white;
+    background-color: green;
 }

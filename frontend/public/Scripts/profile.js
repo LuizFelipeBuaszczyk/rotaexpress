@@ -2,6 +2,7 @@ import { refreshAuthToken } from './utils/http.js';
 import { formatter_phone_number, formatter_cpf } from './utils/formatter.js';
 
 document.getElementById('edit-button').addEventListener('click', allowEditFields);
+document.getElementById('save-button').addEventListener('click', sendUpdatedFields);
 
 document.getElementById('cpf').addEventListener('input', inputCPFField);
 document.getElementById('number').addEventListener('input', inputNumberField);
@@ -14,7 +15,6 @@ let editFields = false;
 window.onload = () => {
     getData();
 }
-
 
 function allowEditFields(){
 
@@ -109,12 +109,75 @@ function getData(){
         }
     })
     .catch(error => {
-        console.log(error)
         if (error.status === 401) {
             const refreshed = refreshAuthToken();
             if (refreshed){
                 getData();
             }
+        }
+    })
+}
+
+// Atualiza os campos padrões do usuário
+function sendUpdatedFields(){
+    const user = {
+        'name': document.getElementById('name').value,
+        'email': document.getElementById('email').value,
+        'cpf': document.getElementById('cpf').value,
+        'phone_number': document.getElementById('number').value
+    };
+
+
+
+    fetch('/api/users', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    })
+    .then(response => {
+        const status_code = response.status;
+
+        switch (Math.floor(status_code / 100)) {
+            case 4: // Caso tiver algum erro ele pula direto para o .catch
+                return response.json().then(err => {
+                    return Promise.reject({
+                        status: response.status,
+                        body: err
+                    });
+                });
+            default:
+                return response.json(); 
+        }
+    })
+    .then(data => {
+        document.getElementById('name').value = data.name;
+        document.getElementById("username").textContent = data.name;
+        document.getElementById('email').value = data.email;
+        
+        if (data.cpf !== ''){
+            document.getElementById('cpf').value = data.cpf;
+        }
+
+        if (data.phone_number !== ''){
+            document.getElementById('number').value = data.phone_number;
+        }
+    })
+    .catch(error => {
+        switch(error.status){
+            case 401:
+                const refreshed = refreshAuthToken();
+                if (refreshed){
+                    getData();
+                }
+                break;
+            case 400: // Tratar respostas da API
+                console.log(error);
+                break;
+            default:
+                alert(error);
         }
     })
 }
