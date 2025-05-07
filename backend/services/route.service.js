@@ -3,8 +3,6 @@ const firmRepository = require("../repositories/firm.repository");
 const isValidCPF = require("../utils/cpf.validator");
 
 async function createRoute(routeData, id_user) {
-  console.log(routeData);
-  console.log(id_user);
   const firm = await firmRepository.findNameById(id_user, routeData.firm_name);
 
   if (!firm) {
@@ -41,7 +39,7 @@ async function getRoutes(id_user) {
 }
 
 async function updateRoutes(newData, routeId, id_user) {
-  if (newData.cpf && !isValidCPF(newData.cpf)) {
+  if (!isValidCPF(newData.cpf)) {
     const error = new Error("CPF inválido");
     error.statusCode = 400;
     throw error;

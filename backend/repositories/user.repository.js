@@ -21,6 +21,7 @@ async function findByUserId(id_user) {
 }
 
 async function updateById(id_user, updatedData) {
+
   const user = await findByUserId(id_user);
   if (!user) return null;
   await User.update(updatedData, { where: { id_user } });

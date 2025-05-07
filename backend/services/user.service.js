@@ -6,23 +6,41 @@ async function getUserById(id_user) {
 }
 
 async function updateUser(updateData, id_user) {
-  let userExistsEmail = null;
+  let userExistsEmail = false;
   if (updateData.email) {
     userExistsEmail = await userRepository.findByEmail(updateData.email);
   }
-  if (updateData.email && userExistsEmail) {
-    const error = new Error("Email já cadastrado");
-    error.statusCode = 400;
-    throw error;
+
+  if (updateData.email && userExistsEmail ) {
+    try {
+      if (!(id_user == userExistsEmail.id_user)){
+        throw error;
+      }
+    } catch (error) {
+      error = new Error("Email já cadastrado");
+      error.statusCode = 400;
+      throw error;
+    }
   }
-  let userExistsCPF = null;
+
+  let userExistsCPF = false;
   if (updateData.cpf) {
     userExistsCPF = await userRepository.findByCPF(updateData.cpf);
   }
+
   if (updateData.cpf && userExistsCPF) {
-    const error = new Error("CPF já cadastrado");
-    error.statusCode = 400;
-    throw error;
+
+    try {
+      if (!(id_user == userExistsCPF.id_user)){
+        throw error;
+      }
+
+    } catch (error) {
+      error = new Error("CPF já cadastrado");
+      error.statusCode = 400;
+      throw error;
+    }
+    
   }
   if (updateData.cpf && !isValidCPF(updateData.cpf)) {
     const error = new Error("CPF inválido");

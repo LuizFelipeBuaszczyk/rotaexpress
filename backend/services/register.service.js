@@ -8,8 +8,9 @@ async function createUser(userData) {
     error.statusCode = 400;
     throw error;
   }
-
-  const userExistsCPF = await userRepository.findByCPF(userData.cpf);
+  if (userData.cpf){
+    const userExistsCPF = await userRepository.findByCPF(userData.cpf);
+  }
   if (userData.cpf && userExistsCPF) {
     const error = new Error("CPF já cadastrado");
     error.statusCode = 400;
