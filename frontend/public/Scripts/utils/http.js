@@ -20,7 +20,7 @@ export async function refreshAuthToken(){
     })
     .catch(error => { // Não sei se funciona essa parte
         alert("Acesso expirado!")
-        window.location.href="../../signin.html";
+        window.location.href="/signin";
     })
 
     return refreshed;

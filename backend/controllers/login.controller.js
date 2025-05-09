@@ -28,7 +28,7 @@ async function login(req, res, next) {
 async function checkCredentials(req, res){
 
   // Retorna que já possui token salvo nos cookies
-  res.status(200).json({login: true});
+  res.status(204).json({login: true});
 }
 
 async function logout(req, res) {
@@ -45,7 +45,7 @@ async function logout(req, res) {
       sameSite: "Strict",
       path: "/",
   });
-  res.status(200);
+  res.status(200).json({logout:true});
 }
 
 module.exports = { login, checkCredentials, logout };

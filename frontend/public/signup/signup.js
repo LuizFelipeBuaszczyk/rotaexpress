@@ -74,7 +74,7 @@ function submitSignUp(event) {
             })
             .then(data => { // Inutil??
                 alert('Conta cadastrada!')
-                window.location.href="../signin.html";
+                window.location.href="/signin";
             })
             .catch(error => {
                 // Trata os erros
