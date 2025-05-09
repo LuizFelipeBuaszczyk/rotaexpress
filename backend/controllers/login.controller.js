@@ -27,10 +27,25 @@ async function login(req, res, next) {
 
 async function checkCredentials(req, res){
 
-  //req.user.id_user
-
   // Retorna que já possui token salvo nos cookies
   res.status(200).json({login: true});
 }
 
-module.exports = { login, checkCredentials };
+async function logout(req, res) {
+  res.clearCookie('authToken', {
+    httpOnly: true,
+      secure: false, 
+      sameSite: "Strict",
+      path: "/",
+  });
+
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+      secure: false, 
+      sameSite: "Strict",
+      path: "/",
+  });
+  res.status(200);
+}
+
+module.exports = { login, checkCredentials, logout };

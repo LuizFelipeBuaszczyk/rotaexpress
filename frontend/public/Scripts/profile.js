@@ -1,3 +1,4 @@
+import './panel.js';
 import { refreshAuthToken } from './utils/http.js';
 import { formatter_phone_number, formatter_cpf } from './utils/formatter.js';
 
