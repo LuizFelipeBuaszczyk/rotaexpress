@@ -1,4 +1,4 @@
-@import url('root.css');
+@import url('../Styles/root.css');
 
 /* Reset de estilo básico para garantir consistência entre os navegadores */
 * {
@@ -9,60 +9,65 @@
 
 /* Estilo do corpo da página */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    flex-direction: column;
 }
 
 .containerlogo {
-    display: flex;
-    flex-direction: row-reverse; /* Coloca o texto e a imagem em linha (padrão é 'row') */
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-    background-color: none;
-    max-height: 100px;
-    max-width: 100px;
-    padding: 0%;
-    color: #000000;
+    background-color: var(--cor-bege);
+    padding: 1rem;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 100%;
+    max-height: 350px;
+    max-width: 250px;
     margin: 20px;
-    margin-bottom: 5px;
+    margin-right: 0px;
+    color: #000000;
+    align-content: center;
+    display: flex;
+    flex-direction: line; /* Coloca o texto e a imagem em coluna */
+    justify-content: center; /* Centraliza verticalmente */
+    align-items: center; /* Centraliza horizontalmente */
+    border-top-left-radius: 1em;
+    border-bottom-left-radius: 1em;
+    
 }
 
 .containerlogo h1 {
-    font-size: 2em;
-    margin-right: 10px; /* Espaço entre o título e a imagem */
+    font-size: 1.8em;
+    margin-bottom: 30%; 
     color: #000000;
 }
 
 .containerlogo img {
     height: 60px;
+    margin-bottom: 30%;
 }
 
 
-/* Container principal do formulário de cadastro */
-.signup-container {
-    justify-content: center;
-    align-items: center;
+/* Container principal do formulário de login */
+.login-container {
     background-color: white;
-    padding: 2rem;
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-    height: 100%;
-    max-height: 525px;
+    padding: 1rem;
+    border-radius: 0px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     width: 100%;
+    height: 100%;
+    max-height: 350px;
     max-width: 400px;
     margin: 20px;
     margin-left: 0px;
-    margin-top: 0px;
-    padding-top: 1%;
-    border-radius: 1em;
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
 }
 
-/* Título do formulário de cadastro */
+/* Título do formulário de login */
 h2 {
     text-align: center;
     margin-bottom: 1rem;
@@ -82,7 +87,7 @@ label {
 input {
     width: 100%;
     padding: 10px;
-    margin-bottom: 3px;
+    margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
@@ -105,39 +110,40 @@ button:hover {
     background-color: #45a049;
 }
 
-/* Estilo para o link de "Faça login" */
-.signin-link {
+/* Estilo para o link de "Cadastre-se" */
+.signup-link {
     text-align: center;
     margin-top: 10px;
 }
 
-.signin-link p {
+.signup-link p {
     font-size: 0.9rem;
     color: #333;
 }
 
-.signin-link a {
+.signup-link a {
     text-decoration: none;
     color: #4CAF50;
     font-weight: bold;
 }
 
-.signin-link a:hover {
+.signup-link a:hover {
     text-decoration: underline;
 }
 
 .containerlogo a {
     text-decoration: none;
     color: #000000;
+    margin-bottom: 30%;
     font-weight: bold;
-    font-size: 2em;   
+    font-size: 1.7em;  
 }
 
 .containerlogo a:hover {
     text-decoration: none;
 }
 
-.errorMessage{
+#errorResponse {
     min-height: 18px;
     color: red;
 }

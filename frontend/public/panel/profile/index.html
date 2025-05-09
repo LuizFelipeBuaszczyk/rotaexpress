@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Perfil</title>
-    <link rel="stylesheet" href="Styles/profile.css">
-    <link rel="icon" href="images/logo.png" />
+    <link rel="stylesheet" href="profile.css">
+    <link rel="icon" href="../../images/avatar.png" />
 
-    <script src="Scripts/profile.js" defer type="module"></script>
+    <script src="profile.js" type="module" defer></script>
 </head>
 <body>
     <div class="container">
@@ -18,19 +18,19 @@
                 <h2>Nome da Pessoa</h2>
             </div>
             <ul class="menu">
-                <li><a href="panel.html">Home</a></li>
-                <li><a href="profile.html">Minha Conta</a></li>
-                <li><a href="enterprise.html">Empresa</a></li>
-                <li><a href="config.html">Configurações</a></li>
-                <li><a href="notification.html">Notificações</a></li>
-                <li><a href="#">Sair</a></li>
+                <li><a href="/panel">Home</a></li>
+                <li><a href="/panel/profile">Minha Conta</a></li>
+                <li><a href="/panel/enterprise">Empresa</a></li>
+                <li><a href="/panel/config">Configurações</a></li>
+                <li><a href="/panel/notification">Notificações</a></li>
+                <li><button id="logout-button">Sair</button></li>
             </ul>
         </div>
         <!-- Conteúdo principal -->
         <div class="main-content">
             <div id="perfil">
                 <div id="perfil-image">
-                    <img src="./images/avatar.png" alt="imagem de perfil anonima" width="120px" height="120px">
+                    <img src="../../images/avatar.png" alt="imagem de perfil" width="120px" height="120px">
                     <h1 id="username">Nome do Individuo</h1>
                 </div>
                 <section id="user-data">

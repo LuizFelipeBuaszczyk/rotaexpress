@@ -1,5 +1,6 @@
-import { refreshAuthToken } from './utils/http.js';
-import { formatter_phone_number, formatter_cpf } from './utils/formatter.js';
+import '../panel.js';
+import { refreshAuthToken } from '../../Scripts/utils/http.js';
+import { formatter_phone_number, formatter_cpf } from '../../Scripts/utils/formatter.js';
 
 document.getElementById('edit-button').addEventListener('click', allowEditFields);
 document.getElementById('save-button').addEventListener('click', sendUpdatedFields);
