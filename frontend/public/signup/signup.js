@@ -101,15 +101,15 @@ function responseAPIError(data){
 function isFullNameValid (fullName){
 
     if(!fullName){
-        document.getElementById('errorMessageFullmane').innerHTML = `<label for="fullname" id="errorMessageFullmane" class="errorMessage">Preencha com seu nome.</label>`
+        document.getElementById('errorMessageFullmane').textContent = `Preencha com seu nome.`
         return false;
     }
     if (fullName.length < 3) {
-        document.getElementById('errorMessageFullmane').innerHTML = `<label for="fullname" id="errorMessageFullmane" class="errorMessage">Seu nome deve ter mais que 3 letras.</label>`
+        document.getElementById('errorMessageFullmane').textContent = `Seu nome deve ter mais que 3 letras.`
         return false;
     }
     if (fullName.length > 50){
-        document.getElementById('errorMessageFullmane').innerHTML = `<label for="fullname" id="errorMessageFullmane" class="errorMessage">Seu nome é muito grande, abrevie o seu nome.</label>`
+        document.getElementById('errorMessageFullmane').textContent = `Seu nome é muito grande, abrevie o seu nome.`
         return false;
     }
     return true;
@@ -118,7 +118,7 @@ function isFullNameValid (fullName){
 function isEmailValid (email){
 
     if(!email){
-        document.getElementById('errorMessageEmail').innerHTML = `<label for="fullname" id="errorMessageFullmane" class="errorMessage">Preencha com seu email.</label>`
+        document.getElementById('errorMessageEmail').textContent = `Preencha com seu email.`
         return false;
     }
 
@@ -128,25 +128,25 @@ function isEmailValid (email){
 function isPasswordValid(password, confirmPassword){
 
     if (!password || !confirmPassword){
-        document.getElementById('errorMessagePassword').innerHTML = `<label for="fullname" id="errorMessagePassword" class="errorMessage">Preencha os dois campos de senha.</label>`
+        document.getElementById('errorMessagePassword').textContent = `Preencha os dois campos de senha.`
         return false;
     }
 
     if (password.length < 6){
-        document.getElementById('errorMessagePassword').innerHTML = `<label for="fullname" id="errorMessagePassword" class="errorMessage">Sua senha deve conter no minímio 6 caracteres.</label>`
+        document.getElementById('errorMessagePassword').textContent = `Sua senha deve conter no minímio 6 caracteres.`
         return false;
     }
 
     if (password !== confirmPassword){
-        document.getElementById('errorMessageConfirmPassword').innerHTML = `<label for="fullname" id="errorMessageConfirmPassword" class="errorMessage">Os campos de senha não são iguais.</label>`
+        document.getElementById('errorMessageConfirmPassword').textContent = `Os campos de senha não são iguais.`
         return false;
     }
     return true;
 }
 
 function resetErrorMessage(){
-    document.getElementById('errorMessageFullmane').innerHTML = '';
-    document.getElementById('errorMessageEmail').innerHTML = '';
-    document.getElementById('errorMessagePassword').innerHTML = '';
-    document.getElementById('errorMessageConfirmPassword').innerHTML = '';
+    document.getElementById('errorMessageFullmane').textContent = '';
+    document.getElementById('errorMessageEmail').textContent = '';
+    document.getElementById('errorMessagePassword').textContent = '';
+    document.getElementById('errorMessageConfirmPassword').textContent = '';
 }

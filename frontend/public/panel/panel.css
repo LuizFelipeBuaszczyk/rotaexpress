@@ -6,6 +6,10 @@
     box-sizing: border-box;
 }
 
+body {
+    background-color: #ecf0f1;
+}
+
 /* Container geral */
 .container {
     display: flex;
@@ -60,7 +64,6 @@
 .main-content {
     flex: 1;
     padding: 20px;
-    background-color: #ecf0f1;
     overflow-y: auto;
 }
 
@@ -69,3 +72,21 @@
     margin-bottom: 10px;
 }
 
+#notification {
+    display: flex;
+    border: 1px solid black;
+    height: 50px;
+    margin: 10px;
+    padding: 5px;
+    background-color: #8fa347;  /* Por padrão uma cor neutra */
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    opacity: 0; 
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateY(-20px);
+    z-index: 1000;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
