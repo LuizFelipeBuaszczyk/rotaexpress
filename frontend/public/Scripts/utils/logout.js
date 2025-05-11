@@ -7,7 +7,6 @@ export async function logout(){
         })
         .then(response => {
             const status_code = response.status;
-            console.log(response)
 
             if (status_code == 200){
                 window.location.href="/signin";
