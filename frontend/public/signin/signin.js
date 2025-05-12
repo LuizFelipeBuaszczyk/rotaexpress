@@ -57,5 +57,5 @@ function submitSignIn(event){
 function responseAPIError(error){
     const messageError = document.getElementById("errorResponse");
 
-    messageError.innerHTML = `<p>${error.error}</p>`;
+    messageError.textContent = `${error.error}`;
 }

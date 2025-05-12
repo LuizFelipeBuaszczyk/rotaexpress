@@ -1,6 +1,7 @@
 import '../panel.js';
 import { refreshAuthToken } from '../../Scripts/utils/http.js';
 import { formatter_phone_number, formatter_cpf } from '../../Scripts/utils/formatter.js';
+import { showNotification } from '../../Scripts/utils/notifications.js';
 
 document.getElementById('edit-button').addEventListener('click', allowEditFields);
 document.getElementById('save-button').addEventListener('click', sendUpdatedFields);
@@ -154,6 +155,7 @@ function sendUpdatedFields(){
         }
     })
     .then(data => {
+        const colorMessage = '#4CAF50' 
         document.getElementById('name').value = data.name;
         document.getElementById("username").textContent = data.name;
         document.getElementById('email').value = data.email;
@@ -165,17 +167,21 @@ function sendUpdatedFields(){
         if (data.phone_number !== ''){
             document.getElementById('number').value = data.phone_number;
         }
+
+        showNotification('Dados atualizados!', document.getElementById('notification'),colorMessage)
     })
     .catch(error => {
+        const colorMessage = 'red';
         switch(error.status){
             case 401:
                 const refreshed = refreshAuthToken();
                 if (refreshed){
                     getData();
                 }
+                showNotification('Ocorreu um erro de autenticação, tente novamente!', document.getElementById('notification'), colorMessage)
                 break;
             case 400: // Tratar respostas da API
-                console.log(error);
+                showNotification(error.body.error, document.getElementById('notification'), colorMessage);
                 break;
             default:
                 alert(error);

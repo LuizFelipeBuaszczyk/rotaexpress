@@ -6,6 +6,8 @@
     <title>Configurações</title>
     <link rel="stylesheet" href="config.css">
     <link rel="icon" href="../images/logo.png" />
+
+    <script src="config.js" type="module" defer></script>
 </head>
 <body>
     <div class="container">
@@ -21,13 +23,22 @@
                 <li><a href="/panel/enterprise">Empresa</a></li>
                 <li><a href="/panel/config">Configurações</a></li>
                 <li><a href="/panel/notification">Notificações</a></li>
-                <li><button id="logout-button">Sair</button></li>
+                <li><a href="#" data-logout>Sair</a></li>
             </ul>
         </div>
 
         <!-- Conteúdo principal -->
         <div class="main-content">
             <h1>Configurações</h1>
+
+            <!-- pop-up para realizar logout-->
+            <div id="logout-modal" class="modal">
+                <div class="content-modal">
+                    <p>Tem certeza que deseja sair?</p>
+                    <button id="cancel-logout-button">Cancelar</button>
+                    <button id="confirm-logout-button">Confirmar</button>
+                </div>
+            </div>
 
         </div>
     </div>
