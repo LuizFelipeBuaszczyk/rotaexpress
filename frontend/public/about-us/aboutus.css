@@ -26,8 +26,8 @@ header h1 {
 
 .containerLogo {
     display: flex;
+    justify-content: center;
     align-items: center;
-    padding-left: 37%;
 }
 
 .containerLogo a {
@@ -44,10 +44,8 @@ header h1 {
 }
 
 .containerLogo img {
-    width: 40px;
+    width: 100px;
 }
-
-
 
 .container {
     width: 80%;
