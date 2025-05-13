@@ -5,6 +5,7 @@ import { showNotification } from '../../Scripts/utils/notifications.js';
 
 document.getElementById('edit-button').addEventListener('click', allowEditFields);
 document.getElementById('save-button').addEventListener('click', sendUpdatedFields);
+document.getElementById('delete-button').addEventListener('click', deleteUser);
 
 document.getElementById('cpf').addEventListener('input', inputCPFField);
 document.getElementById('number').addEventListener('input', inputNumberField);
@@ -122,14 +123,23 @@ function getData(){
 
 // Atualiza os campos padrões do usuário
 function sendUpdatedFields(){
+
     const user = {
         'name': document.getElementById('name').value,
         'email': document.getElementById('email').value,
-        'cpf': document.getElementById('cpf').value,
-        'phone_number': document.getElementById('number').value
+        
     };
 
+    let cpf = document.getElementById('cpf').value;
+    let phone_number = document.getElementById('number').value;
 
+    if (cpf){
+        user.cpf = cpf;
+    }
+
+    if (phone_number){
+        user.phone_number = phone_number;
+    }
 
     fetch('/api/users', {
         method: 'PUT',
@@ -171,6 +181,7 @@ function sendUpdatedFields(){
         showNotification('Dados atualizados!', document.getElementById('notification'),colorMessage)
     })
     .catch(error => {
+        console.log(error)
         const colorMessage = 'red';
         switch(error.status){
             case 401:
@@ -187,4 +198,43 @@ function sendUpdatedFields(){
                 alert(error);
         }
     })
+}
+
+function deleteUser(){
+
+    const response = confirm("Deseja realmente excluir sua conta?");
+
+    if (response){
+        fetch('/api/users', {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+
+            const status_code = response.status;
+
+            switch (Math.floor(status_code / 100)) {
+                case 4: // Caso tiver algum erro ele pula direto para o .catch
+                    return response.json().then(err => {
+                        return Promise.reject({
+                            status: response.status,
+                            body: err
+                        });
+                    });
+                default:
+                    window.location.href = '/signup';
+            }
+        })
+        .catch(error => {
+            if (error.status === 401) {
+                const refreshed = refreshAuthToken();
+                if (refreshed){
+                    getData();
+                }
+            }
+        })
+    }
 }
