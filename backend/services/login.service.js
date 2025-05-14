@@ -25,7 +25,7 @@ async function login(userData) {
   return { token, refreshToken };
 }
 
-async function checkCredentials(token){
+async function checkCredentials(res, token){
 
     if (token.authToken){
       return true;
@@ -33,7 +33,7 @@ async function checkCredentials(token){
     else{
       if(token.refreshToken){
         const refresh = require('./refreshToken.service.js');
-        const data = refresh.refreshToken(token.refreshToken);
+        const data = await refresh.refreshToken(token.refreshToken);
 
         res.cookie("authToken", data.accessToken, {
           httpOnly: true,
@@ -42,7 +42,7 @@ async function checkCredentials(token){
           path: "/",
           maxAge: 3600000 // 1000 * 60 * 60 -> 3.600.000ms || 1000ms * 60s * Xmin || 1 hora
         });
-        
+      
         return true;
       }
       else {

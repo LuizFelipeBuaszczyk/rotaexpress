@@ -26,7 +26,7 @@ async function login(req, res, next) {
 }
 
 async function checkCredentials(req, res){
-  const validate = await loginService.checkCredentials(req.cookies);
+  const validate = await loginService.checkCredentials(res, req.cookies);
 
   // Retorna que já possui token salvo nos cookies
   if (validate){
