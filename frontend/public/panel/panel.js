@@ -1,4 +1,5 @@
 import { logout } from "../Scripts/utils/logout.js";
+import { checkToken } from "../Scripts/utils/http.js";
 
 document.querySelectorAll('[data-logout]').forEach(element => {
     element.addEventListener('click', function(e) {
@@ -13,3 +14,9 @@ document.getElementById('cancel-logout-button').addEventListener('click', () => 
 
 document.getElementById('confirm-logout-button').addEventListener('click', logout); 
 
+window.onload = () => {
+    login = checkToken();
+    if (!login){
+        window.location.href = '/signin'
+    }
+}

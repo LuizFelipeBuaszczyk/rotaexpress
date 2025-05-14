@@ -77,7 +77,7 @@ function inputNumberField() {
 }
 
 // Pega os dados do usuário logado
-function getData(){
+function getData() {
     fetch('/api/users/', {
         method: 'GET',
         credentials: 'include'
