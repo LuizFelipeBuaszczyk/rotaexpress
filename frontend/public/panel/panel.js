@@ -9,7 +9,7 @@ document.querySelectorAll('[data-logout]').forEach(element => {
 })
 
 document.getElementById('cancel-logout-button').addEventListener('click', () => {
-    document.getElementById('logout-modal').display = 'none';
+    document.getElementById('logout-modal').style.display = 'none';
 });
 
 document.getElementById('confirm-logout-button').addEventListener('click', logout); 
