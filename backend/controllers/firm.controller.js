@@ -1,4 +1,5 @@
 const firmService = require("../services/firm.service");
+const ParamsSchema = require("../validators/uuidparam.validator");
 
 async function createFirm(req, res, next) {
   //Chamar firm service
@@ -20,7 +21,31 @@ async function getFirmByIDUser(req, res, next) {
   }
 }
 
+async function updateFirm(req, res, next) {
+  try {
+    const { id_user } = req.user;
+    const { id } = ParamsSchema.parse(req.params);
+    const firm = await firmService.updateFirm(req.body, id, id_user);
+    return res.json(firm);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function deleteFirm(req, res, next) {
+  try {
+    const { id_user } = req.user;
+    const { id } = ParamsSchema.parse(req.params);
+    const firm = await firmService.deleteFirm(id, id_user);
+    return res.json(firm);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   createFirm,
   getFirmByIDUser,
+  updateFirm,
+  deleteFirm,
 };
