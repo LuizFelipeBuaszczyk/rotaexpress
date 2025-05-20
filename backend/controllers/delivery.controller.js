@@ -1,4 +1,3 @@
-const { get } = require("../routes/delivery.routes");
 const deliveryService = require("../services/delivery.service");
 const ParamsSchema = require("../validators/uuidparam.validator");
 
