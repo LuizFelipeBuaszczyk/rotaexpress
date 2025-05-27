@@ -70,3 +70,77 @@
     margin-bottom: 10px;
 }
 
+.container-principal {
+    display: flex;
+    flex-direction: column;
+    
+    margin: 0;
+    border: 0;
+    padding: 10px;
+
+    width: 100%;
+    height: 90%;
+
+    border: 1px solid black; /* Define uma borda visível */
+    box-sizing: border-box; /* Garante que padding e border não ultrapassem os 80%/70% */
+}
+
+.busca-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    width: 20%; /* Define a largura da div para 20% */
+}
+.busca-container input {
+    padding: 8px;
+    flex: 1; /* O input cresce para ocupar o espaço disponível */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.busca-container button {
+    padding: 8px 12px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.busca-container button:hover {
+    background-color: #0056b3;
+}
+
+
+.tabelaPrincipal {
+    display: flex;
+    flex-direction: column;
+    
+    margin: 0;
+    border: 0;
+    padding: 10px;
+
+    width: 100%;
+    height: 70%;
+
+    border: 1px solid black; /* Define uma borda visível */
+    box-sizing: border-box; 
+}
+
+.btn-criar-empresa {
+    margin-top: 15px;     /* Espaço acima do botão */
+    padding: 10px 16px;
+    background-color: #28a745;  /* Verde */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-end;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-criar-empresa:hover {
+    background-color: #218838;
+}
