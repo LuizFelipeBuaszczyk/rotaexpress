@@ -33,4 +33,14 @@ async function deleteUser(req, res, next) {
   }
 }
 
-module.exports = { getUserById, updateUsers, deleteUser };
+async function changePassword(req, res, next){
+  try {
+    const { id_user } = req.user;
+    const responseData = await userService.changePassword(id_user, req.body.password);
+    res.json(responseData);
+  } catch (error){
+    next(error);
+  }
+}
+
+module.exports = { getUserById, updateUsers, deleteUser, changePassword };

@@ -14,6 +14,7 @@ router.put(
   validatePutUser,
   userController.updateUsers
 );
+router.post("/password", hashPassword, authMiddleware, userController.changePassword)
 router.delete("/", authMiddleware, userController.deleteUser);
 
 module.exports = router;
