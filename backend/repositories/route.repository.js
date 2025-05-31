@@ -86,10 +86,25 @@ async function deleteRoutes(id_route, fk_id_user) {
   return true;
 }
 
+async function findRouteById(id_route, fk_id_user) {
+  return await Route.findOne({
+    where: { id_route },
+    include: [
+      {
+        model: Firm,
+        where: { fk_id_user },
+        required: true,
+        attributes: [],
+      },
+    ],
+  });
+}
+
 module.exports = {
   create,
   findRouteByFirm,
   findRoutes,
   updateRoutes,
   deleteRoutes,
+  findRouteById,
 };

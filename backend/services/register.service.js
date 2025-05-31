@@ -8,19 +8,19 @@ async function createUser(userData) {
     error.statusCode = 400;
     throw error;
   }
-  if (userData.cpf){
-    const userExistsCPF = await userRepository.findByCPF(userData.cpf);
-  }
-  if (userData.cpf && userExistsCPF) {
-    const error = new Error("CPF já cadastrado");
-    error.statusCode = 400;
-    throw error;
-  }
-  if (userData.cpf && !isValidCPF(userData.cpf)) {
-    const error = new Error("CPF inválido");
-    error.statusCode = 400;
-    throw error;
-  }
+  // if (userData.cpf){
+  //   const userExistsCPF = await userRepository.findByCPF(userData.cpf);
+  // }
+  // if (userData.cpf && userExistsCPF) {
+  //   const error = new Error("CPF já cadastrado");
+  //   error.statusCode = 400;
+  //   throw error;
+  // }
+  // if (userData.cpf && !isValidCPF(userData.cpf)) {
+  //   const error = new Error("CPF inválido");
+  //   error.statusCode = 400;
+  //   throw error;
+  // }
 
   return await userRepository.create(userData);
 }
