@@ -32,8 +32,7 @@ async function sendEmail(token, origin, destination, subject, body) {
         return {success: true};
         
     } catch (error){
-        console.error('Ocorreu um erro: ' + error);
-        return {success: false, error: error.message};
+        throw error;
     }
 }
 

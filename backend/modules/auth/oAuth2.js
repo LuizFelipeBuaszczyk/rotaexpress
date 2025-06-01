@@ -12,10 +12,8 @@ async function getNewToken (REFRESH_TOKEN, CLIENT_ID, CLIENT_SECRET, REDIRECT_UR
         refresh_token: REFRESH_TOKEN,
     });
 
-    console.log(oAuth2);
     try {
         const { credentials } = await oAuth2.refreshAccessToken();
-        console.log(credentials);
 
         if (credentials){
             const newAcessToken = credentials.access_token;

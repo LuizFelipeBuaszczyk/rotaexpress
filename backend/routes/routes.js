@@ -8,6 +8,7 @@ const refreshTokenRoutes = require("./refreshToken.routes");
 const routeRoutes = require("./route.routes");
 const deliveryRoutes = require("./delivery.routes");
 const productRoutes = require("./product.routes");
+const confirmationRoutes = require("./confirmation.routes");
 
 const router = express.Router();
 
@@ -19,5 +20,6 @@ router.use("/refresh", refreshTokenRoutes);
 router.use("/routes", routeRoutes);
 router.use("/deliveries", deliveryRoutes);
 router.use("/products", productRoutes);
+router.use("/confirmation", confirmationRoutes);
 
 module.exports = router;
