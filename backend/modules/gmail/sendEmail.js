@@ -1,4 +1,5 @@
 const { google } = require('googleapis');
+const MailComposer = require('mailcomposer').MailComposer;
 
 async function sendEmail(token, origin, destination, subject, body) {
     try {
@@ -11,17 +12,30 @@ async function sendEmail(token, origin, destination, subject, body) {
 
         const gmail = google.gmail({ version: 'v1', auth });
 
-        // Criando mensagem no formato MIME
-        const message = `From: ${origin}\r\n` +
-                        `To: ${destination}\r\n` +
-                        `Subject: ${subject}\r\n\r\n` +
-                        body;
+        const mailOptions = {
+            from: origin,
+            to: destination,
+            subject: subject,
+            html: body
+        };
 
-        // Codificar a mensagem em Base64
-        const codedMessage = Buffer.from(message).toString('base64')
-            .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-        
-        
+        const mail = new MailComposer(mailOptions);
+
+        // Criando mensagem no formato MIME
+        const codedMessage = await new Promise((resolve, reject) => {
+        mail.compile().build((err, message) => {
+            if (err) {
+                throw err;
+            }
+
+            // Codificar a mensagem em Base64 URL-safe
+            const encoded = Buffer.from(message).toString('base64')
+                .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+            
+            resolve(encoded); 
+        });
+    });
+
         const res = await gmail.users.messages.send({
             userId: 'me',
             requestBody: {

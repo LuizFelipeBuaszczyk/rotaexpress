@@ -8,16 +8,15 @@ async function createPendingPassword(pendingPasswordData, user){
 
     const pendingPassword = await pendingPassowrdChangeRepository.create(pendingPasswordData);
 
-    const subject = 'Confirmação da alteração de senha';
+    const subject = 'Redefinição de Senha: Confirme para continuar';
 
-    const body =  `Olá, ${user.name}!\nRecebemos uma solicitação para alterar a sua senha.\n`+
-                    `Para confirmar essa alteração, clique no link abaixo:\n\n` +
-                    `${process.env.URL}/confirm-password-change?id=${pendingPassword.id_pending_password_change} \n\n` +
-                    `Se você não solicitou essa alteração, ignore este e-mail.\nO link expira em 1 hora por motivos de segurança.\n\n` +
-                    `Atenciosamente,\n Equipe RotaExpress.`;
+    const body =    `<h1>Olá, ${user.name}!</h1>
+                    <p>Recebemos uma solicitação para alterar a sua senha.</p>
+                    <p>Para confirmar essa alteração, clique no link abaixo:</p>
+                    <a href="${process.env.URL}/confirm-password-change?id=${pendingPassword.id_pending_password_change}">Confirme alteração</a>
+                    <p>Se você não solicitou essa alteração, ignore este e-mail.<br>O link expira em 1 hora por motivos de segurança.<br><br>
+                    Atenciosamente,<br> Equipe RotaExpress.</p>`;
            
-
-                        
     // Enviar mensagem por e-mail Pedindo para o usuário clicar em um link, com o uuid_senha ou algo do tipo
     try {
         let res = await email.sendEmail(gmail_token, process.env.GMAIL_ADDRESS, user.email, subject, body);
