@@ -35,7 +35,7 @@ async function deleteUser(req, res, next) {
 
 async function changePassword(req, res, next){
   try {
-    const { id_user } = req.user;
+    const { id_user } = req.user.id_user;
     const responseData = await userService.changePassword(id_user, req.body.password);
     res.json(responseData);
   } catch (error){

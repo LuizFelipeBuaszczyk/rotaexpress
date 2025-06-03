@@ -2,10 +2,14 @@ import '../panel.js';
 import { refreshAuthToken } from '../../Scripts/utils/http.js';
 import { formatter_phone_number, formatter_cpf } from '../../Scripts/utils/formatter.js';
 import { showNotification } from '../../Scripts/utils/notifications.js';
+import { isSamePassword } from '../../Scripts/utils/validator.js';
 
 document.getElementById('edit-button').addEventListener('click', allowEditFields);
 document.getElementById('save-button').addEventListener('click', sendUpdatedFields);
 document.getElementById('delete-button').addEventListener('click', deleteUser);
+document.getElementById('alter-password').addEventListener('click', showChangePasswordModal);
+document.getElementById('cancel-change-password-button').addEventListener('click', cancelChangePassword);
+document.getElementById('send-change-password-button').addEventListener('click', sendChangePassword);
 
 document.getElementById('cpf').addEventListener('input', inputCPFField);
 document.getElementById('number').addEventListener('input', inputNumberField);
@@ -181,7 +185,6 @@ function sendUpdatedFields(){
         showNotification('Dados atualizados!', document.getElementById('notification'),colorMessage)
     })
     .catch(error => {
-        console.log(error)
         const colorMessage = 'red';
         switch(error.status){
             case 401:
@@ -238,3 +241,49 @@ function deleteUser(){
         })
     }
 }
+
+function showChangePasswordModal(){
+    const modal = document.getElementById('change-password-modal');
+
+    modal.showModal();
+}
+
+function cancelChangePassword () {
+    const modal = document.getElementById('change-password-modal');
+
+    modal.close();
+}
+
+function sendChangePassword(){
+    const password = document.getElementById('new-password').value;
+    const confirmPassword = document.getElementById('confirm-new-passoword').value;
+
+
+    if(isSamePassword(password, confirmPassword)){
+        const bodyRequest = {
+            'password': password
+        }
+
+        fetch('/api/users/password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bodyRequest)
+        })
+        .then(response => {
+
+            proccessChangePasswordResponse(response);
+    });
+    }
+    else{
+        // Mostar texto que deve ter as mesmas caracteres
+    }
+}
+
+function proccessChangePasswordResponse (res) {
+
+    const status_code = res.status;
+
+    console.log(res);
+} 

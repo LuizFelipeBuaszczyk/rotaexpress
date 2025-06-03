@@ -118,3 +118,53 @@
     color: white;
     background-color: green;
 }
+
+#change-password-modal {
+    position: fixed;
+    margin: auto;
+
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 30px;
+
+}
+
+#change-password-modal .modal-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+#change-password-modal #input-change-password-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    width: 100%;
+    gap: 10px;
+}
+
+#change-password-modal.change-password-modal-inputs {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+#change-password-modal div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#change-password-modal button {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
