@@ -53,9 +53,8 @@
                             <input type="text" id="number" name="number" readonly placeholder="(XX) XXXXX-XXXX" maxlength="15">
                         </div>
 
-                        <button id="alter-password"><strong>Alterar Senha</strong></button>
+                        <button type="button" id="alter-password"><strong>Alterar Senha</strong></button>
                     </form>
-
                     <nav>
                         <button id="edit-button"><strong>Editar</strong></button>
                         <button id="save-button"><strong>Salvar</strong></button>
@@ -63,6 +62,26 @@
                     </nav>
                 </section>
             </div>
+
+            <dialog id="change-password-modal">
+                <div class="modal-container">
+                    <h1>Alterar Senha</h1>
+                    <div id="input-change-password-div">
+                        <div class="change-password-modal-inputs">                    
+                            <label>Digite a sua nova senha: </label>
+                            <input type="password" name="newPassword" id="new-password">
+                        </div>
+                        <div class="change-password-modal-inputs">
+                            <label>Confirme a sua nova senha: </label>
+                            <input type="password" name="confirmNewPassord" id="confirm-new-passoword">
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" id="send-change-password-button">Enviar</button>
+                        <button type="button" id="cancel-change-password-button">Cancelar</button>
+                    </div>
+                </div>
+            </dialog>
             
             <!-- pop-up para realizar logout-->
             <div id="logout-modal" class="modal">

@@ -15,7 +15,7 @@ document.getElementById('cancel-logout-button').addEventListener('click', () => 
 document.getElementById('confirm-logout-button').addEventListener('click', logout); 
 
 window.onload = () => {
-    login = checkToken();
+    const login = checkToken();
     if (!login){
         window.location.href = '/signin'
     }
