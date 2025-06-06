@@ -63,7 +63,6 @@ function allowEditFields(){
     }
 }
 
-
 // Máscara e validação das teclas digitadas pelo usuário no campo de CPF
 function inputCPFField() {
     let cpf = document.getElementById('cpf').value;
