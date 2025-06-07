@@ -3,10 +3,12 @@ const userController = require("../controllers/user.controller");
 const hashPassword = require("../utils/password.hash");
 const authMiddleware = require("../middlewares/auth.middleware");
 const validatePutUser = require("../middlewares/user.put.middleware");
+const { validateChangePassword } = require("../middlewares/user.middleware");
 
 const router = express.Router();
 
 router.get("/", authMiddleware, userController.getUserById);
+
 router.put(
   "/",
   hashPassword,
@@ -14,7 +16,14 @@ router.put(
   validatePutUser,
   userController.updateUsers
 );
-router.post("/password", hashPassword, authMiddleware, userController.changePassword)
+
+router.post("/password", 
+  authMiddleware, 
+  validateChangePassword, 
+  hashPassword,
+  userController.changePassword
+);
+
 router.delete("/", authMiddleware, userController.deleteUser);
 
 module.exports = router;

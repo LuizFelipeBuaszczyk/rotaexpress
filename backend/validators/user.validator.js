@@ -21,4 +21,11 @@ const updateUserSchema = z.object({
   phone_number: z.string().max(20).optional().nullable(),
 });
 
-module.exports = { createUserSchema, updateUserSchema };
+const changeUserPasswordSchema = z.object({
+  password: z
+    .string({ required_error: "O campo password deve ser preenchido corretamente" })
+    .min(6, {message: "A senha deve conter no minímo 6 digítos."})
+    .max(200, {message: "A senha deve conter no máximo 200 digítos."})
+});
+
+module.exports = { createUserSchema, updateUserSchema, changeUserPasswordSchema };
