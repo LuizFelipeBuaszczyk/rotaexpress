@@ -144,3 +144,66 @@
 .btn-criar-empresa:hover {
     background-color: #218838;
 }
+
+#firm-modal {
+    position: fixed;
+    margin: auto;
+    padding: 10px;
+    width: 80%;
+    height: 70%;
+    border-radius: 20px;
+}
+
+.modalContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+}
+
+#firm-modal header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.modalContainer button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    padding: 10px;
+}
+
+.modalContainer form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.modalContainer form section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.divInput {
+    display: flex;
+    flex-direction: column;
+}
+
+.buttonsDiv {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: end;
+    gap: 7px;
+}
+
+#members-data {
+    width: 100%;
+}
