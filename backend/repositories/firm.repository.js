@@ -28,9 +28,15 @@ async function deleteById(id_firm) {
   });
 }
 
-async function findById(id_firm, fk_id_user) {
+async function findByIdAndIdUser(id_firm, fk_id_user) {
   return await Firm.findOne({
     where: { id_firm, fk_id_user },
+  });
+}
+
+async function findById(id_firm){
+  return await Firm.findOne({
+    where: { id_firm }
   });
 }
 
@@ -40,5 +46,6 @@ module.exports = {
   findByIdUser,
   updateById,
   deleteById,
-  findById,
+  findByIdAndIdUser,
+  findById
 };

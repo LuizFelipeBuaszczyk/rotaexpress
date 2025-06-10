@@ -50,7 +50,7 @@ async function updateFirm(firmData, id_firm, id_user) {
 }
 
 async function deleteFirm(id_firm, id_user) {
-  const existsFirm = await firmRepository.findById(id_firm, id_user);
+  const existsFirm = await firmRepository.findByIdAndIdUser(id_firm, id_user);
 
   if (!existsFirm) {
     const error = new Error("Firma não encontrada!");
