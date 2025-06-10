@@ -1,4 +1,5 @@
 const Firm = require("../models/firm.model");
+const { Op } = require("sequelize"); 
 
 async function create(firmData) {
   return await Firm.create(firmData);
@@ -40,6 +41,18 @@ async function findById(id_firm){
   });
 }
 
+async function findAllByName(name, fk_id_user){
+  const searchName = `%${name}%`;
+
+  return await Firm.findAll({
+    where: { 
+      fk_id_user: fk_id_user, 
+      name: {
+        [Op.like]: searchName
+      } }
+  });
+}
+
 module.exports = {
   create,
   findNameById,
@@ -47,5 +60,6 @@ module.exports = {
   updateById,
   deleteById,
   findByIdAndIdUser,
-  findById
+  findById,
+  findAllByName
 };

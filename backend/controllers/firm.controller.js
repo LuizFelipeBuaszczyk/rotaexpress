@@ -22,6 +22,17 @@ async function getFirmByIDUser(req, res, next) {
   }
 }
 
+async function getFirmByName (req, res, next){
+  try {
+    const { id_user } = req.user;
+    const { name } = req.params;
+    const firms = await firmService.getFirmByName(id_user, name);
+    return res.json(firms);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function updateFirm(req, res, next) {
   try {
     const { id_user } = req.user;
@@ -62,5 +73,6 @@ module.exports = {
   getFirmByIDUser,
   updateFirm,
   deleteFirm,
-  addMember
+  addMember,
+  getFirmByName,
 };

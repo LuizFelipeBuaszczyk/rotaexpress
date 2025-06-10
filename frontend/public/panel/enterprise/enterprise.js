@@ -44,21 +44,58 @@ function getDataFirms(){
 
 function getDataFirmsByName(){
     const name = document.getElementById('name-search').value;
-    console.log(name)
+
+    fetch(`/api/firms/name/${name}`, {
+        method: 'GET',
+        credentials: 'include',
+    })
+    .then(response => {
+        const status_code = response.status;        
+        switch (Math.floor(status_code / 100)) {
+            case 4: // Caso tiver algum erro ele pula direto para o .catch
+                return response.json().then(err => {
+                    return Promise.reject({
+                        status: response.status,
+                        body: err
+                    });
+                });
+            default:
+                return response.json(); 
+        }
+    })
+    .then(data => { updateFirmTable(data) })
+    .catch(error => {
+        if (error.status === 401) {
+            const refreshed = refreshAuthToken();
+            if (refreshed){
+                getDataFirms();
+            }
+        }
+    })
 }
 
 function updateFirmTable(data){
+    firms = [];
+
+
     const table = document.getElementById('enterprise-table');
+    table.innerHTML = '';
     let sequence = 0;
 
-    table.innerHTML =   ` 
-                        <thead>
-                            <tr>
-                                <th>Sequencial</th>
-                                <th>Nome</th>
-                            </tr>
-                        </thead>
-                        `;
+    const headerLine = document.createElement('tr');
+
+    const tdHeaderSequence = document.createElement('th');
+    tdHeaderSequence.className = 'firmSequenceColumn';
+    tdHeaderSequence.textContent = 'Sequencia';
+
+    const tdHeaderName = document.createElement('th');
+    tdHeaderName.className = 'firmNameColumn';
+    tdHeaderName.textContent = 'Nome';
+
+    headerLine.appendChild(tdHeaderSequence);
+    headerLine.appendChild(tdHeaderName);
+    table.appendChild(headerLine);
+
     // Guardar os valores das empresas ?
     data.forEach(firm => {
         sequence++;
@@ -67,9 +104,11 @@ function updateFirmTable(data){
         const line = document.createElement('tr');
 
         const tdSequence = document.createElement('td');
+        tdSequence.className = 'firmSequenceColumn';
         tdSequence.textContent = sequence;
 
         const tdName = document.createElement('td');
+        tdName.className = 'firmNameColumn';
         tdName.textContent = firm.name;
 
         line.appendChild(tdSequence);

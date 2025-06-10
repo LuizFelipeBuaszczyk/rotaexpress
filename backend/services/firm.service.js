@@ -24,6 +24,23 @@ async function getFirmByIDUser(id_user) {
   return await firmRepository.findByIdUser(id_user);
 }
 
+async function getFirmByName(id_user, name){
+  // Caso não tiver name ele retorna todas
+  if (name == ''){
+    return await getFirmByIDUser(id_user);
+  }
+
+  // Select com LIKE
+  const firms = await firmRepository.findAllByName(name, id_user);
+  
+  if (!firms){
+    return [];
+  }
+
+  return firms;
+
+}
+
 async function updateFirm(firmData, id_firm, id_user) {
   const existsFirm = await firmRepository.findById(id_firm, id_user);
   if (!existsFirm) {
@@ -66,4 +83,5 @@ module.exports = {
   getFirmByIDUser,
   updateFirm,
   deleteFirm,
+  getFirmByName,
 };
