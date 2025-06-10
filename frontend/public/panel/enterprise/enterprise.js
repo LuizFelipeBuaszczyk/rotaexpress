@@ -69,25 +69,36 @@ function updateFirmTable(data){
         const tdSequence = document.createElement('td');
         tdSequence.textContent = sequence;
 
-        const tdName = document.createElement('name');
+        const tdName = document.createElement('td');
         tdName.textContent = firm.name;
 
         line.appendChild(tdSequence);
         line.appendChild(tdName);
         
-        line.addEventListener("dblclick", showFirmModal);
+        line.addEventListener("dblclick", () => {
+            let cells = line.querySelectorAll("td");
+            showFirmModal (cells)
+        });
 
         table.appendChild(line);
     });
 }
 
 // Mostrar o modal de firmas -- Para personalizar os dados da empresa, adicionar funcionários e etc...
-function showFirmModal() {
+function showFirmModal(cells) {
+
     const modal = document.getElementById("firm-modal");
     const firmName =  document.getElementById("firm-name");
 
+    let sequence = (cells[0].innerText) - 1; 
+
+    const nameField = document.getElementById('name');
+    const addressField = document.getElementById('address');
+
     // Pegar o sequencial da tabela
-    firmName.textContent = firms[0].name;
+    firmName.textContent = firms[sequence].name;
+    nameField.value = firms[sequence].name;
+    addressField.value = firms[sequence].address;
 
     modal.showModal();
 }
