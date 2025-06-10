@@ -60,7 +60,9 @@ body {
     background-color: #34495e;
 }
 
-
+button:hover{
+    cursor: pointer;
+}
 
 /* Conteúdo principal */
 .main-content {
