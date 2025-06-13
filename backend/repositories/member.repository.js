@@ -16,8 +16,20 @@ async function findByIdUserAndIdFirm(fk_id_user, fk_id_firm) {
     });
 }
 
+async function findMemberByFirm(fk_id_firm) {
+    return await Member.findAll({
+        where: { fk_id_firm }
+    });
+}
+
+async function findAll() {
+    return await Member.findAll();
+}
+
 module.exports = {
     create,
     findMemberByIdUser,
-    findByIdUserAndIdFirm
+    findByIdUserAndIdFirm,
+    findMemberByFirm,
+    findAll
 }

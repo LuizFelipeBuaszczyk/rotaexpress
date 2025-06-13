@@ -26,7 +26,6 @@ async function addMember(id_user, id_firm, data){
             error.statusCode = 401;
             throw error;
         }
-        
     }
 
     const userByEmail = await userRepository.findByEmail(data.email);
@@ -39,10 +38,12 @@ async function addMember(id_user, id_firm, data){
     
     const user = userByEmail.dataValues;
 
-    const is_already_member = await memberRepository.findByIdUserAndIdFirm(user.id_user, id_firm);
+    let is_already_member = await memberRepository.findByIdUserAndIdFirm(user.id_user, id_firm);
+
+    is_already_member = (is_already_member || (user.id_user == firm.fk_id_user))
 
     if (is_already_member){
-        const error = new Error("Esta pessoa já esta na organização.");
+        const error = new Error("Pessoa já pertence à organização.");
         error.statusCode = 400;
         throw error;
     } 
@@ -56,6 +57,23 @@ async function addMember(id_user, id_firm, data){
     return await memberRepository.create(newMember);
 }
 
+// Retorna os membros de uma firma
+async function getMemberByFirm(id_user, id_firm){
+
+    // Regras??
+    // Verificar se o id da org existe?
+    // Verificar se o id_user faz parte da org?
+
+    return await memberRepository.findMemberByFirm(id_firm);
+}
+
+// Retorna as firmas que o usuário é membro
+async function getMemberByUser(id_user){
+
+}
+
 module.exports = {
-    addMember
+    addMember,
+    getMemberByFirm,
+    getMemberByUser
 }   

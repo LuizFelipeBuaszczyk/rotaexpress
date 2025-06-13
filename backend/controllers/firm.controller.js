@@ -68,6 +68,17 @@ async function addMember(req, res, next) {
   }
 }
 
+async function getMemberByFirm(req, res, next) {
+  try{
+    const { id_user } = req.user;
+    const { id } = ParamsSchema.parse(req.params);
+    const members = await memberService.getMemberByFirm(id_user, id);
+    return res.json(members);
+  }catch(error){
+    next(error);
+  }
+}
+
 module.exports = {
   createFirm,
   getFirmByIDUser,
@@ -75,4 +86,5 @@ module.exports = {
   deleteFirm,
   addMember,
   getFirmByName,
+  getMemberByFirm,
 };

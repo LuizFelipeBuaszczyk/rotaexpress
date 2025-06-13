@@ -21,5 +21,5 @@ router.delete("/:id", authMiddleware, firmController.deleteFirm);
 
 // Member
 router.post("/member/:id", authMiddleware, validateAddMember, firmController.addMember);
-
+router.get("/member/:id", authMiddleware, firmController.getMemberByFirm)
 module.exports = router;

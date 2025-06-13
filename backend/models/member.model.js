@@ -12,6 +12,10 @@ const Member = sequelize.define("members", {
   role: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
+  },
+  active : {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
   }
 });
 
@@ -20,6 +24,6 @@ Member.belongsTo(User, { foreignKey: "fk_id_user", onDelete: "CASCADE" });
 User.hasMany(Member, { foreignKey: "fk_id_user" });
 
 Member.belongsTo(Firm, { foreignKey: "fk_id_firm", onDelete: "CASCADE" });
-Firm.hasMany(Member, { foreignKey: "fk_id_firm" })
+Firm.hasMany(Member, { foreignKey: "fk_id_firm" });
 
 module.exports = Member;
