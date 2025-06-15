@@ -60,12 +60,24 @@ async function addMember(id_user, id_firm, data){
 // Retorna os membros de uma firma
 async function getMemberByFirm(id_user, id_firm){
 
-    // Regras??
-    // Verificar se o id da org existe?
-    // Verificar se o id_user faz parte da org?
-    // Retornar um objeto mais legal
+    let firms = await firmRepository.findById(id_firm); 
 
-    return await memberRepository.findMemberByFirm(id_firm);
+    // Se a firma não existe retorna 1 objeto vazio
+    if(!firms){
+        return [];
+    }
+
+    firms = firms.dataValues;
+
+    // Verificando se pode visualizar os membros
+    if ((firms.fk_id_user != id_user)) {
+        const error = new Error("Sem permissão para visualizar os membros dessa organização.");
+        error.statusCode = 401;
+        throw error;
+    }
+
+    // Retornar um objeto mais legal
+    return await memberRepository.findMemberByFirm(id_firm);  ;
 }
 
 // Retorna as firmas que o usuário é membro
