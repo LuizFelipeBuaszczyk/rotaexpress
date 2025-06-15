@@ -3,6 +3,8 @@ const {
   updateFirmSchema,
 } = require("../validators/firm.validator");
 
+const { createMemberSchema } = require("../validators/member.validator");
+
 const validateCreateFirm = async (req, res, next) => {
   const validation = await createFirmSchema.safeParseAsync(req.body);
 
@@ -23,7 +25,18 @@ const validateUpdateFirm = async (req, res, next) => {
   next();
 };
 
+const validateAddMember = async (req, res, next) => {
+  const validation = await createMemberSchema.safeParseAsync(req.body);
+
+  if (!validation.success){
+    return next(validation.error);
+  }
+
+  next();
+}
+
 module.exports = {
   validateCreateFirm,
   validateUpdateFirm,
+  validateAddMember
 };

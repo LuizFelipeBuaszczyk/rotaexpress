@@ -256,9 +256,12 @@ function cancelChangePassword () {
 function sendChangePassword(){
     const password = document.getElementById('new-password').value;
     const confirmPassword = document.getElementById('confirm-new-passoword').value;
+    const errorMessage = document.getElementById('error-message-change-password');
+    errorMessage.textContent = '';
 
+    const validate = isSamePassword(password, confirmPassword);
 
-    if(isSamePassword(password, confirmPassword)){
+    if(validate){
         const bodyRequest = {
             'password': password
         }
@@ -272,17 +275,35 @@ function sendChangePassword(){
         })
         .then(response => {
 
-            proccessChangePasswordResponse(response);
-    });
-    }
-    else{
-        // Mostar texto que deve ter as mesmas caracteres
+            const status_code = response.status;
+
+            switch (Math.floor(status_code / 100)) {
+                case 4: // Caso tiver algum erro ele pula direto para o .catch
+                    return response.json().then(err => {
+                        return Promise.reject({
+                            status: response.status,
+                            body: err
+                        });
+                    });
+                default:
+                    return response.json();
+            }
+            
+        })
+        .then(data => {
+            proccessChangePasswordResponse(data);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    } else {
+        errorMessage.textContent = 'Os campos de senhas devem estar iguais.'
     }
 }
 
 function proccessChangePasswordResponse (res) {
-
+        console.log(res);
     const status_code = res.status;
 
-    console.log(res);
+
 } 

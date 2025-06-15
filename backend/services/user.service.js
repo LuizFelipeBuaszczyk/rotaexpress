@@ -76,6 +76,8 @@ async function changePassword(id_user, newPassword) {
     throw error;
   }
 
+  // Validar se a senha é correta para colocar no change passoword (password>3) 
+
   const expiresAt = addHours(new Date(), 1);
 
   // Inserir em uma tabela de senhas a confirmar e linka-la com o id_user

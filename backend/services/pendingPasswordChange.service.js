@@ -33,7 +33,7 @@ async function createPendingPassword(pendingPasswordData, user){
             res = await email.sendEmail(gmail_token, process.env.GMAIL_ADDRESS, user.email, subject, body);
         } catch (error) {
             const err = new Error("Ocorreu um erro interno ao enviar o email. Por favor, tente mais tarde!");
-            err.statusCode = 400;
+            err.statusCode = 500;
             throw err;
         }   
     }

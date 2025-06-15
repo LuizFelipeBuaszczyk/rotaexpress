@@ -1,4 +1,4 @@
-const { createUserSchema } = require("../validators/user.validator");
+const { createUserSchema, changeUserPasswordSchema } = require("../validators/user.validator");
 
 const validateUser = async (req, res, next) => {
   const validation = await createUserSchema.safeParseAsync(req.body);
@@ -10,4 +10,17 @@ const validateUser = async (req, res, next) => {
   next();
 };
 
-module.exports = validateUser;
+const validateChangePassword = async (req, res, next) => {
+  const validation = await changeUserPasswordSchema.safeParseAsync(req.body);
+
+  if(!validation.success){
+    return next(validation.error);
+  }
+
+  next();
+}
+
+module.exports = { 
+  validateUser,
+  validateChangePassword
+ };

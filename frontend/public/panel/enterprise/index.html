@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Empresas</title>
+    <title>Organizações</title>
     <link rel="stylesheet" href="enterprise.css">
     <link rel="icon" href="../images/logo.png" />
 
@@ -20,7 +20,7 @@
             <ul class="menu">
                 <li><a href="/panel">Página Inicial</a></li>
                 <li><a href="/panel/profile">Minha Conta</a></li>
-                <li><a href="/panel/enterprise">Empresa</a></li>
+                <li><a href="/panel/enterprise">Organizações</a></li>
                 <li><a href="/panel/config">Configurações</a></li>
                 <li><a href="/panel/notification">Notificações</a></li>
                 <li><a href="#" data-logout>Sair</a></li>
@@ -29,17 +29,51 @@
 
         <!-- Conteúdo principal -->
         <div class="main-content">
-            <h1>Empresa</h1>
+            <h1>Organizações</h1>
 
             <div class="container-principal">
          <div class="busca-container">
-            <input type="text" placeholder="Pesquisa por nome">
+            <input type="text" placeholder="Pesquisa por nome" id="name-search">
             <button id="search-firm-button">Buscar</button>
          </div>
 
             <table class="tabelaPrincipal" id="enterprise-table"></table>
 
-             <button class="btn-criar-empresa">Criar empresa</button>
+            <dialog id="firm-modal">
+                 <header>
+                    <h1 id="firm-name"></h1>
+                    <button class="exitButton" id="exit-firm-modal">X</button>
+                </header>
+                <div class="modalContainer">
+                    <form id="firm-data">
+                        <section>
+                            <div class="divInput">
+                                <label for="name">Nome</label>
+                                <input type="text" name="name" id="name">
+                            </div>
+                            <div class="divInput">
+                                <label for="address">Endereço</label>
+                                <input type="text" name="address" id="address">
+                            </div>
+                        </section>
+                        <div class="buttonsDiv">
+                            <button type="submit">Salvar</button>
+                            <button type="submit">Editar</button>
+                            <button type="submit">Deletar</button>
+                        </div>
+                    </form>
+                    <div id="members-data">
+                        <h1>Lista de Membros</h1>
+                        <table></table>
+                        <div class="buttonsDiv">
+                            <button type="button">Adicionar Membro</button>
+                            <button type="button">Remover Membro</button>
+                        </div>
+                    </div>
+                </div>
+            </dialog>
+
+            <button class="btn-criar-empresa">Criar empresa</button>
 
 
             <!-- pop-up para realizar logout-->

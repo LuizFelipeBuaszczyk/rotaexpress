@@ -1,4 +1,5 @@
 const userService = require("../services/user.service");
+const memberService = require("../services/member.service");
 
 async function getUserById(req, res) {
   try {
@@ -43,4 +44,20 @@ async function changePassword(req, res, next){
   }
 }
 
-module.exports = { getUserById, updateUsers, deleteUser, changePassword };
+async function getFirmsWhenUserIsMember(req, res, next) {
+  try{
+    const { id_user } = req.user;
+    const firms = await memberService.getMemberByUser(id_user);
+    res.json(firms);
+  }catch(error){
+    next(error);
+  }
+}
+
+module.exports = { 
+  getUserById, 
+  updateUsers, 
+  deleteUser, 
+  changePassword, 
+  getFirmsWhenUserIsMember 
+};
