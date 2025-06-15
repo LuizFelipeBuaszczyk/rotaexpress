@@ -26,4 +26,6 @@ router.post("/password",
 
 router.delete("/", authMiddleware, userController.deleteUser);
 
+router.get("/firms/member", authMiddleware, userController.getFirmsWhenUserIsMember);
+
 module.exports = router;

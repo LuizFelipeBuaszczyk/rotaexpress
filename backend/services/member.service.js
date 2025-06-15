@@ -30,7 +30,7 @@ async function addMember(id_user, id_firm, data){
 
     const userByEmail = await userRepository.findByEmail(data.email);
 
-    if (!userByEmail){
+    if (!userByEmail){""
         const error = new Error("Não existe nenhum usuário cadastrado com este email.");
         error.statusCode = 404;
         throw error;
@@ -63,17 +63,19 @@ async function getMemberByFirm(id_user, id_firm){
     // Regras??
     // Verificar se o id da org existe?
     // Verificar se o id_user faz parte da org?
+    // Retornar um objeto mais legal
 
     return await memberRepository.findMemberByFirm(id_firm);
 }
 
 // Retorna as firmas que o usuário é membro
 async function getMemberByUser(id_user){
-
+    // Retornar o nome das organizações que o usuário e membro e sua rule nela
+    return await memberRepository.findMemberByIdUser(id_user);
 }
 
 module.exports = {
     addMember,
     getMemberByFirm,
-    getMemberByUser
+    getMemberByUser,
 }   

@@ -5,7 +5,7 @@ async function create(data){
 }
 
 async function findMemberByIdUser(fk_id_user) {
-    return await Member.findOne({
+    return await Member.findAll({
         where: { fk_id_user }
     });
 }
@@ -22,14 +22,9 @@ async function findMemberByFirm(fk_id_firm) {
     });
 }
 
-async function findAll() {
-    return await Member.findAll();
-}
-
 module.exports = {
     create,
     findMemberByIdUser,
     findByIdUserAndIdFirm,
     findMemberByFirm,
-    findAll
 }
