@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="routes.css">
+    <link rel="icon" href="../images/logo.png" />
+
+    <script type="module" src="panel.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Barra lateral -->
+        <div class="sidebar">
+            <div class="profile">
+        
+                <h2>Nome da Pessoa</h2>
+            </div>
+            <ul class="menu">
+                <li><a href="/panel">Página Inicial</a></li>
+                <li><a href="/panel/profile">Minha Conta</a></li>
+                <li><a href="/panel/enterprise">Empresa</a></li>
+                <li><a href="/panel/config">Configurações</a></li>
+                <li><a href="/panel/notification">Notificações</a></li>
+                <li><a href="#" data-logout>Sair</a></li>
+            </ul>
+            
+        </div>
+
+        <div class="main-content">
+
+            <div class="containerCentro">
+
+                <!--Rotas disponíveis--> 
+                <div class="containerEsquerdo">
+                  <h1>ROTAS</h1>
+                  <hr>
+
+                </div>
+
+                <!--MAPA--> 
+                <div class="containerDireito">
+                    <p>MAPA</p>
+                </div>
+
+            </div>
+
+    
+       
+
+         <!-- Conteúdo principal -->
+            <!-- pop-up para realizar logout-->
+            <div id="logout-modal" class="modal">
+                <div class="content-modal">
+                    <p>Tem certeza que deseja sair?</p>
+                    <button id="cancel-logout-button">Cancelar</button>
+                    <button id="confirm-logout-button">Confirmar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
