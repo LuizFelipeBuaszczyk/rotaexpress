@@ -206,6 +206,7 @@ body {
     height: 95%;
     border: 2px solid black;
     box-sizing: border-box;
+    border-radius: 2em;
 }
 
 .BotaoConfigRotas {
