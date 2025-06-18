@@ -172,7 +172,7 @@ body {
 .containerEsquerdo {
     display: flex;
     flex-direction: column;
-    justify-content: baseline;
+    justify-content: space-between;
     text-align: center;
     align-items: center;
     width: 50%;
@@ -239,9 +239,9 @@ body {
 
 }
 
+/* Botões padrão base */
 .BotoesRotas button {
     padding: 10px 24px;
-    background-color: #28a745; /* Verde */
     color: white;
     border: none;
     border-radius: 8px;
@@ -252,27 +252,25 @@ body {
     transition: background-color 0.3s, transform 0.2s;
 }
 
-.BotoesRotas button:hover {
-    background-color: #218838; /* Verde mais escuro no hover */
+/* Adicionar - Verde */
+.BotoesRotas .adicionar {
+    background-color: #28a745;
+}
+
+.BotoesRotas .adicionar:hover {
+    background-color: #218838;
     transform: translateY(-2px);
 }
 
-.BotoesRotas button:active {
+.BotoesRotas .adicionar:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Editar - Amarelo */
 .BotoesRotas .editar {
-    padding: 10px 24px;
-    background-color: #ffc107; /* Amarelo */
+    background-color: #ffc107;
     color: black;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    transition: background-color 0.3s, transform 0.2s;
 }
 
 .BotoesRotas .editar:hover {
@@ -281,6 +279,36 @@ body {
 }
 
 .BotoesRotas .editar:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Excluir - Vermelho */
+.BotoesRotas .excluir {
+    background-color: #dc3545;
+}
+
+.BotoesRotas .excluir:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+.BotoesRotas .excluir:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Voltar - Cinza escuro */
+.BotoesRotas .voltar {
+    background-color: #6c757d;
+}
+
+.BotoesRotas .voltar:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+.BotoesRotas .voltar:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
