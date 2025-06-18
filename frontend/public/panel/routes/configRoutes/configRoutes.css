@@ -177,11 +177,13 @@ body {
     align-items: center;
     width: 50%;
     height: 100%;
-    border: 2px solid black;
+    border: 2px transparent black;
     border-right: none; 
     box-sizing: border-box;
     padding: 1em;
     border-right: none;
+    border-bottom-left-radius: 2em;
+    
 }
 
 /* Mapa mostrando as rotas */
@@ -192,10 +194,11 @@ body {
     text-align: center;
     width: 50%;
     height: 100%;
-    border: 2px solid black;
+    border: 2px transparent black;
     box-sizing: border-box;
     padding: 1em;
-    border-left: none; 
+    border-left: none;
+    border-top-right-radius: 2em; 
 }
 
 .TituloRotas {
@@ -208,6 +211,7 @@ body {
     height: 95%;
     border: 2px solid black;
     box-sizing: border-box;
+    border-radius: 2em;
     padding: 1em;
     gap: 15px;
 }
@@ -221,6 +225,7 @@ body {
     width: 100%;
     height: 95%;
     border: 2px solid black;
+    border-radius: 2em;
     box-sizing: border-box;
     padding: 1em;
     gap: 15px;
