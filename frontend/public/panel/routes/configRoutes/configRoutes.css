@@ -172,9 +172,10 @@ body {
 .containerEsquerdo {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: baseline;
     text-align: center;
-    width: 20%;
+    align-items: center;
+    width: 50%;
     height: 100%;
     border: 2px solid black;
     border-right: none; 
@@ -186,58 +187,98 @@ body {
 .containerDireito {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     text-align: center;
-    width: 100%;
+    width: 50%;
     height: 100%;
     border: 2px solid black;
     box-sizing: border-box;
+    padding: 1em;
 }
 
-.SelecionarRotas {
+.TituloRotas {
     display: flex;
-    padding: 10px;
     flex-direction: column;
-    align-items: center;
     justify-content: baseline;
+    align-items: center;
     text-align: center;
     width: 100%;
     height: 95%;
     border: 2px solid black;
     box-sizing: border-box;
+    padding: 1em;
+    gap: 15px;
 }
 
-.BotaoConfigRotas {
+.TituloEntregas {
     display: flex;
-    align-self: flex-end;
     flex-direction: column;
+    justify-content: baseline;
     align-items: center;
-    justify-content: center;
     text-align: center;
     width: 100%;
-    height: 4%;
+    height: 95%;
+    border: 2px solid black;
     box-sizing: border-box;
+    padding: 1em;
+    gap: 15px;
 }
 
-.BotaoConfigRotas button {
-    padding: 10px 20px;
-    background-color: #007BFF; /* Azul */
+
+
+
+
+.BotoesRotas {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+
+}
+
+.BotoesRotas button {
+    padding: 10px 24px;
+    background-color: #28a745; /* Verde */
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     transition: background-color 0.3s, transform 0.2s;
 }
 
-.BotaoConfigRotas button:hover {
-    background-color: #0056b3; /* Azul mais escuro */
+.BotoesRotas button:hover {
+    background-color: #218838; /* Verde mais escuro no hover */
     transform: translateY(-2px);
 }
 
-.BotaoConfigRotas button:active {
+.BotoesRotas button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.BotoesRotas .editar {
+    padding: 10px 24px;
+    background-color: #ffc107; /* Amarelo */
+    color: black;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.BotoesRotas .editar:hover {
+    background-color: #e0a800;
+    transform: translateY(-2px);
+}
+
+.BotoesRotas .editar:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
