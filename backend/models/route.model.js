@@ -8,16 +8,41 @@ const Route = sequelize.define("routes", {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  cpf: {
-    type: DataTypes.STRING(14),
+  name: {
+    type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
+  },
+  id_delivery_guy: {
+    type: DataTypes.UUIDV4,
+    allowNull: true,
   },
   date: {
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
   },
   description: {
     type: DataTypes.STRING(200),
+    allowNull: true,
+  },
+  origin: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  polyline: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  distancia_metros: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  duracao_segundos: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  waypoint_order: {
+    type: DataTypes.JSON, // Guarda a ordem otimizada das paradas
     allowNull: true,
   },
 });

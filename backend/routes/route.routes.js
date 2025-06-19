@@ -20,5 +20,10 @@ router.put(
   routeController.updateRoutes
 );
 router.delete("/:id", authMiddleware, routeController.deleteRoutes);
+router.post(
+  "/generate-route",
+  authMiddleware,
+  routeController.generateOptimizedRoute
+);
 
 module.exports = router;

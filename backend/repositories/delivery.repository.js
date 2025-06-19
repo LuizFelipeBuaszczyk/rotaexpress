@@ -1,6 +1,7 @@
 const Delivery = require("../models/delivery.model");
 const Firm = require("../models/firm.model");
 const Route = require("../models/route.model");
+const { Op } = require("sequelize");
 
 async function create(deliveryData) {
   return await Delivery.create(deliveryData);
@@ -96,6 +97,16 @@ async function findDeliveryByRouteId(id_route, fk_id_user) {
   });
 }
 
+async function findDeliveriesByIds(deliveryIds) {
+  return await Delivery.findAll({
+    where: {
+      id_delivery: {
+        [Op.in]: deliveryIds,
+      },
+    },
+  });
+}
+
 module.exports = {
   create,
   findById,
@@ -103,4 +114,5 @@ module.exports = {
   deleteById,
   findByUserId,
   findDeliveryByRouteId,
+  findDeliveriesByIds,
 };

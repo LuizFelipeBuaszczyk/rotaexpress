@@ -10,6 +10,22 @@ async function createRoute(req, res, next) {
   }
 }
 
+async function generateOptimizedRoute(req, res, next) {
+  try {
+    const { deliveryIds, originAddress, routeName, fk_id_firm } = req.body;
+    const route = await routeService.generateOptimizedRoute({
+      deliveryIds,
+      originAddress,
+      routeName,
+      id_user: req.user.id_user,
+      fk_id_firm,
+    });
+    res.status(201).json(route);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function getRoutes(req, res, next) {
   try {
     const { firm } = req.query;
@@ -48,4 +64,10 @@ async function deleteRoutes(req, res, next) {
   }
 }
 
-module.exports = { createRoute, getRoutes, updateRoutes, deleteRoutes };
+module.exports = {
+  createRoute,
+  getRoutes,
+  updateRoutes,
+  deleteRoutes,
+  generateOptimizedRoute,
+};

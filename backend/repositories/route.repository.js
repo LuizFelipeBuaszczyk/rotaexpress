@@ -100,6 +100,23 @@ async function findRouteById(id_route, fk_id_user) {
   });
 }
 
+async function findRouteByName(name, fk_id_user) {
+  return await Route.findOne({
+    where: { name },
+    include: [
+      {
+        model: Firm,
+        where: { fk_id_user },
+        required: true,
+        attributes: [],
+      },
+      {
+        model: Delivery,
+      },
+    ],
+  });
+}
+
 module.exports = {
   create,
   findRouteByFirm,
@@ -107,4 +124,5 @@ module.exports = {
   updateRoutes,
   deleteRoutes,
   findRouteById,
+  findRouteByName,
 };
