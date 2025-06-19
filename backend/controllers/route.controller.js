@@ -12,13 +12,13 @@ async function createRoute(req, res, next) {
 
 async function generateOptimizedRoute(req, res, next) {
   try {
-    const { deliveryIds, originAddress, routeName, fk_id_firm } = req.body;
+    const { deliveryIds, originAddress, routeName, id_delivery_guy } = req.body;
     const route = await routeService.generateOptimizedRoute({
       deliveryIds,
       originAddress,
       routeName,
       id_user: req.user.id_user,
-      fk_id_firm,
+      id_delivery_guy,
     });
     res.status(201).json(route);
   } catch (error) {

@@ -36,7 +36,7 @@ async function updateById(id_delivery, updatedData, fk_id_user) {
 }
 
 async function deleteById(id_delivery, fk_id_user) {
-  return await Delivery.destroy({
+  const delivery = await Delivery.findOne({
     where: { id_delivery },
     include: [
       {
@@ -53,6 +53,12 @@ async function deleteById(id_delivery, fk_id_user) {
         ],
       },
     ],
+  });
+  if (!delivery) {
+    return 0;
+  }
+  return await Delivery.destroy({
+    where: { id_delivery },
   });
 }
 
@@ -97,13 +103,28 @@ async function findDeliveryByRouteId(id_route, fk_id_user) {
   });
 }
 
-async function findDeliveriesByIds(deliveryIds) {
+async function findDeliveriesByIds(deliveryIds, fk_id_user) {
   return await Delivery.findAll({
     where: {
       id_delivery: {
         [Op.in]: deliveryIds,
       },
     },
+    include: [
+      {
+        model: Route,
+        required: true,
+        attributes: [],
+        include: [
+          {
+            model: Firm,
+            where: { fk_id_user },
+            required: true,
+            attributes: [],
+          },
+        ],
+      },
+    ],
   });
 }
 

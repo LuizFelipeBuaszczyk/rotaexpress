@@ -14,7 +14,7 @@ const Route = sequelize.define("routes", {
     unique: true,
   },
   id_delivery_guy: {
-    type: DataTypes.UUIDV4,
+    type: DataTypes.UUID,
     allowNull: true,
   },
   date: {
@@ -42,7 +42,7 @@ const Route = sequelize.define("routes", {
     allowNull: true,
   },
   waypoint_order: {
-    type: DataTypes.JSON, // Guarda a ordem otimizada das paradas
+    type: DataTypes.JSON,
     allowNull: true,
   },
 });

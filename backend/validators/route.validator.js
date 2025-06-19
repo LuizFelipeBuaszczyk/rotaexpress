@@ -9,8 +9,9 @@ const createRouteSchema = z.object({
     .transform((val) => new Date(val))
     .refine((val) => !isNaN(val.getTime()), {
       message: "O formato da data deve ser YYYY-MM-DD",
-    }),
-  description: z.string().nullable(),
+    })
+    .optional(),
+  description: z.string().nullable().optional(),
 });
 
 const updateRouteSchema = z.object({

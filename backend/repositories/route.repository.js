@@ -45,13 +45,10 @@ async function updateRoutes(newData, id_route, fk_id_user) {
       },
     ],
   });
-
   if (!route) return null;
-
   await Route.update(newData, {
     where: { id_route },
   });
-
   return await Route.findOne({
     where: { id_route },
     include: [
@@ -109,9 +106,6 @@ async function findRouteByName(name, fk_id_user) {
         where: { fk_id_user },
         required: true,
         attributes: [],
-      },
-      {
-        model: Delivery,
       },
     ],
   });
