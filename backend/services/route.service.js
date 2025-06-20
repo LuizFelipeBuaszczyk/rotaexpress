@@ -3,7 +3,7 @@ const firmRepository = require("../repositories/firm.repository");
 const { Client } = require("@googlemaps/google-maps-services-js");
 const deliveryRepository = require("../repositories/delivery.repository");
 const googleMapsClient = new Client({});
-const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+const API_KEY = "";
 
 async function generateOptimizedRoute({
   deliveryIds,
@@ -27,7 +27,8 @@ async function generateOptimizedRoute({
     throw error;
   }
   const waypoints = deliveries.map((d) => d.address);
-  // Chama api do google
+  console.log("Cheguei");
+  console.log(originAddress, waypoints, API_KEY);
   const directionsResponse = await googleMapsClient.directions({
     params: {
       origin: originAddress,
@@ -37,6 +38,7 @@ async function generateOptimizedRoute({
       key: API_KEY,
     },
   });
+  console.log("Cheguei2");
   if (directionsResponse.data.status !== "OK") {
     const error = new Error(
       `Erro na API do Google: ${directionsResponse.data.status}`
@@ -61,6 +63,7 @@ async function generateOptimizedRoute({
     ),
     waypoint_order: JSON.stringify(rotaCalculada.waypoint_order),
   };
+  console.log("Cheguei3");
   const Rota = await routeRepository.findRouteByName(
     dadosRotaMae.name,
     id_user
@@ -70,7 +73,7 @@ async function generateOptimizedRoute({
     error.statusCode = 404;
     throw error;
   }
-
+  console.log("Cheguei4");
   const novaRota = await routeRepository.updateRoutes(
     dadosRotaMae,
     Rota.id_route,
@@ -112,6 +115,16 @@ async function createRoute(routeData, id_user) {
   routeData.fk_id_firm = firm.id_firm;
 
   return await routeRepository.create(routeData);
+}
+
+async function getRouteById(id_route, id_user) {
+  const route = await routeRepository.findRouteById(id_route, id_user);
+  if (!route) {
+    const error = new Error("Rota não encontrada");
+    error.statusCode = 404;
+    throw error;
+  }
+  return route;
 }
 
 async function getRouteByFirm(firm_name, id_user) {
@@ -165,4 +178,5 @@ module.exports = {
   deleteRoutes,
   generateOptimizedRoute,
   getRouteByName,
+  getRouteById,
 };

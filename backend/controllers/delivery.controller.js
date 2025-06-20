@@ -57,9 +57,27 @@ async function deleteDelivery(req, res, next) {
   }
 }
 
+async function updateRoute(req, res, next) {
+  try {
+    const { id_user } = req.user;
+    const { id } = ParamsSchema.parse(req.params);
+
+    const idsDelivery = req.body.deliveryIds;
+    const delivery = await deliveryService.updateRoute(
+      idsDelivery,
+      id,
+      id_user
+    );
+    res.status(200).json(delivery);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   createDelivery,
   getDeliveries,
   updateDelivery,
   deleteDelivery,
+  updateRoute,
 };

@@ -16,6 +16,10 @@ const Delivery = sequelize.define("deliveries", {
     type: DataTypes.STRING(200),
     allowNull: false,
   },
+  fk_id_user: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
 });
 
 Delivery.belongsTo(Route, { foreignKey: "fk_id_route", onDelete: "CASCADE" });

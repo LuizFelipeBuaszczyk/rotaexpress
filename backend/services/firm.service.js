@@ -24,21 +24,20 @@ async function getFirmByIDUser(id_user) {
   return await firmRepository.findByIdUser(id_user);
 }
 
-async function getFirmByName(id_user, name){
+async function getFirmByName(id_user, name) {
   // Caso não tiver name ele retorna todas
-  if (name == ''){
+  if (name == "") {
     return await getFirmByIDUser(id_user);
   }
 
   // Select com LIKE
   const firms = await firmRepository.findAllByName(name, id_user);
-  
-  if (!firms){
+
+  if (!firms) {
     return [];
   }
 
   return firms;
-
 }
 
 async function updateFirm(firmData, id_firm, id_user) {
@@ -78,10 +77,21 @@ async function deleteFirm(id_firm, id_user) {
   return await firmRepository.deleteById(id_firm);
 }
 
+async function getFirmByRouteId(id_route, id_user) {
+  const firm = await firmRepository.findFirmByRouteId(id_route, id_user);
+  if (!firm) {
+    const error = new Error("Firma não encontrada!");
+    error.statusCode = 404;
+    throw error;
+  }
+  return firm;
+}
+
 module.exports = {
   createFirm,
   getFirmByIDUser,
   updateFirm,
   deleteFirm,
   getFirmByName,
+  getFirmByRouteId,
 };

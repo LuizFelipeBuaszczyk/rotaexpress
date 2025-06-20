@@ -1,5 +1,6 @@
 const Firm = require("../models/firm.model");
-const { Op } = require("sequelize"); 
+const Route = require("../models/route.model");
+const { Op } = require("sequelize");
 
 async function create(firmData) {
   return await Firm.create(firmData);
@@ -35,21 +36,37 @@ async function findByIdAndIdUser(id_firm, fk_id_user) {
   });
 }
 
-async function findById(id_firm){
+async function findById(id_firm) {
   return await Firm.findOne({
-    where: { id_firm }
+    where: { id_firm },
   });
 }
 
-async function findAllByName(name, fk_id_user){
+async function findAllByName(name, fk_id_user) {
   const searchName = `%${name}%`;
 
   return await Firm.findAll({
-    where: { 
-      fk_id_user: fk_id_user, 
+    where: {
+      fk_id_user: fk_id_user,
       name: {
-        [Op.like]: searchName
-      } }
+        [Op.like]: searchName,
+      },
+    },
+  });
+}
+
+async function findFirmByRouteId(fk_id_user, id_route) {
+  return await Firm.findOne({
+    include: [
+      {
+        model: Route,
+        where: {
+          id_route,
+        },
+        attributes: [],
+      },
+    ],
+    where: { fk_id_user },
   });
 }
 
@@ -61,5 +78,6 @@ module.exports = {
   deleteById,
   findByIdAndIdUser,
   findById,
-  findAllByName
+  findAllByName,
+  findFirmByRouteId,
 };

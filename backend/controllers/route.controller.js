@@ -10,6 +10,17 @@ async function createRoute(req, res, next) {
   }
 }
 
+async function getRouteById(req, res, next) {
+  try {
+    const { id } = ParamsSchema.parse(req.params);
+    const { id_user } = req.user;
+    const route = await routeService.getRouteById(id, id_user);
+    res.json(route);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function generateOptimizedRoute(req, res, next) {
   try {
     const { deliveryIds, originAddress, routeName, id_delivery_guy } = req.body;
@@ -70,4 +81,5 @@ module.exports = {
   updateRoutes,
   deleteRoutes,
   generateOptimizedRoute,
+  getRouteById,
 };

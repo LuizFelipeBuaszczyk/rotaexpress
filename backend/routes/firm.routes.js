@@ -17,9 +17,15 @@ router.put(
 );
 router.get("/", authMiddleware, firmController.getFirmByIDUser);
 router.get("/name/:name", authMiddleware, firmController.getFirmByName);
+router.get("/route/:id", authMiddleware, firmController.getFirmByRouteId);
 router.delete("/:id", authMiddleware, firmController.deleteFirm);
 
 // Member
-router.post("/member/:id", authMiddleware, validateAddMember, firmController.addMember);
-router.get("/member/:id", authMiddleware, firmController.getMemberByFirm)
+router.post(
+  "/member/:id",
+  authMiddleware,
+  validateAddMember,
+  firmController.addMember
+);
+router.get("/member/:id", authMiddleware, firmController.getMemberByFirm);
 module.exports = router;

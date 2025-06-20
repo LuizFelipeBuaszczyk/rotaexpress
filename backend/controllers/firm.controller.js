@@ -1,5 +1,5 @@
 const firmService = require("../services/firm.service");
-const memberService = require("../services/member.service")
+const memberService = require("../services/member.service");
 const ParamsSchema = require("../validators/uuidparam.validator");
 
 async function createFirm(req, res, next) {
@@ -22,7 +22,7 @@ async function getFirmByIDUser(req, res, next) {
   }
 }
 
-async function getFirmByName (req, res, next){
+async function getFirmByName(req, res, next) {
   try {
     const { id_user } = req.user;
     const { name } = req.params;
@@ -55,7 +55,6 @@ async function deleteFirm(req, res, next) {
   }
 }
 
-
 // Membros da organização
 async function addMember(req, res, next) {
   try {
@@ -63,18 +62,29 @@ async function addMember(req, res, next) {
     const { id } = ParamsSchema.parse(req.params);
     const member = await memberService.addMember(id_user, id, req.body);
     return res.json(member);
-  } catch (error){
+  } catch (error) {
     next(error);
   }
 }
 
 async function getMemberByFirm(req, res, next) {
-  try{
+  try {
     const { id_user } = req.user;
     const { id } = ParamsSchema.parse(req.params);
     const members = await memberService.getMemberByFirm(id_user, id);
     return res.json(members);
-  }catch(error){
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function getFirmByRouteId(req, res, next) {
+  try {
+    const { id_user } = req.user;
+    const { id } = ParamsSchema.parse(req.params);
+    const firm = await firmService.getFirmByRouteId(id_user, id);
+    return res.json(firm);
+  } catch (error) {
     next(error);
   }
 }
@@ -87,4 +97,5 @@ module.exports = {
   addMember,
   getFirmByName,
   getMemberByFirm,
+  getFirmByRouteId,
 };

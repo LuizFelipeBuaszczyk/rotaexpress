@@ -1,88 +1,238 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="configRoutes.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configurar Rotas</title>
+    <link rel="stylesheet" href="configRoutes.css" />
     <link rel="icon" href="../images/logo.png" />
-
-    <script type="module" src="panel.js" defer></script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <!-- Barra lateral -->
-        <div class="sidebar">
-            <div class="profile">
-        
-                <h2>Nome da Pessoa</h2>
-            </div>
-            <ul class="menu">
-                <li><a href="/panel">Página Inicial</a></li>
-                <li><a href="/panel/profile">Minha Conta</a></li>
-                <li><a href="/panel/enterprise">Empresa</a></li>
-                <li><a href="/panel/routes">Rotas</a></li>
-                <li><a href="/panel/config">Configurações</a></li>
-                <li><a href="/panel/notification">Notificações</a></li>
-                <li><a href="#" data-logout>Sair</a></li>
-            </ul>
-            
+      <div class="sidebar">
+        <div class="profile">
+          <h2>Nome da Pessoa</h2>
         </div>
+        <ul class="menu">
+          <li><a href="/panel">Página Inicial</a></li>
+          <li><a href="/panel/profile">Minha Conta</a></li>
+          <li><a href="/panel/enterprise">Empresa</a></li>
+          <li><a href="/panel/routes">Rotas</a></li>
+          <li><a href="/panel/config">Configurações</a></li>
+          <li><a href="/panel/notification">Notificações</a></li>
+          <li><a href="#" data-logout>Sair</a></li>
+        </ul>
+      </div>
 
-        <div class="main-content">
-
-            <div class="containerCentro">
-
-                <!--Rotas disponíveis--> 
-                <div class="containerEsquerdo">
-
-                    <div class="TituloRotas">
-                    <h1>ROTAS</h1>
-                        
-                        <!--Rotas-->
-
-                    </div>
-
-                      
-
-                </div>
-
-                <!--Entregas disponiveis--> 
-                <div class="containerDireito">
-                     
-                    <div class="TituloEntregas">
-                    <h1>ENTREGAS</h1>
-                    
-                        <!--Entregas-->
-
-                    </div>
-
-                    <div class="BotoesRotas">
-                     <button class="adicionar">Adicionar Rota</button>
-                     <button class="adicionar">Adicionar Entrega</button>
-                     <button class="editar">Editar</button>
-                     <button class="excluir">Excluir</button>
-                      <button class="voltar">Voltar</button>
-                    </div>
-
-                </div>
-
+      <div class="main-content">
+        <div class="containerCentro">
+          <div class="containerEsquerdo">
+            <div class="TituloRotas">
+              <h1>SELECIONE UMA ROTA</h1>
+              <div id="listed-routes-container">
+                <p>Carregando rotas...</p>
+              </div>
             </div>
+          </div>
 
-    
-       
-
-         <!-- Conteúdo principal -->
-            <!-- pop-up para realizar logout-->
-            <div id="logout-modal" class="modal">
-                <div class="content-modal">
-                    <p>Tem certeza que deseja sair?</p>
-                    <button id="cancel-logout-button">Cancelar</button>
-                    <button id="confirm-logout-button">Confirmar</button>
-                </div>
+          <div class="containerDireito">
+            <div class="TituloEntregas">
+              <h1>MARQUE AS ENTREGAS</h1>
+              <div id="listed-deliveries-container">
+                <p>Selecione uma rota para ver as entregas.</p>
+              </div>
             </div>
-
+            <div class="BotoesRotas">
+              <button class="salvar" id="save-associations-button">
+                Salvar Associações
+              </button>
+              <button
+                class="voltar"
+                onclick="window.location.href='/panel/routes'"
+              >
+                Voltar
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</body>
+
+    <script>
+      let selectedRouteId = null;
+      let allDeliveries = [];
+
+      async function fetchAndRenderRoutes() {
+        const container = document.getElementById("listed-routes-container");
+        container.innerHTML = "<p>Buscando rotas...</p>";
+
+        try {
+          const response = await fetch("/api/routes/", {
+            credentials: "include",
+          });
+          if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
+          const routes = await response.json();
+          container.innerHTML = "";
+
+          if (routes.length === 0) {
+            container.innerHTML = "<p>Nenhuma rota cadastrada.</p>";
+            return;
+          }
+
+          routes.forEach((route) => {
+            const button = document.createElement("button");
+            button.className = "route-button";
+            button.dataset.id = route.id_route;
+            button.innerHTML = `
+                <strong>${route.description || "Rota sem descrição"}</strong>
+                <br>
+                <small>Data: ${new Date(route.date).toLocaleDateString(
+                  "pt-BR"
+                )}</small>
+            `;
+
+            button.addEventListener("click", () => {
+              document
+                .querySelectorAll(".route-button.selected")
+                .forEach((btn) => btn.classList.remove("selected"));
+              button.classList.add("selected");
+              selectedRouteId = route.id_route;
+              updateDeliveryCheckboxes();
+            });
+            container.appendChild(button);
+          });
+        } catch (error) {
+          console.error("Erro ao buscar rotas:", error);
+          container.innerHTML = "<p>Erro ao carregar rotas.</p>";
+        }
+      }
+
+      async function fetchAndRenderDeliveries() {
+        const container = document.getElementById(
+          "listed-deliveries-container"
+        );
+        container.innerHTML = "<p>Buscando entregas...</p>";
+
+        try {
+          const response = await fetch("/api/deliveries/", {
+            credentials: "include",
+          });
+          if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
+          allDeliveries = await response.json();
+
+          if (allDeliveries.length === 0) {
+            container.innerHTML = "<p>Nenhuma entrega cadastrada.</p>";
+            return;
+          }
+
+          container.innerHTML =
+            "<p>Selecione uma rota para associar entregas.</p>";
+        } catch (error) {
+          console.error("Erro ao buscar entregas:", error);
+          container.innerHTML = "<p>Erro ao carregar entregas.</p>";
+        }
+      }
+
+      function updateDeliveryCheckboxes() {
+        const container = document.getElementById(
+          "listed-deliveries-container"
+        );
+        container.innerHTML = "";
+
+        if (!selectedRouteId) {
+          container.innerHTML =
+            "<p>Selecione uma rota para associar entregas.</p>";
+          return;
+        }
+
+        if (allDeliveries.length === 0) {
+          container.innerHTML = "<p>Nenhuma entrega para associar.</p>";
+          return;
+        }
+
+        allDeliveries.forEach((delivery) => {
+          const deliveryId = `delivery-${delivery.id_delivery}`;
+          const item = document.createElement("div");
+          item.className = "delivery-item";
+
+          const isChecked = delivery.fk_id_route === selectedRouteId;
+
+          item.innerHTML = `
+              <input type="checkbox" id="${deliveryId}" data-id="${
+            delivery.id_delivery
+          }" ${isChecked ? "checked" : ""}>
+              <label for="${deliveryId}">
+                <strong>Endereço:</strong> ${delivery.address}
+                <br>
+                <small>Cliente: ${
+                  delivery.client_name || "Não informado"
+                }</small>
+              </label>
+            `;
+          container.appendChild(item);
+        });
+      }
+
+      async function saveAssociations() {
+        if (!selectedRouteId) {
+          alert("Por favor, selecione uma rota antes de salvar.");
+          return;
+        }
+
+        const checkboxes = document.querySelectorAll(
+          '#listed-deliveries-container input[type="checkbox"]'
+        );
+        const associatedDeliveryIds = Array.from(checkboxes)
+          .filter((checkbox) => checkbox.checked)
+          .map((checkbox) => checkbox.dataset.id);
+
+        const button = document.getElementById("save-associations-button");
+        button.textContent = "Salvando...";
+        button.disabled = true;
+
+        try {
+          const response = await fetch(`/api/deliveries/${selectedRouteId}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ deliveryIds: associatedDeliveryIds }),
+            credentials: "include",
+          });
+
+          if (!response.ok) {
+            const errorData = await response
+              .json()
+              .catch(() => ({ message: "Erro desconhecido." }));
+            throw new Error(
+              `O servidor respondeu com o erro ${response.status}: ${errorData.message}`
+            );
+          }
+
+          alert("Associações salvas com sucesso!");
+
+          const updatedDeliveriesResponse = await fetch("/api/deliveries/", {
+            credentials: "include",
+          });
+          allDeliveries = await updatedDeliveriesResponse.json();
+          updateDeliveryCheckboxes();
+        } catch (error) {
+          console.error("Erro ao salvar associações:", error);
+          alert(`Falha ao salvar as associações: ${error.message}`);
+        } finally {
+          button.textContent = "Salvar Associações";
+          button.disabled = false;
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchAndRenderRoutes();
+        fetchAndRenderDeliveries();
+      });
+
+      document
+        .getElementById("save-associations-button")
+        .addEventListener("click", saveAssociations);
+    </script>
+  </body>
 </html>

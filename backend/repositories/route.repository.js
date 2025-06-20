@@ -1,5 +1,6 @@
 const Route = require("../models/route.model");
 const Firm = require("../models/firm.model");
+const Delivery = require("../models/delivery.model");
 
 async function create(routeData) {
   return await Route.create(routeData);
@@ -92,6 +93,9 @@ async function findRouteById(id_route, fk_id_user) {
         where: { fk_id_user },
         required: true,
         attributes: [],
+      },
+      {
+        model: Delivery,
       },
     ],
   });
