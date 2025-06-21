@@ -1,5 +1,6 @@
 const Route = require("../models/route.model");
 const Firm = require("../models/firm.model");
+const Delivery = require("../models/delivery.model");
 
 async function create(routeData) {
   return await Route.create(routeData);
@@ -45,13 +46,10 @@ async function updateRoutes(newData, id_route, fk_id_user) {
       },
     ],
   });
-
   if (!route) return null;
-
   await Route.update(newData, {
     where: { id_route },
   });
-
   return await Route.findOne({
     where: { id_route },
     include: [
@@ -96,6 +94,23 @@ async function findRouteById(id_route, fk_id_user) {
         required: true,
         attributes: [],
       },
+      {
+        model: Delivery,
+      },
+    ],
+  });
+}
+
+async function findRouteByName(name, fk_id_user) {
+  return await Route.findOne({
+    where: { name },
+    include: [
+      {
+        model: Firm,
+        where: { fk_id_user },
+        required: true,
+        attributes: [],
+      },
     ],
   });
 }
@@ -107,4 +122,5 @@ module.exports = {
   updateRoutes,
   deleteRoutes,
   findRouteById,
+  findRouteByName,
 };

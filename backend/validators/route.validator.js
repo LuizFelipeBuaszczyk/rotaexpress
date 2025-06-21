@@ -1,11 +1,6 @@
 const z = require("zod");
 
 const createRouteSchema = z.object({
-  cpf: z
-    .string({ required_error: "O campo CPF é obrigatório" })
-    .min(11)
-    .max(14)
-    .nonempty(),
   firm_name: z
     .string({ required_error: "O campo firm_name é obrigatório" })
     .nonempty(),
@@ -14,12 +9,12 @@ const createRouteSchema = z.object({
     .transform((val) => new Date(val))
     .refine((val) => !isNaN(val.getTime()), {
       message: "O formato da data deve ser YYYY-MM-DD",
-    }),
-  description: z.string().nullable(),
+    })
+    .optional(),
+  description: z.string().nullable().optional(),
 });
 
 const updateRouteSchema = z.object({
-  cpf: z.string().min(11).max(14).optional(),
   firm_name: z.string().optional(),
   date: z
     .string()

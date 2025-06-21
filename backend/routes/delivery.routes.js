@@ -24,5 +24,6 @@ router.put(
   deliveryController.updateDelivery
 );
 router.delete("/:id", authMiddleware, deliveryController.deleteDelivery);
+router.patch("/:id", authMiddleware, deliveryController.updateRoute);
 
 module.exports = router;

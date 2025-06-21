@@ -2,14 +2,17 @@ const deliveryRepository = require("../repositories/delivery.repository");
 const routeRepository = require("../repositories/route.repository");
 
 async function createDelivery(deliveryData, id_user) {
-  const route = await routeRepository.findRouteById(
-    deliveryData.fk_id_route,
-    id_user
-  );
-  if (!route) {
-    const error = new Error("Rota não encontrada");
-    error.statusCode = 404;
-    throw error;
+  if (deliveryData.fk_id_route === undefined) deliveryData.fk_id_route = null;
+  if (deliveryData.fk_id_route !== null) {
+    const route = await routeRepository.findRouteById(
+      deliveryData.fk_id_route,
+      id_user
+    );
+    if (!route) {
+      const error = new Error("Rota não encontrada");
+      error.statusCode = 404;
+      throw error;
+    }
   }
   return await deliveryRepository.create(deliveryData, id_user);
 }
@@ -54,9 +57,19 @@ async function deleteDelivery(id_user, id_delivery) {
   return await deliveryRepository.deleteById(id_delivery, id_user);
 }
 
+async function updateRoute(idsDelivery, id_route, id_user) {
+  await deliveryRepository.updateAllDeliveriesForRoute(
+    id_route,
+    idsDelivery,
+    id_user
+  );
+  return routeRepository.findRouteById(id_route, id_user);
+}
+
 module.exports = {
   createDelivery,
   getDelivery,
   updateDelivery,
   deleteDelivery,
+  updateRoute,
 };

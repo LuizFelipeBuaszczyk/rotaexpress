@@ -17,6 +17,7 @@ router.put(
 );
 router.get("/", authMiddleware, firmController.getFirmByIDUser);
 router.get("/name/:name", authMiddleware, firmController.getFirmByName);
+router.get("/route/:id", authMiddleware, firmController.getFirmByRouteId);
 router.delete("/:id", authMiddleware, firmController.deleteFirm);
 
 // Member

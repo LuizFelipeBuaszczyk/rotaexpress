@@ -1,65 +1,367 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
-    <link rel="stylesheet" href="routes.css">
-    <link rel="icon" href="../images/logo.png" />
-
-    <script type="module" src="panel.js" defer></script>
-</head>
-<body>
+    <link rel="stylesheet" href="/panel/routes/routes.css" />
+    <link rel="stylesheet" href="/panel/Styles/root.css" />
+    <link rel="icon" href="/panel/images/logo.png" />
+    <script type="module" src="/panel/panel.js" defer></script>
+  </head>
+  <body>
     <div class="container">
-        <!-- Barra lateral -->
-        <div class="sidebar">
-            <div class="profile">
-        
-                <h2>Nome da Pessoa</h2>
+      <div class="sidebar">
+        <div class="profile">
+          <h2>Nome da Pessoa</h2>
+        </div>
+        <ul class="menu">
+          <li><a href="/panel">Página Inicial</a></li>
+          <li><a href="/panel/profile">Minha Conta</a></li>
+          <li><a href="/panel/enterprise">Empresa</a></li>
+          <li><a href="/panel/routes">Rotas</a></li>
+          <li><a href="/panel/config">Configurações</a></li>
+          <li><a href="/panel/notification">Notificações</a></li>
+          <li><a href="#" data-logout>Sair</a></li>
+        </ul>
+      </div>
+
+      <div class="main-content">
+        <div class="containerCentro">
+          <div class="containerEsquerdo">
+            <div class="SelecionarRotas">
+              <h1>ROTAS</h1>
+              <br />
+              <div id="route-buttons-container">
+                <p>Carregando rotas...</p>
+              </div>
             </div>
-            <ul class="menu">
-                <li><a href="/panel">Página Inicial</a></li>
-                <li><a href="/panel/profile">Minha Conta</a></li>
-                <li><a href="/panel/enterprise">Empresa</a></li>
-                <li><a href="/panel/config">Configurações</a></li>
-                <li><a href="/panel/notification">Notificações</a></li>
-                <li><a href="#" data-logout>Sair</a></li>
-            </ul>
-            
+
+            <div class="BotaoConfigRotas">
+              <button
+                onclick="window.location.href='./configRoutes/index.html'"
+              >
+                Configurar Rotas
+              </button>
+            </div>
+          </div>
+
+          <div class="containerDireito" id="map">
+            <p>Clique em uma rota para ver o mapa.</p>
+          </div>
         </div>
 
-        <div class="main-content">
-
-            <div class="containerCentro">
-
-                <!--Rotas disponíveis--> 
-                <div class="containerEsquerdo">
-                  <h1>ROTAS</h1>
-                  <hr>
-
-                </div>
-
-                <!--MAPA--> 
-                <div class="containerDireito">
-                    <p>MAPA</p>
-                </div>
-
-            </div>
-
-    
-       
-
-         <!-- Conteúdo principal -->
-            <!-- pop-up para realizar logout-->
-            <div id="logout-modal" class="modal">
-                <div class="content-modal">
-                    <p>Tem certeza que deseja sair?</p>
-                    <button id="cancel-logout-button">Cancelar</button>
-                    <button id="confirm-logout-button">Confirmar</button>
-                </div>
-            </div>
-
+        <div id="logout-modal" class="modal">
+          <div class="content-modal">
+            <p>Tem certeza que deseja sair?</p>
+            <button id="cancel-logout-button">Cancelar</button>
+            <button id="confirm-logout-button">Confirmar</button>
+          </div>
         </div>
+      </div>
     </div>
-</body>
+
+    <script>
+      const Maps_API_KEY = "";
+
+      let mapLoaded = false;
+      let mapInstance;
+      let currentRoutePath = null;
+      let currentMarkers = [];
+
+      function initMap(routeDataToLoad) {
+        if (
+          !routeDataToLoad ||
+          !routeDataToLoad.polyline ||
+          !routeDataToLoad.origin
+        ) {
+          console.error(
+            "Dados da rota, polyline ou origem ausentes.",
+            routeDataToLoad
+          );
+          document.getElementById("map").innerHTML =
+            "<p>Ocorreu um erro ao gerar a rota. Faltam informações essenciais.</p>";
+          return;
+        }
+        const decodedPath = google.maps.geometry.encoding.decodePath(
+          routeDataToLoad.polyline
+        );
+        if (decodedPath.length === 0) {
+          document.getElementById("map").innerHTML =
+            "<p>Não foi possível decodificar a rota. Verifique os endereços.</p>";
+          return;
+        }
+        if (!mapInstance) {
+          mapInstance = new google.maps.Map(document.getElementById("map"), {
+            zoom: 15,
+            center: decodedPath[0],
+          });
+          mapLoaded = true;
+          document.getElementById("map").addEventListener("click", (event) => {
+            if (event.target.matches(".streetview-button")) {
+              const lat = parseFloat(event.target.getAttribute("data-lat"));
+              const lng = parseFloat(event.target.getAttribute("data-lng"));
+              const location = { lat, lng };
+              const panorama = mapInstance.getStreetView();
+              panorama.setPosition(location);
+              panorama.setPov({ heading: 34, pitch: 10 });
+              panorama.setVisible(true);
+              if (window.infoWindow) window.infoWindow.close();
+            }
+          });
+        }
+        if (currentRoutePath) currentRoutePath.setMap(null);
+        currentMarkers.forEach((marker) => marker.setMap(null));
+        currentMarkers = [];
+
+        if (window.infoWindow) window.infoWindow.close();
+        else window.infoWindow = new google.maps.InfoWindow();
+
+        const routePath = new google.maps.Polyline({
+          path: decodedPath,
+          strokeColor: "#4285F4",
+          strokeWeight: 4,
+        });
+        routePath.setMap(mapInstance);
+        currentRoutePath = routePath;
+        const originMarker = new google.maps.Marker({
+          position: decodedPath[0],
+          map: mapInstance,
+          title: routeDataToLoad.origin,
+          icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        });
+        currentMarkers.push(originMarker);
+        const geocoder = new google.maps.Geocoder();
+        if (routeDataToLoad.deliveries) {
+          routeDataToLoad.deliveries.forEach((delivery, index) => {
+            geocoder.geocode(
+              { address: delivery.address },
+              (results, status) => {
+                if (status === "OK") {
+                  const markerPosition = results[0].geometry.location;
+                  const marker = new google.maps.Marker({
+                    position: markerPosition,
+                    map: mapInstance,
+                    label: `${index + 1}`,
+                    title: delivery.client_name,
+                    icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                  });
+                  currentMarkers.push(marker);
+                  marker.addListener("click", () => {
+                    const contentString = `<div><h4>Entrega ${index + 1}: ${
+                      delivery.client_name || ""
+                    }</h4><p>${
+                      delivery.address
+                    }</p><button class="streetview-button" data-lat="${markerPosition.lat()}" data-lng="${markerPosition.lng()}">Ver Fachada</button></div>`;
+                    window.infoWindow.setContent(contentString);
+                    window.infoWindow.open(mapInstance, marker);
+                  });
+                } else {
+                  console.error(
+                    `Geocoding para ${delivery.address} falhou: ${status}`
+                  );
+                }
+              }
+            );
+          });
+        }
+        const bounds = new google.maps.LatLngBounds();
+        decodedPath.forEach((point) => bounds.extend(point));
+        mapInstance.fitBounds(bounds);
+      }
+
+      function loadGoogleMapsScript(callback) {
+        if (window.google && window.google.maps) {
+          callback();
+          return;
+        }
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${Maps_API_KEY}&libraries=geometry,places&callback=googleMapsLoaded`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+        window.googleMapsLoaded = callback;
+      }
+
+      async function callBackendToGenerateRoute(
+        payload,
+        routeId,
+        buttonElement
+      ) {
+        buttonElement.textContent = "Gerando Rota...";
+
+        try {
+          const generateResponse = await fetch(
+            `/api/routes/generate-route/${routeId}`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify(payload),
+            }
+          );
+
+          if (!generateResponse.ok) {
+            const errorData = await generateResponse
+              .json()
+              .catch(() => ({ message: "Erro desconhecido no servidor." }));
+            throw new Error(
+              `Erro ao gerar a rota. Status: ${generateResponse.status}. Mensagem: ${errorData.message}`
+            );
+          }
+
+          const newlyGeneratedRoute = await generateResponse.json();
+          initMap(newlyGeneratedRoute);
+        } catch (error) {
+          console.error("Falha ao chamar o backend para gerar a rota:", error);
+          document.getElementById(
+            "map"
+          ).innerHTML = `<p>Ocorreu um erro ao gerar a rota: ${error.message}.</p>`;
+          alert(`Não foi possível gerar a rota: ${error.message}`);
+        }
+      }
+
+      async function fetchAndRenderRouteButtons() {
+        const buttonsContainer = document.getElementById(
+          "route-buttons-container"
+        );
+        buttonsContainer.innerHTML = "<p>Carregando rotas...</p>";
+        try {
+          const response = await fetch("/api/routes/", {
+            method: "GET",
+            credentials: "include",
+          });
+          if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+          const routesList = await response.json();
+          buttonsContainer.innerHTML = "";
+          if (routesList.length === 0) {
+            buttonsContainer.innerHTML = "<p>Nenhuma rota disponível.</p>";
+            return;
+          }
+          routesList.forEach((route) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.classList.add("route-button");
+            button.dataset.routeId = route.id_route;
+
+            let buttonText;
+            buttonText = `Rota - ${route.name}`;
+
+            button.innerHTML = `<strong>${buttonText}</strong>`;
+
+            button.addEventListener("click", async (event) => {
+              const allButtons =
+                buttonsContainer.querySelectorAll(".route-button");
+              allButtons.forEach((btn) => btn.classList.remove("selected"));
+              event.currentTarget.classList.add("selected");
+
+              const selectedRouteId = event.currentTarget.dataset.routeId;
+
+              allButtons.forEach((btn) => {
+                btn.disabled = true;
+              });
+
+              const originalButtonHTML = event.currentTarget.innerHTML;
+              event.currentTarget.textContent = "Carregando...";
+
+              try {
+                const detailsResponse = await fetch(
+                  `/api/routes/${selectedRouteId}`,
+                  { method: "GET", credentials: "include" }
+                );
+                if (!detailsResponse.ok)
+                  throw new Error(
+                    `HTTP error! status: ${detailsResponse.status}`
+                  );
+                const routeDetails = await detailsResponse.json();
+
+                loadGoogleMapsScript(async () => {
+                  if (routeDetails.polyline) {
+                    const firmResponse = await fetch(
+                      `/api/firms/route/${selectedRouteId}`,
+                      { method: "GET", credentials: "include" }
+                    );
+                    if (!firmResponse.ok)
+                      throw new Error(
+                        "Não foi possível buscar os dados da empresa."
+                      );
+                    const firmDetails = await firmResponse.json();
+                    routeDetails.origin = firmDetails.address;
+                    initMap(routeDetails);
+                  } else {
+                    if (
+                      !routeDetails.deliveries ||
+                      routeDetails.deliveries.length === 0
+                    ) {
+                      alert(
+                        "Não é possível gerar uma rota sem entregas associadas."
+                      );
+                      document.getElementById(
+                        "map"
+                      ).innerHTML = `<p>Esta rota não possui entregas. Associe ao menos uma entrega na página "Configurar Rotas" para gerar o mapa.</p>`;
+                      return;
+                    }
+
+                    event.currentTarget.textContent = "Buscando origem...";
+
+                    const firmResponse = await fetch(
+                      `/api/firms/route/${selectedRouteId}`,
+                      { credentials: "include" }
+                    );
+                    if (!firmResponse.ok)
+                      throw new Error(
+                        "Não foi possível buscar os dados da empresa."
+                      );
+                    const firmDetails = await firmResponse.json();
+
+                    const payload = {
+                      deliveryIds: routeDetails.deliveries.map(
+                        (d) => d.id_delivery
+                      ),
+                      originAddress: firmDetails.address,
+                      routeName: routeDetails.name,
+                      id_delivery_guy: routeDetails.id_delivery_guy,
+                    };
+
+                    await callBackendToGenerateRoute(
+                      payload,
+                      selectedRouteId,
+                      event.currentTarget
+                    );
+                  }
+                });
+              } catch (error) {
+                console.error(
+                  "Erro no processo de carregar ou gerar rota:",
+                  error
+                );
+                alert(`Ocorreu um erro: ${error.message}`);
+                document.getElementById("map").innerHTML =
+                  "<p>Clique em uma rota para ver o mapa.</p>";
+              } finally {
+                buttonsContainer
+                  .querySelectorAll(".route-button")
+                  .forEach((btn) => {
+                    btn.disabled = false;
+                  });
+                event.currentTarget.innerHTML = originalButtonHTML;
+              }
+            });
+            buttonsContainer.appendChild(button);
+            buttonsContainer.appendChild(document.createElement("br"));
+            buttonsContainer.appendChild(document.createElement("br"));
+          });
+        } catch (error) {
+          console.error("Erro ao buscar lista de rotas:", error);
+          buttonsContainer.innerHTML =
+            "<p>Erro ao carregar rotas. Verifique sua conexão ou tente novamente.</p>";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", fetchAndRenderRouteButtons);
+    </script>
+  </body>
 </html>

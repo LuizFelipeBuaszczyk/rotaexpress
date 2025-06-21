@@ -13,6 +13,7 @@ router.post(
   routeController.createRoute
 );
 router.get("/", authMiddleware, routeController.getRoutes);
+router.get("/:id", authMiddleware, routeController.getRouteById);
 router.put(
   "/:id",
   authMiddleware,
@@ -20,5 +21,10 @@ router.put(
   routeController.updateRoutes
 );
 router.delete("/:id", authMiddleware, routeController.deleteRoutes);
+router.patch(
+  "/generate-route",
+  authMiddleware,
+  routeController.generateOptimizedRoute
+);
 
 module.exports = router;
