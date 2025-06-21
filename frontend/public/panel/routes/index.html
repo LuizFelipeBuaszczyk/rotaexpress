@@ -80,7 +80,7 @@
             routeDataToLoad
           );
           document.getElementById("map").innerHTML =
-            "<p>Ocorreu um erro ao gerar a rota. Faltam informações essenciais (origem ou polyline).</p>";
+            "<p>Ocorreu um erro ao gerar a rota. Faltam informações essenciais.</p>";
           return;
         }
         const decodedPath = google.maps.geometry.encoding.decodePath(
@@ -113,7 +113,10 @@
         if (currentRoutePath) currentRoutePath.setMap(null);
         currentMarkers.forEach((marker) => marker.setMap(null));
         currentMarkers = [];
-        window.infoWindow = new google.maps.InfoWindow();
+
+        if (window.infoWindow) window.infoWindow.close();
+        else window.infoWindow = new google.maps.InfoWindow();
+
         const routePath = new google.maps.Polyline({
           path: decodedPath,
           strokeColor: "#4285F4",
@@ -149,7 +152,7 @@
                       delivery.client_name || ""
                     }</h4><p>${
                       delivery.address
-                    }</p><button class="streetview-button" data-lat="${markerPosition.lat()}" data-lng="${markerPosition.lng()}">Ver Fachada (Street View)</button></div>`;
+                    }</p><button class="streetview-button" data-lat="${markerPosition.lat()}" data-lng="${markerPosition.lng()}">Ver Fachada</button></div>`;
                     window.infoWindow.setContent(contentString);
                     window.infoWindow.open(mapInstance, marker);
                   });
@@ -186,18 +189,19 @@
         buttonElement
       ) {
         buttonElement.textContent = "Gerando Rota...";
-        document.getElementById("map").innerHTML =
-          "<p>Enviando dados para o servidor calcular a rota...</p>";
 
         try {
-          const generateResponse = await fetch(`/api/routes/generate-route`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify(payload),
-          });
+          const generateResponse = await fetch(
+            `/api/routes/generate-route/${routeId}`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify(payload),
+            }
+          );
 
           if (!generateResponse.ok) {
             const errorData = await generateResponse
@@ -209,13 +213,12 @@
           }
 
           const newlyGeneratedRoute = await generateResponse.json();
-
           initMap(newlyGeneratedRoute);
         } catch (error) {
           console.error("Falha ao chamar o backend para gerar a rota:", error);
           document.getElementById(
             "map"
-          ).innerHTML = `<p>Ocorreu um erro ao gerar a rota: ${error.message}. Verifique o console.</p>`;
+          ).innerHTML = `<p>Ocorreu um erro ao gerar a rota: ${error.message}.</p>`;
           alert(`Não foi possível gerar a rota: ${error.message}`);
         }
       }
@@ -241,20 +244,28 @@
           routesList.forEach((route) => {
             const button = document.createElement("button");
             button.type = "button";
-            button.classList.add("route-button-dynamic");
-            const buttonText =
-              route.description || `Rota ${route.id_route.substring(0, 8)}`;
-            button.textContent = buttonText;
+            button.classList.add("route-button");
             button.dataset.routeId = route.id_route;
 
+            let buttonText;
+            buttonText = `Rota - ${route.name}`;
+
+            button.innerHTML = `<strong>${buttonText}</strong>`;
+
             button.addEventListener("click", async (event) => {
-              const selectedRouteId = event.target.dataset.routeId;
-              buttonsContainer
-                .querySelectorAll(".route-button-dynamic")
-                .forEach((btn) => {
-                  btn.disabled = true;
-                });
-              event.target.textContent = "Carregando...";
+              const allButtons =
+                buttonsContainer.querySelectorAll(".route-button");
+              allButtons.forEach((btn) => btn.classList.remove("selected"));
+              event.currentTarget.classList.add("selected");
+
+              const selectedRouteId = event.currentTarget.dataset.routeId;
+
+              allButtons.forEach((btn) => {
+                btn.disabled = true;
+              });
+
+              const originalButtonHTML = event.currentTarget.innerHTML;
+              event.currentTarget.textContent = "Carregando...";
 
               try {
                 const detailsResponse = await fetch(
@@ -279,11 +290,22 @@
                       );
                     const firmDetails = await firmResponse.json();
                     routeDetails.origin = firmDetails.address;
-
-                    event.target.textContent = "Desenhando Mapa...";
                     initMap(routeDetails);
                   } else {
-                    event.target.textContent = "Buscando origem...";
+                    if (
+                      !routeDetails.deliveries ||
+                      routeDetails.deliveries.length === 0
+                    ) {
+                      alert(
+                        "Não é possível gerar uma rota sem entregas associadas."
+                      );
+                      document.getElementById(
+                        "map"
+                      ).innerHTML = `<p>Esta rota não possui entregas. Associe ao menos uma entrega na página "Configurar Rotas" para gerar o mapa.</p>`;
+                      return;
+                    }
+
+                    event.currentTarget.textContent = "Buscando origem...";
 
                     const firmResponse = await fetch(
                       `/api/firms/route/${selectedRouteId}`,
@@ -307,7 +329,7 @@
                     await callBackendToGenerateRoute(
                       payload,
                       selectedRouteId,
-                      event.target
+                      event.currentTarget
                     );
                   }
                 });
@@ -321,11 +343,11 @@
                   "<p>Clique em uma rota para ver o mapa.</p>";
               } finally {
                 buttonsContainer
-                  .querySelectorAll(".route-button-dynamic")
+                  .querySelectorAll(".route-button")
                   .forEach((btn) => {
                     btn.disabled = false;
                   });
-                event.target.textContent = buttonText;
+                event.currentTarget.innerHTML = originalButtonHTML;
               }
             });
             buttonsContainer.appendChild(button);

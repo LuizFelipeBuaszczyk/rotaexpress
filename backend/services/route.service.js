@@ -27,8 +27,7 @@ async function generateOptimizedRoute({
     throw error;
   }
   const waypoints = deliveries.map((d) => d.address);
-  console.log("Cheguei");
-  console.log(originAddress, waypoints, API_KEY);
+
   const directionsResponse = await googleMapsClient.directions({
     params: {
       origin: originAddress,
@@ -38,7 +37,6 @@ async function generateOptimizedRoute({
       key: API_KEY,
     },
   });
-  console.log("Cheguei2");
   if (directionsResponse.data.status !== "OK") {
     const error = new Error(
       `Erro na API do Google: ${directionsResponse.data.status}`
@@ -63,7 +61,6 @@ async function generateOptimizedRoute({
     ),
     waypoint_order: JSON.stringify(rotaCalculada.waypoint_order),
   };
-  console.log("Cheguei3");
   const Rota = await routeRepository.findRouteByName(
     dadosRotaMae.name,
     id_user
@@ -73,7 +70,6 @@ async function generateOptimizedRoute({
     error.statusCode = 404;
     throw error;
   }
-  console.log("Cheguei4");
   const novaRota = await routeRepository.updateRoutes(
     dadosRotaMae,
     Rota.id_route,

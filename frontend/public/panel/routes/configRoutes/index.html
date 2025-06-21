@@ -83,13 +83,23 @@
             const button = document.createElement("button");
             button.className = "route-button";
             button.dataset.id = route.id_route;
-            button.innerHTML = `
-                <strong>${route.description || "Rota sem descrição"}</strong>
+            if (route.description) {
+              button.innerHTML = `
+                <strong>${route.name} - ${route.description}</strong>
                 <br>
-                <small>Data: ${new Date(route.date).toLocaleDateString(
-                  "pt-BR"
-                )}</small>
+                <small>Última atualização: ${new Date(
+                  route.updatedAt
+                ).toLocaleDateString("pt-BR")}</small>
             `;
+            } else {
+              button.innerHTML = `
+                <strong>${route.name}</strong>
+                <br>
+                <small>Última atualização: ${new Date(
+                  route.updatedAt
+                ).toLocaleDateString("pt-BR")}</small>
+            `;
+            }
 
             button.addEventListener("click", () => {
               document
@@ -145,30 +155,55 @@
           return;
         }
 
-        if (allDeliveries.length === 0) {
-          container.innerHTML = "<p>Nenhuma entrega para associar.</p>";
+        const availableDeliveries = allDeliveries.filter(
+          (delivery) =>
+            delivery.fk_id_route === null ||
+            delivery.fk_id_route === selectedRouteId
+        );
+
+        if (availableDeliveries.length === 0) {
+          container.innerHTML =
+            "<p>Nenhuma entrega disponível para associar.</p>";
           return;
         }
 
-        allDeliveries.forEach((delivery) => {
+        availableDeliveries.forEach((delivery) => {
           const deliveryId = `delivery-${delivery.id_delivery}`;
           const item = document.createElement("div");
           item.className = "delivery-item";
 
           const isChecked = delivery.fk_id_route === selectedRouteId;
 
+          let deliveryDate = "Não informada";
+          if (delivery.date) {
+            const dateParts = delivery.date.split("-");
+            if (dateParts.length === 3) {
+              const year = parseInt(dateParts[0], 10);
+              const month = parseInt(dateParts[1], 10) - 1;
+              const day = parseInt(dateParts[2], 10);
+              const correctDate = new Date(year, month, day);
+              if (!isNaN(correctDate.getTime())) {
+                deliveryDate = correctDate.toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                });
+              }
+            }
+          }
+
           item.innerHTML = `
-              <input type="checkbox" id="${deliveryId}" data-id="${
+        <input type="checkbox" id="${deliveryId}" data-id="${
             delivery.id_delivery
           }" ${isChecked ? "checked" : ""}>
-              <label for="${deliveryId}">
-                <strong>Endereço:</strong> ${delivery.address}
-                <br>
-                <small>Cliente: ${
-                  delivery.client_name || "Não informado"
-                }</small>
-              </label>
-            `;
+        <label for="${deliveryId}">
+          <strong>Endereço:</strong> ${delivery.address}
+          <br>
+          <small>Status: <strong>${
+            delivery.status
+          } </strong>| Data de entrega: ${deliveryDate}</small>
+        </label>
+      `;
           container.appendChild(item);
         });
       }

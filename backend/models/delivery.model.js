@@ -20,6 +20,10 @@ const Delivery = sequelize.define("deliveries", {
     type: DataTypes.UUID,
     allowNull: false,
   },
+  date: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
 });
 
 Delivery.belongsTo(Route, { foreignKey: "fk_id_route", onDelete: "CASCADE" });

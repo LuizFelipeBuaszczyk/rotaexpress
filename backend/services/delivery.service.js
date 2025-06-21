@@ -58,21 +58,11 @@ async function deleteDelivery(id_user, id_delivery) {
 }
 
 async function updateRoute(idsDelivery, id_route, id_user) {
-  for (const id_delivery of idsDelivery) {
-    const delivery = await deliveryRepository.findById(id_delivery, id_user);
-    if (!delivery) {
-      const error = new Error("Entrega não encontrada");
-      error.statusCode = 404;
-      throw error;
-    }
-    const route = await routeRepository.findRouteById(id_route, id_user);
-    if (!route) {
-      const error = new Error("Rota não encontrada");
-      error.statusCode = 404;
-      throw error;
-    }
-    await deliveryRepository.updateRoute(id_delivery, id_route, id_user);
-  }
+  await deliveryRepository.updateAllDeliveriesForRoute(
+    id_route,
+    idsDelivery,
+    id_user
+  );
   return routeRepository.findRouteById(id_route, id_user);
 }
 
