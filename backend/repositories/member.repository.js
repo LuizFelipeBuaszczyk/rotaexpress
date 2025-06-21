@@ -42,9 +42,14 @@ async function findMemberByFirm(fk_id_firm) {
     });
 }
 
+async function deleteMemberById(id_member){
+    return await Member.destroy({where: {id_member}});
+}
+
 module.exports = {
     create,
     findMemberByIdUser,
     findByIdUserAndIdFirm,
     findMemberByFirm,
+    deleteMemberById
 }
