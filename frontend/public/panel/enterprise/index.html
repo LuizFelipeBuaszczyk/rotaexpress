@@ -64,13 +64,24 @@
                     </form>
                     <div id="members-data">
                         <h1>Lista de Membros</h1>
-                        <table></table>
+                        <table class="memberTable" id="member-table"></table>
                         <div class="buttonsDiv">
                             <button type="button">Adicionar Membro</button>
-                            <button type="button">Remover Membro</button>
                         </div>
                     </div>
                 </div>
+                <dialog id="member-modal">
+                    <header>
+                        <h1 id="member-name"></h1>
+                        <button class="exitButton" id="exit-member-modal">X</button>
+                    </header>
+                    <main>
+                        <div>
+                            <select name="select-roles-member" id="select-roles-member"></select>
+                            <button type="button" id="remove-member-button">Remover Membro</button>
+                        </div>
+                    </main>
+                </dialog>
             </dialog>
 
             <button class="btn-criar-empresa">Criar empresa</button>
