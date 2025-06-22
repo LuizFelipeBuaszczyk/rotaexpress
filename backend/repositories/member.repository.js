@@ -36,9 +36,8 @@ async function findMemberByFirm(fk_id_firm) {
         },
         where: { 
             fk_id_firm,
-            active: true
         },
-        attributes: ['id_member', 'role']
+        attributes: ['id_member', 'role', 'active']
     });
 }
 

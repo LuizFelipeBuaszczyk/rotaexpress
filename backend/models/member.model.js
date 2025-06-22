@@ -12,6 +12,10 @@ const Member = sequelize.define("members", {
   role: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
+  },
+  active: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
 });
 
