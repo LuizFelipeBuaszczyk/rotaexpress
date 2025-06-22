@@ -236,3 +236,27 @@
     height: 60%;
     border-radius: 20px;
 }
+
+#add-member-modal {
+    position: fixed;
+    margin: auto;
+    padding: 10px;
+    width: 50%;
+    height: 60%;
+    border-radius: 20px;
+}
+
+#create-firm-modal{
+    position: fixed;
+    margin: auto;
+    padding: 10px;
+    width: 50%;
+    height: 60%;
+    border-radius: 20px;
+}
+
+#create-firm-modal header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

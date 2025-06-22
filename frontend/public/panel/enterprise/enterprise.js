@@ -10,7 +10,22 @@ document.getElementById('exit-member-modal').addEventListener('click', () => {
     document.getElementById('member-modal').close()
 });
 
-document.getElementById('remove-member-button').addEventListener('click', removeMember);
+document.getElementById('exit-add-member-modal').addEventListener('click', () => {
+    document.getElementById('add-member-modal').close()
+});
+
+document.getElementById('exit-create-firm-modal').addEventListener('click', () => {
+    document.getElementById('create-firm-modal').close()
+});
+
+
+document.getElementById('remove-member-button').addEventListener('click', removeMember); 
+document.getElementById('save-create-firm-button').addEventListener('click', createFirm);
+
+document.getElementById('send-firm-invite-to-user').addEventListener('click', sendFirmInvite);
+document.getElementById('add-member-button').addEventListener('click', showAddMemberModal);
+document.getElementById('create-firm-button').addEventListener('click', showCreateFirmModal);
+
 
 let firms = [];
 let selectedFirm;
@@ -54,33 +69,38 @@ function getDataFirms(){
 function getDataFirmsByName(){
     const name = document.getElementById('name-search').value;
 
-    fetch(`/api/firms/name/${name}`, {
-        method: 'GET',
-        credentials: 'include',
-    })
-    .then(response => {
-        const status_code = response.status;        
-        switch (Math.floor(status_code / 100)) {
-            case 4: // Caso tiver algum erro ele pula direto para o .catch
-                return response.json().then(err => {
-                    return Promise.reject({
-                        status: response.status,
-                        body: err
+    if (!name) {
+        getDataFirms();
+    }
+    else{
+        fetch(`/api/firms/name/${name}`, {
+            method: 'GET',
+            credentials: 'include',
+        })
+        .then(response => {
+            const status_code = response.status;        
+            switch (Math.floor(status_code / 100)) {
+                case 4: // Caso tiver algum erro ele pula direto para o .catch
+                    return response.json().then(err => {
+                        return Promise.reject({
+                            status: response.status,
+                            body: err
+                        });
                     });
-                });
-            default:
-                return response.json(); 
-        }
-    })
-    .then(data => { updateFirmTable(data) })
-    .catch(error => {
-        if (error.status === 401) {
-            const refreshed = refreshAuthToken();
-            if (refreshed){
-                getDataFirms();
+                default:
+                    return response.json(); 
             }
-        }
-    })
+        })
+        .then(data => { updateFirmTable(data) })
+        .catch(error => {
+            if (error.status === 401) {
+                const refreshed = refreshAuthToken();
+                if (refreshed){
+                    getDataFirms();
+                }
+            }
+        })
+    }
 }
 
 function updateFirmTable(data){
@@ -303,6 +323,108 @@ function removeMember(){
             const refreshed = refreshAuthToken();
             if (refreshed){
                 getDataMemberByFirm();
+            }
+        }
+    })
+}
+
+function showAddMemberModal(){
+    const modal = document.getElementById('add-member-modal');
+
+    modal.showModal();
+}
+
+function sendFirmInvite(){
+    const email = document.getElementById('add-member-email-input').value;
+
+    const data = {
+        email: email,
+        role: 0
+    }
+
+    fetch(`/api/firms/member/${selectedFirm.id_firm}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        const status_code = response.status;        
+        switch (Math.floor(status_code / 100)) {
+            case 4: // Caso tiver algum erro ele pula direto para o .catch
+                return response.json().then(err => {
+                    return Promise.reject({
+                        status: response.status,
+                        body: err
+                    });
+                });
+            default:
+                return response.json(); 
+        }
+    })
+    .then(data => { console.log(data)})
+    .catch(error => {
+        console.log(error)
+        if (error.status === 401) {
+            const refreshed = refreshAuthToken();
+            if (refreshed){
+                sendFirmInvite();
+            }
+        }
+    })
+}
+
+function showCreateFirmModal(){
+    const modal = document.getElementById('create-firm-modal');
+
+    modal.showModal();
+}
+
+function createFirm(){
+    const name = document.getElementById('create-firm-name-input').value;
+    const address = document.getElementById('create-firm-address-input').value;
+
+    const data = {
+        name: name,
+        address: address
+    }
+
+    fetch(`/api/firms`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        const status_code = response.status;        
+        switch (Math.floor(status_code / 100)) {
+            case 4: // Caso tiver algum erro ele pula direto para o .catch
+                return response.json().then(err => {
+                    return Promise.reject({
+                        status: response.status,
+                        body: err
+                    });
+                });
+            default:
+                return response.json(); 
+        }
+    })
+    .then(data => { 
+        const member = data;
+        data.sequence = firms.length;
+        firms.push(data);
+        updateFirmTable(firms);
+    })
+    .catch(error => {
+        console.log(error)
+        if (error.status === 401) {
+            const refreshed = refreshAuthToken();
+            if (refreshed){
+                sendFirmInvite();
             }
         }
     })
