@@ -183,25 +183,16 @@
         window.googleMapsLoaded = callback;
       }
 
-      async function callBackendToGenerateRoute(
-        payload,
-        routeId,
-        buttonElement
-      ) {
+      async function callBackendToGenerateRoute(payload, buttonElement) {
         buttonElement.textContent = "Gerando Rota...";
 
         try {
-          const generateResponse = await fetch(
-            `/api/routes/generate-route/${routeId}`,
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-              body: JSON.stringify(payload),
-            }
-          );
+          const generateResponse = await fetch(`/api/routes/generate-route`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(payload),
+          });
 
           if (!generateResponse.ok) {
             const errorData = await generateResponse
@@ -253,19 +244,20 @@
             button.innerHTML = `<strong>${buttonText}</strong>`;
 
             button.addEventListener("click", async (event) => {
+              const clickedButton = event.currentTarget;
               const allButtons =
                 buttonsContainer.querySelectorAll(".route-button");
               allButtons.forEach((btn) => btn.classList.remove("selected"));
-              event.currentTarget.classList.add("selected");
+              clickedButton.classList.add("selected");
 
-              const selectedRouteId = event.currentTarget.dataset.routeId;
+              const selectedRouteId = clickedButton.dataset.routeId;
 
               allButtons.forEach((btn) => {
                 btn.disabled = true;
               });
 
-              const originalButtonHTML = event.currentTarget.innerHTML;
-              event.currentTarget.textContent = "Carregando...";
+              const originalButtonHTML = clickedButton.innerHTML;
+              clickedButton.textContent = "Carregando...";
 
               try {
                 const detailsResponse = await fetch(
@@ -305,7 +297,7 @@
                       return;
                     }
 
-                    event.currentTarget.textContent = "Buscando origem...";
+                    clickedButton.textContent = "Buscando origem...";
 
                     const firmResponse = await fetch(
                       `/api/firms/route/${selectedRouteId}`,
@@ -318,6 +310,7 @@
                     const firmDetails = await firmResponse.json();
 
                     const payload = {
+                      id_route: selectedRouteId,
                       deliveryIds: routeDetails.deliveries.map(
                         (d) => d.id_delivery
                       ),
@@ -326,11 +319,7 @@
                       id_delivery_guy: routeDetails.id_delivery_guy,
                     };
 
-                    await callBackendToGenerateRoute(
-                      payload,
-                      selectedRouteId,
-                      event.currentTarget
-                    );
+                    await callBackendToGenerateRoute(payload, clickedButton);
                   }
                 });
               } catch (error) {
@@ -347,7 +336,9 @@
                   .forEach((btn) => {
                     btn.disabled = false;
                   });
-                event.currentTarget.innerHTML = originalButtonHTML;
+                if (clickedButton) {
+                  clickedButton.innerHTML = originalButtonHTML;
+                }
               }
             });
             buttonsContainer.appendChild(button);
