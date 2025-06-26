@@ -21,6 +21,8 @@ document.getElementById('exit-create-firm-modal').addEventListener('click', () =
 
 document.getElementById('remove-member-button').addEventListener('click', removeMember); 
 document.getElementById('save-create-firm-button').addEventListener('click', createFirm);
+document.getElementById('delete-firm-button').addEventListener('click', deleteFirm);
+document.getElementById('save-uploaded-firm-button').addEventListener('click', saveFirm);
 
 document.getElementById('send-firm-invite-to-user').addEventListener('click', sendFirmInvite);
 document.getElementById('add-member-button').addEventListener('click', showAddMemberModal);
@@ -179,6 +181,90 @@ function updateFirm(){
 
 function deleteFirm () {
 
+    const response = confirm(`Deseja realmente excluir a organização ${selectedFirm.name}?`);
+
+
+    if(response){
+        fetch(`/api/firms/${selectedFirm.id_firm}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        })
+        .then(response => {
+            const status_code = response.status;        
+            switch (Math.floor(status_code / 100)) {
+                case 4: // Caso tiver algum erro ele pula direto para o .catch
+                    return response.json().then(err => {
+                        return Promise.reject({
+                            status: response.status,
+                            body: err
+                        });
+                    });
+                default:
+                    return response.json(); 
+            }
+        })
+        .then(data => { 
+            getDataFirms()
+        })
+        .catch(error => {
+            if (error.status === 401) {
+                const refreshed = refreshAuthToken();
+                if (refreshed){
+                    deleteFirm();
+                }
+            }
+        })
+    }
+}
+
+function saveFirm(){
+    const response = confirm(`Deseja realmente salvar os dados alterados?`);
+
+
+    if(response){
+        const firm_name = document.getElementById('name').value;
+        const firm_address = document.getElementById('address').value;
+
+        const data = {
+            name: firm_name,
+            address: firm_address 
+        }
+
+        fetch(`/api/firms/${selectedFirm.id_firm}`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            const status_code = response.status;        
+            switch (Math.floor(status_code / 100)) {
+                case 4: // Caso tiver algum erro ele pula direto para o .catch
+                    return response.json().then(err => {
+                        return Promise.reject({
+                            status: response.status,
+                            body: err
+                        });
+                    });
+                default:
+                    return response.json(); 
+            }
+        })
+        .then(data => { 
+            console.log(data);
+            getDataFirms()
+        })
+        .catch(error => {
+            if (error.status === 401) {
+                const refreshed = refreshAuthToken();
+                if (refreshed){
+                    saveFirm();
+                }
+            }
+        })
+    }
 }
 
 function getDataMemberByFirm(){
