@@ -58,24 +58,64 @@
                             </div>
                         </section>
                         <div class="buttonsDiv">
-                            <button type="submit">Salvar</button>
-                            <button type="submit">Editar</button>
-                            <button type="submit">Deletar</button>
+                            <button type="button" id="save-uploaded-firm-button">Salvar</button>
+                            <button type="button" id="update-firm-button">Editar</button>
+                            <button type="button" id="delete-firm-button">Deletar</button>
                         </div>
                     </form>
                     <div id="members-data">
                         <h1>Lista de Membros</h1>
-                        <table></table>
+                        <table class="memberTable" id="member-table"></table>
                         <div class="buttonsDiv">
-                            <button type="button">Adicionar Membro</button>
-                            <button type="button">Remover Membro</button>
+                            <button type="button" id="add-member-button">Adicionar Membro</button>
                         </div>
                     </div>
                 </div>
+                <dialog id="member-modal">
+                    <header>
+                        <h1 id="member-name"></h1>
+                        <button class="exitButton" id="exit-member-modal">X</button>
+                    </header>
+                    <main>
+                        <div>
+                            <select name="select-roles-member" id="select-roles-member"></select>
+                            <button type="button" id="remove-member-button">Remover Membro</button>
+                        </div>
+                    </main>
+                    </dialog>
+                <dialog id="add-member-modal">
+                    <header>
+                        <h1>Adicione um membro</h1>
+                        <button class="exitButton" id="exit-add-member-modal">X</button>
+                    </header>
+                    <form id="send-member-invite-form">
+                        <label for="add-member-email-input">Digite o email</label>
+                        <input type="email" name="add-member-email-input" id="add-member-email-input">
+                        <button type="button" id="send-firm-invite-to-user">Enviar convite</button>
+                    </form>
+                </dialog>
+            </dialog>
+            <dialog id="create-firm-modal">
+                <header>
+                    <h1>Crie sua organização</h1>
+                    <button class="exitButton" id="exit-create-firm-modal">X</button>                    
+                </header>
+                <main>
+                    <form id="form-create-firm">
+                        <div class="divInput">
+                            <label for="create-firm-name-input">Nome</label>
+                            <input type="text" name="create-firm-name-input" id="create-firm-name-input">
+                        </div>
+                        <div class="divInput">
+                            <label for="create-firm-address-input">Endereço</label>
+                            <input type="text" name="create-firm-address-input" id="create-firm-address-input">
+                        </div>
+                        <button type="button" id="save-create-firm-button">Salvar</button>
+                    </form>
+                </main>
             </dialog>
 
-            <button class="btn-criar-empresa">Criar empresa</button>
-
+            <button class="btn-criar-empresa" id="create-firm-button">Criar organização</button>
 
             <!-- pop-up para realizar logout-->
             <div id="logout-modal" class="modal">

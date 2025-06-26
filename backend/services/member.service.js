@@ -60,11 +60,23 @@ async function addMember(id_user, id_firm, data){
 // Retorna os membros de uma firma
 async function getMemberByFirm(id_user, id_firm){
 
-    // Regras??
-    // Verificar se o id da org existe?
-    // Verificar se o id_user faz parte da org?
-    // Retornar um objeto mais legal
+    let firms = await firmRepository.findById(id_firm); 
 
+    // Se a firma não existe retorna 1 objeto vazio
+    if(!firms){
+        return [];
+    }
+
+    firms = firms.dataValues;
+
+    // Verificando se pode visualizar os membros
+    if ((firms.fk_id_user != id_user)) {
+        const error = new Error("Sem permissão para visualizar os membros dessa organização.");
+        error.statusCode = 401;
+        throw error;
+    }
+
+    // Retornar um objeto mais legal
     return await memberRepository.findMemberByFirm(id_firm);
 }
 
@@ -74,8 +86,32 @@ async function getMemberByUser(id_user){
     return await memberRepository.findMemberByIdUser(id_user);
 }
 
+async function removeMemberByFirm(data){
+    // Validar se o id_user tem permissão para remover o membro
+    firm = await firmRepository.findById(data.id_firm);
+    member = await memberRepository.findByIdUserAndIdFirm(data.id_user, data.id_firm);
+
+    if (member){
+        if ((member.dataValues.role == 0)){
+            const error = new Error("Sem permissão para remover os membros dessa organização.");
+            error.statusCode = 401;
+            throw error; 
+        }
+    }
+
+    if (firm){
+        return await memberRepository.deleteMemberById(data.id_member);
+    }
+    else{
+        const error = new Error("Sem permissão para remover os membros dessa organização.");
+        error.statusCode = 401;
+        throw error;
+    }
+}
+
 module.exports = {
     addMember,
     getMemberByFirm,
     getMemberByUser,
+    removeMemberByFirm
 }   

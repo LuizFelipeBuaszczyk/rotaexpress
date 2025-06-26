@@ -13,9 +13,9 @@ const Member = sequelize.define("members", {
     type: DataTypes.INTEGER,
     defaultValue: 0,
   },
-  active : {
+  active: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true
+    defaultValue: false
   }
 });
 

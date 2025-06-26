@@ -89,6 +89,42 @@ async function getFirmByRouteId(req, res, next) {
   }
 }
 
+async function removeMemberByFirm(req, res, next){
+  try{
+    const { id_user } = req.user;
+    const { id_firm, id_member } = ParamsSchema.parse(req.params);
+    
+    const data = {
+      id_user: id_user,
+      id_firm: id_firm,
+      id_member: id_member
+    }
+    await memberService.removeMemberByFirm(data);
+    res.status(200).json({ message: "Membro removido com sucesso" });
+    res.status(200).send();
+  }catch(error){
+    next(error);
+  }
+}
+
+async function removeMemberByFirm(req, res, next){
+  try{
+    const { id_user } = req.user;
+    const { id_firm, id_member } = ParamsSchema.parse(req.params);
+    
+    const data = {
+      id_user: id_user,
+      id_firm: id_firm,
+      id_member: id_member
+    }
+    await memberService.removeMemberByFirm(data);
+    res.status(200).json({ message: "Membro removido com sucesso" });
+    res.status(200).send();
+  }catch(error){
+    next(error);
+  }
+}
+
 module.exports = {
   createFirm,
   getFirmByIDUser,
@@ -97,5 +133,6 @@ module.exports = {
   addMember,
   getFirmByName,
   getMemberByFirm,
+  removeMemberByFirm,
   getFirmByRouteId,
 };

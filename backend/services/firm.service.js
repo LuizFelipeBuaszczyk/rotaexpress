@@ -44,7 +44,7 @@ async function updateFirm(firmData, id_firm, id_user) {
   const existsFirm = await firmRepository.findById(id_firm, id_user);
   if (!existsFirm) {
     const error = new Error("Firma não encontrada!");
-    error.statusCode = 400;
+    error.statusCode = 404;
     throw error;
   }
 
