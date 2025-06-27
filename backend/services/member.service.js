@@ -109,9 +109,47 @@ async function removeMemberByFirm(data){
     }
 }
 
+async function confirmFirmMemberInvite(id_member, inviteAnswer) {
+
+    let member = await memberRepository.findMemberByIdMember(id_member);
+
+    if(!member){
+        const error = new Error("ID de membro não encontrado.");
+        error.statusCode = 400;
+        throw error;        
+    }
+
+    member = member.dataValues;
+
+    if(member.active){
+        const error = new Error("O convite para a organização já foi aceito.");
+        error.statusCode = 400;
+        throw error;  
+    }
+
+    if(!inviteAnswer){
+        // Deletar o membro
+        const deletedMember = await memberRepository.deleteMemberById(id_member);
+        console.log(deletedMember);
+        return ({message: "Convite recusado!", accept: false});
+    }
+    
+    member.active = true;
+    const updatedMember = await memberRepository.updateMember(id_member, member);
+    
+    if (!updatedMember){
+        const error = new Error("Ocorreu um erro interno ao atualizar o membro.");
+        error.statusCode = 400;
+        throw error;     
+    }
+
+    return ({message: "Convite aceito!", accept: true});    
+}
+
 module.exports = {
     addMember,
     getMemberByFirm,
     getMemberByUser,
-    removeMemberByFirm
+    removeMemberByFirm,
+    confirmFirmMemberInvite
 }   
