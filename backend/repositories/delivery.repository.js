@@ -33,9 +33,11 @@ async function deleteById(id_delivery, fk_id_user) {
   });
 }
 
-async function findByUserId(id_user) {
+async function findByUserId(id_user, fk_id_firm) {
   return await Delivery.findAll({
-    where: { fk_id_user: id_user },
+    where: {
+      fk_id_firm,
+    },
   });
 }
 

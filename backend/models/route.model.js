@@ -11,7 +11,6 @@ const Route = sequelize.define("routes", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   id_delivery_guy: {
     type: DataTypes.UUID,

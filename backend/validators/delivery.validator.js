@@ -1,8 +1,8 @@
 const z = require("zod");
 
 const createDeliverySchema = z.object({
-  fk_id_user: z
-    .string({ required_error: "O campo fk_id_user é obrigatório" })
+  fk_id_firm: z
+    .string({ required_error: "O campo fk_id_firm é obrigatório" })
     .nonempty()
     .uuid({ message: "O id deve ser um UUID válido" }),
   status: z.enum(["AGUARDANDO", "ENTREGUE", "CANCELADO"]),

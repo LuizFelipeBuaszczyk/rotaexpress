@@ -16,7 +16,9 @@ async function createDelivery(req, res, next) {
 async function getDeliveries(req, res, next) {
   try {
     const { id_user } = req.user;
-    const delivery = await deliveryService.getDelivery(id_user);
+    const { id } = req.params;
+
+    const delivery = await deliveryService.getDelivery(id_user, id);
     if (!delivery) {
       return res.status(404).json({ message: "Entrega não encontrada" });
     }

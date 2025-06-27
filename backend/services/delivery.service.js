@@ -1,5 +1,6 @@
 const deliveryRepository = require("../repositories/delivery.repository");
 const routeRepository = require("../repositories/route.repository");
+const firmRepository = require("../repositories/firm.repository");
 
 async function createDelivery(deliveryData, id_user) {
   if (deliveryData.fk_id_route === undefined) deliveryData.fk_id_route = null;
@@ -14,11 +15,17 @@ async function createDelivery(deliveryData, id_user) {
       throw error;
     }
   }
+  const firm = await firmRepository.findById(deliveryData.fk_id_firm);
+  if (!firm) {
+    const error = new Error("Empresa não encontrada");
+    error.statusCode = 404;
+    throw error;
+  }
   return await deliveryRepository.create(deliveryData, id_user);
 }
 
-async function getDelivery(id_user) {
-  const delivery = await deliveryRepository.findByUserId(id_user);
+async function getDelivery(id_user, fk_id_firm) {
+  const delivery = await deliveryRepository.findByUserId(id_user, fk_id_firm);
   if (!delivery) {
     const error = new Error("Entrega não encontrada");
     error.statusCode = 404;

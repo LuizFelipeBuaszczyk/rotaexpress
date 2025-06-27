@@ -16,7 +16,7 @@ const Delivery = sequelize.define("deliveries", {
     type: DataTypes.STRING(200),
     allowNull: false,
   },
-  fk_id_user: {
+  fk_id_firm: {
     type: DataTypes.UUID,
     allowNull: false,
   },
