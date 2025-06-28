@@ -11,6 +11,7 @@ async function generateOptimizedRoute({
   routeName,
   id_user,
   id_delivery_guy = null,
+  id_route,
 }) {
   const deliveries = await deliveryRepository.findDeliveriesByIds(
     deliveryIds,
@@ -45,8 +46,8 @@ async function generateOptimizedRoute({
     throw error;
   }
   const rotaCalculada = directionsResponse.data.routes[0];
-
   const dadosRotaMae = {
+    id_route: id_route,
     name: routeName,
     origin: originAddress,
     id_delivery_guy: id_delivery_guy,
@@ -61,21 +62,11 @@ async function generateOptimizedRoute({
     ),
     waypoint_order: JSON.stringify(rotaCalculada.waypoint_order),
   };
-  const Rota = await routeRepository.findRouteByName(
-    dadosRotaMae.name,
-    id_user
-  );
-  if (!Rota) {
-    const error = new Error("Rota não encontrada");
-    error.statusCode = 404;
-    throw error;
-  }
   const novaRota = await routeRepository.updateRoutes(
     dadosRotaMae,
-    Rota.id_route,
+    dadosRotaMae.id_route,
     id_user
   );
-
   return routeRepository.findRouteById(novaRota.id_route, id_user);
 }
 
@@ -87,6 +78,16 @@ async function getRouteByName(name, id_user) {
     throw error;
   }
   return rota;
+}
+
+async function getRouteByIdFirm(id_firm, id_user) {
+  const route = await routeRepository.findAllRoutesByFirm(id_firm, id_user);
+  if (!route) {
+    const error = new Error("Rota não encontrada");
+    error.statusCode = 404;
+    throw error;
+  }
+  return route;
 }
 
 async function createRoute(routeData, id_user) {
@@ -123,8 +124,8 @@ async function getRouteById(id_route, id_user) {
   return route;
 }
 
-async function getRouteByFirm(firm_name, id_user) {
-  const firm = await firmRepository.findNameById(id_user, firm_name);
+async function getRouteByFirm(id_firm, id_user) {
+  const firm = await firmRepository.findById(id_firm);
 
   if (!firm) {
     const error = new Error("Firma não encontrada");
@@ -132,7 +133,7 @@ async function getRouteByFirm(firm_name, id_user) {
     throw error;
   }
 
-  return await routeRepository.findRouteByFirm(firm_name, id_user);
+  return await routeRepository.findRouteByFirm(id_firm, id_user);
 }
 
 async function getRoutes(id_user) {
@@ -175,4 +176,5 @@ module.exports = {
   generateOptimizedRoute,
   getRouteByName,
   getRouteById,
+  getRouteByIdFirm,
 };

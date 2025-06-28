@@ -14,6 +14,7 @@ router.post(
 );
 router.get("/", authMiddleware, routeController.getRoutes);
 router.get("/:id", authMiddleware, routeController.getRouteById);
+router.get("/firm/:id", authMiddleware, routeController.getRouteByFirm);
 router.put(
   "/:id",
   authMiddleware,

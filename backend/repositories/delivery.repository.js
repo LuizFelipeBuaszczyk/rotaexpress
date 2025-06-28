@@ -48,12 +48,26 @@ async function findDeliveryByRouteId(id_route, fk_id_user) {
 }
 
 async function findDeliveriesByIds(deliveryIds, fk_id_user) {
+  const userFirms = await Firm.findAll({
+    where: { fk_id_user: fk_id_user },
+    attributes: ["id_firm"],
+    raw: true,
+  });
+
+  if (!userFirms || userFirms.length === 0) {
+    return [];
+  }
+
+  const userFirmIds = userFirms.map((firm) => firm.id_firm);
+
   return await Delivery.findAll({
     where: {
       id_delivery: {
         [Op.in]: deliveryIds,
       },
-      fk_id_user,
+      fk_id_firm: {
+        [Op.in]: userFirmIds,
+      },
     },
   });
 }
@@ -79,28 +93,46 @@ async function updateRoute(id_delivery, id_route, fk_id_user) {
 }
 
 async function updateAllDeliveriesForRoute(id_route, idsDelivery, fk_id_user) {
+  const userFirms = await Firm.findAll({
+    where: { fk_id_user: fk_id_user },
+    attributes: ["id_firm"],
+    raw: true,
+  });
+
+  if (!userFirms || userFirms.length === 0) {
+    return true;
+  }
+
+  const userFirmIds = userFirms.map((firm) => firm.id_firm);
+
   await Delivery.update(
     { fk_id_route: null },
     {
       where: {
-        fk_id_user: fk_id_user,
         fk_id_route: id_route,
+        fk_id_firm: {
+          [Op.in]: userFirmIds,
+        },
       },
     }
   );
+
   if (idsDelivery && idsDelivery.length > 0) {
     await Delivery.update(
       { fk_id_route: id_route },
       {
         where: {
-          fk_id_user: fk_id_user,
           id_delivery: {
             [Op.in]: idsDelivery,
+          },
+          fk_id_firm: {
+            [Op.in]: userFirmIds,
           },
         },
       }
     );
   }
+
   await Route.update(
     {
       polyline: null,

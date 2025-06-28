@@ -21,15 +21,28 @@ async function getRouteById(req, res, next) {
   }
 }
 
+async function getRouteByFirm(req, res, next) {
+  try {
+    const { id } = ParamsSchema.parse(req.params);
+    const { id_user } = req.user;
+    const route = await routeService.getRouteByFirm(id, id_user);
+    res.json(route);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function generateOptimizedRoute(req, res, next) {
   try {
-    const { deliveryIds, originAddress, routeName, id_delivery_guy } = req.body;
+    const { deliveryIds, originAddress, routeName, id_delivery_guy, id_route } =
+      req.body;
     const route = await routeService.generateOptimizedRoute({
       deliveryIds,
       originAddress,
       routeName,
       id_user: req.user.id_user,
       id_delivery_guy,
+      id_route,
     });
     res.status(201).json(route);
   } catch (error) {
@@ -39,11 +52,11 @@ async function generateOptimizedRoute(req, res, next) {
 
 async function getRoutes(req, res, next) {
   try {
-    const { firm } = req.query;
+    const { id } = req.params;
     const { id_user } = req.user;
 
-    const routes = firm
-      ? await routeService.getRouteByFirm(firm, id_user)
+    const routes = id
+      ? await routeService.getRouteByFirm(id, id_user)
       : await routeService.getRoutes(id_user);
 
     res.json(routes);
@@ -82,4 +95,5 @@ module.exports = {
   deleteRoutes,
   generateOptimizedRoute,
   getRouteById,
+  getRouteByFirm,
 };

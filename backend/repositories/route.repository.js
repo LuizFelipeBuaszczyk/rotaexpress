@@ -19,13 +19,27 @@ async function findRoutes(fk_id_user) {
   });
 }
 
-async function findRouteByFirm(firmName, id_user) {
+async function findAllRoutesByFirm(fk_id_firm, fk_id_user) {
+  return await Route.findAll({
+    where: { fk_id_firm },
+    include: [
+      {
+        model: Firm,
+        where: { fk_id_user },
+        required: true,
+        attributes: [],
+      },
+    ],
+  });
+}
+
+async function findRouteByFirm(id_firm, id_user) {
   return await Route.findAll({
     include: [
       {
         model: Firm,
         where: {
-          name: firmName,
+          id_firm: id_firm,
           fk_id_user: id_user,
         },
         required: true,
@@ -123,4 +137,5 @@ module.exports = {
   deleteRoutes,
   findRouteById,
   findRouteByName,
+  findAllRoutesByFirm,
 };

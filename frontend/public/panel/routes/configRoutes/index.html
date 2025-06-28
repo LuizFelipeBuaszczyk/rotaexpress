@@ -27,10 +27,17 @@
       <div class="main-content">
         <div class="containerCentro">
           <div class="containerEsquerdo">
+            <div class="TituloEmpresas">
+              <h1>SELECIONE UMA EMPRESA</h1>
+              <div id="firm-selector-container">
+                <p>Carregando empresas...</p>
+              </div>
+            </div>
+
             <div class="TituloRotas">
               <h1>SELECIONE UMA ROTA</h1>
               <div id="listed-routes-container">
-                <p>Carregando rotas...</p>
+                <p>Selecione uma empresa para ver as rotas.</p>
               </div>
             </div>
           </div>
@@ -39,7 +46,7 @@
             <div class="TituloEntregas">
               <h1>MARQUE AS ENTREGAS</h1>
               <div id="listed-deliveries-container">
-                <p>Selecione uma rota para ver as entregas.</p>
+                <p>Selecione uma empresa e uma rota para ver as entregas.</p>
               </div>
             </div>
             <div class="BotoesRotas">
@@ -59,15 +66,71 @@
     </div>
 
     <script>
+      let selectedFirmId = null;
       let selectedRouteId = null;
       let allDeliveries = [];
 
-      async function fetchAndRenderRoutes() {
+      async function fetchAndRenderFirms() {
+        const container = document.getElementById("firm-selector-container");
+        try {
+          const response = await fetch("/api/firms", {
+            credentials: "include",
+          });
+          if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
+          const firms = await response.json();
+
+          if (firms.length === 0) {
+            container.innerHTML = "<p>Nenhuma empresa cadastrada.</p>";
+            return;
+          }
+
+          const select = document.createElement("select");
+          select.id = "firm-select";
+
+          const defaultOption = document.createElement("option");
+          defaultOption.value = "";
+          defaultOption.textContent = "Selecione uma empresa...";
+          select.appendChild(defaultOption);
+
+          firms.forEach((firm) => {
+            const option = document.createElement("option");
+            option.value = firm.id_firm;
+            option.textContent = firm.name;
+            select.appendChild(option);
+          });
+
+          select.addEventListener("change", (event) => {
+            selectedFirmId = event.target.value;
+            selectedRouteId = null;
+            allDeliveries = [];
+
+            if (selectedFirmId) {
+              fetchAndRenderRoutes(selectedFirmId);
+              fetchAndRenderDeliveries(selectedFirmId);
+            } else {
+              document.getElementById("listed-routes-container").innerHTML =
+                "<p>Selecione uma empresa para ver as rotas.</p>";
+              document.getElementById("listed-deliveries-container").innerHTML =
+                "<p>Selecione uma empresa para ver as entregas.</p>";
+            }
+          });
+
+          container.innerHTML = "";
+          container.appendChild(select);
+        } catch (error) {
+          console.error("Erro ao buscar empresas:", error);
+          container.innerHTML = "<p>Erro ao carregar empresas.</p>";
+        }
+      }
+
+      async function fetchAndRenderRoutes(firmId) {
         const container = document.getElementById("listed-routes-container");
         container.innerHTML = "<p>Buscando rotas...</p>";
+        document.getElementById("listed-deliveries-container").innerHTML =
+          "<p>Selecione uma rota para ver as entregas.</p>";
 
         try {
-          const response = await fetch("/api/routes/", {
+          const response = await fetch(`/api/routes/firm/${firmId}`, {
             credentials: "include",
           });
           if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
@@ -75,7 +138,8 @@
           container.innerHTML = "";
 
           if (routes.length === 0) {
-            container.innerHTML = "<p>Nenhuma rota cadastrada.</p>";
+            container.innerHTML =
+              "<p>Nenhuma rota cadastrada para esta empresa.</p>";
             return;
           }
 
@@ -83,23 +147,15 @@
             const button = document.createElement("button");
             button.className = "route-button";
             button.dataset.id = route.id_route;
+
+            let content = `<strong>${route.name}</strong>`;
             if (route.description) {
-              button.innerHTML = `
-                <strong>${route.name} - ${route.description}</strong>
-                <br>
-                <small>Última atualização: ${new Date(
-                  route.updatedAt
-                ).toLocaleDateString("pt-BR")}</small>
-            `;
-            } else {
-              button.innerHTML = `
-                <strong>${route.name}</strong>
-                <br>
-                <small>Última atualização: ${new Date(
-                  route.updatedAt
-                ).toLocaleDateString("pt-BR")}</small>
-            `;
+              content += ` - ${route.description}`;
             }
+            content += `<br><small>Última atualização: ${new Date(
+              route.updatedAt
+            ).toLocaleDateString("pt-BR")}</small>`;
+            button.innerHTML = content;
 
             button.addEventListener("click", () => {
               document
@@ -117,29 +173,31 @@
         }
       }
 
-      async function fetchAndRenderDeliveries() {
+      async function fetchAndRenderDeliveries(firmId) {
         const container = document.getElementById(
           "listed-deliveries-container"
         );
         container.innerHTML = "<p>Buscando entregas...</p>";
 
         try {
-          const response = await fetch("/api/deliveries/", {
+          const response = await fetch(`/api/deliveries/${firmId}`, {
             credentials: "include",
           });
           if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
           allDeliveries = await response.json();
 
           if (allDeliveries.length === 0) {
-            container.innerHTML = "<p>Nenhuma entrega cadastrada.</p>";
+            container.innerHTML =
+              "<p>Nenhuma entrega cadastrada para esta empresa.</p>";
             return;
           }
 
           container.innerHTML =
-            "<p>Selecione uma rota para associar entregas.</p>";
+            "<p>Selecione uma rota para associar as entregas.</p>";
         } catch (error) {
           console.error("Erro ao buscar entregas:", error);
           container.innerHTML = "<p>Erro ao carregar entregas.</p>";
+          allDeliveries = [];
         }
       }
 
@@ -163,7 +221,7 @@
 
         if (availableDeliveries.length === 0) {
           container.innerHTML =
-            "<p>Nenhuma entrega disponível para associar.</p>";
+            "<p>Nenhuma entrega disponível para esta rota.</p>";
           return;
         }
 
@@ -176,34 +234,24 @@
 
           let deliveryDate = "Não informada";
           if (delivery.date) {
-            const dateParts = delivery.date.split("-");
-            if (dateParts.length === 3) {
-              const year = parseInt(dateParts[0], 10);
-              const month = parseInt(dateParts[1], 10) - 1;
-              const day = parseInt(dateParts[2], 10);
-              const correctDate = new Date(year, month, day);
-              if (!isNaN(correctDate.getTime())) {
-                deliveryDate = correctDate.toLocaleDateString("pt-BR", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                });
-              }
-            }
+            const date = new Date(delivery.date);
+            deliveryDate = date.toLocaleDateString("pt-BR", {
+              timeZone: "UTC",
+            });
           }
 
           item.innerHTML = `
-        <input type="checkbox" id="${deliveryId}" data-id="${
+            <input type="checkbox" id="${deliveryId}" data-id="${
             delivery.id_delivery
           }" ${isChecked ? "checked" : ""}>
-        <label for="${deliveryId}">
-          <strong>Endereço:</strong> ${delivery.address}
-          <br>
-          <small>Status: <strong>${
-            delivery.status
-          } </strong>| Data de entrega: ${deliveryDate}</small>
-        </label>
-      `;
+            <label for="${deliveryId}">
+              <strong>Endereço:</strong> ${delivery.address}
+              <br>
+              <small>Status: <strong>${
+                delivery.status
+              }</strong> | Data de entrega: ${deliveryDate}</small>
+            </label>
+          `;
           container.appendChild(item);
         });
       }
@@ -236,9 +284,9 @@
           });
 
           if (!response.ok) {
-            const errorData = await response
-              .json()
-              .catch(() => ({ message: "Erro desconhecido." }));
+            const errorData = await response.json().catch(() => ({
+              message: "O servidor não retornou um erro JSON válido.",
+            }));
             throw new Error(
               `O servidor respondeu com o erro ${response.status}: ${errorData.message}`
             );
@@ -246,10 +294,9 @@
 
           alert("Associações salvas com sucesso!");
 
-          const updatedDeliveriesResponse = await fetch("/api/deliveries/", {
-            credentials: "include",
-          });
-          allDeliveries = await updatedDeliveriesResponse.json();
+          if (selectedFirmId) {
+            await fetchAndRenderDeliveries(selectedFirmId);
+          }
           updateDeliveryCheckboxes();
         } catch (error) {
           console.error("Erro ao salvar associações:", error);
@@ -261,8 +308,7 @@
       }
 
       document.addEventListener("DOMContentLoaded", () => {
-        fetchAndRenderRoutes();
-        fetchAndRenderDeliveries();
+        fetchAndRenderFirms();
       });
 
       document
