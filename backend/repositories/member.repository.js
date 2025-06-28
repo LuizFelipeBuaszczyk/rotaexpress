@@ -9,6 +9,11 @@ async function create(data){
 
 async function findMemberByIdMember(id_member) {
     return await Member.findOne({
+        include: {
+            model: User,
+            required:true,
+            attributes: ['name', 'email']
+        },
         where: { id_member }
     });
 }

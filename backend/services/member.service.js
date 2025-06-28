@@ -2,6 +2,8 @@ const Member = require("../models/member.model");
 const memberRepository = require("../repositories/member.repository");
 const firmRepository = require("../repositories/firm.repository");
 const userRepository = require("../repositories/user.repository");
+const email = require("../modules/gmail/sendEmail");
+const oAuth2 = require("../modules/auth/oAuth2");
 
 async function addMember(id_user, id_firm, data){
     // Membro que esta adicionando tem permissão -- ROLE
@@ -54,8 +56,53 @@ async function addMember(id_user, id_firm, data){
         role: data.role
     }
 
-    return await memberRepository.create(newMember);
+    const createdMember = await memberRepository.create(newMember);
+    
+    if(!createdMember){
+        const error = new Error("Ocorreu um erro interno ao enviar convite para organização.");
+        error.statusCode = 500;
+        throw error;   
+    }
+
+    const memberInvited = await memberRepository.findMemberByIdMember(createdMember.dataValues.id_member);
+
+    sendFirmInviteEmail(memberInvited.dataValues, firm);
+
+    return memberInvited.dataValues;   
 }
+
+async function sendFirmInviteEmail(member, firm){
+    const user = member.user.dataValues;
+    let gmail_token;
+
+    const subject = 'Convite para organização';
+    
+        const body =    `<h1>Olá, ${user.name}!</h1>
+                        <p>Você recebeu um convite para entrar na organização <strong>${firm.name}</strong>.</p>
+                        <p>Deseja aceitar o convite? Por favor acesse o nosso <a href=${process.env.URL}>site</a> :</p>
+                        <p>Se você não utiliza o sistema RotaExpress, por favor, ignore este e-mail.<br><br>
+                        Atenciosamente,<br> Equipe RotaExpress.</p>`;
+               
+        // Enviar mensagem por e-mail Pedindo para o usuário clicar em um link, com o uuid_senha ou algo do tipo
+        try {
+            await email.sendEmail(gmail_token, process.env.GMAIL_ADDRESS, user.email, subject, body);
+    
+        } catch (error) {
+            // Caso não tiver sucesso, pega novo token e tenta novamente
+            try {
+                gmail_token = await oAuth2.getNewToken(
+                                process.env.GMAIL_REFRESH_TOKEN,
+                                process.env.GMAIL_CLIENT_ID, 
+                                process.env.GMAIL_CLIENT_SECRET,
+                                process.env.GMAIL_REDIRECT_URL
+                            );
+                await email.sendEmail(gmail_token, process.env.GMAIL_ADDRESS, user.email, subject, body);
+            } catch (error) {
+                console.log(error);
+            }   
+        }        
+}
+
 
 // Retorna os membros de uma firma
 async function getMemberByFirm(id_user, id_firm){
@@ -130,8 +177,13 @@ async function confirmFirmMemberInvite(id_member, inviteAnswer) {
     if(!inviteAnswer){
         // Deletar o membro
         const deletedMember = await memberRepository.deleteMemberById(id_member);
-        console.log(deletedMember);
-        return ({message: "Convite recusado!", accept: false});
+        if (deletedMember){
+            return ({message: "Convite recusado!", accept: false});
+        }else {
+            const error = new Error("Ocorreu um erro interno ao recusar o convite.");
+            error.statusCode = 400;
+            throw error;
+        }
     }
     
     member.active = true;
