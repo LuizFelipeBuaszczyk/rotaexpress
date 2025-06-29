@@ -198,10 +198,28 @@ async function confirmFirmMemberInvite(id_member, inviteAnswer) {
     return ({message: "Convite aceito!", accept: true});    
 }
 
+async function updateMember(id_firm, memberData){
+    const existsMember = await memberRepository.findMemberByIdMember(memberData.id_member);
+
+    if (!existsMember){
+        const error = new Error("Membro não encontrado!");
+        error.statusCode = 404;
+        throw error;    
+    }
+
+    const data = {
+        id_member: memberData.id_member,
+        role: memberData.role
+    }
+
+    return await memberRepository.updateMember(memberData.id_member, data);
+}
+
 module.exports = {
     addMember,
     getMemberByFirm,
     getMemberByUser,
     removeMemberByFirm,
-    confirmFirmMemberInvite
+    confirmFirmMemberInvite,
+    updateMember
 }   

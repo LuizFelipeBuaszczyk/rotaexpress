@@ -22,6 +22,7 @@ router.delete("/:id", authMiddleware, firmController.deleteFirm);
 
 // Member
 router.post("/member/:id", authMiddleware, validateAddMember, firmController.addMember);
+router.put("/member/:id", authMiddleware, firmController.updateMember);
 router.get("/member/:id", authMiddleware, firmController.getMemberByFirm);
 router.delete("/:id_firm/member/:id_member", authMiddleware, firmController.removeMemberByFirm);
 

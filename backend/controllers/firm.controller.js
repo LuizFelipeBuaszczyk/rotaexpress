@@ -118,8 +118,19 @@ async function removeMemberByFirm(req, res, next){
       id_member: id_member
     }
     await memberService.removeMemberByFirm(data);
-    res.status(200).json({ message: "Membro removido com sucesso" });
-    res.status(200).send();
+    return res.status(200).json({ message: "Membro removido com sucesso" });
+  }catch(error){
+    next(error);
+  }
+}
+
+async function updateMember(req, res, next){
+  try{
+    const { id } = ParamsSchema.parse(req.params);
+    const memberData = req.body;
+
+    const response = await memberService.updateMember(id, memberData);
+    return res.status(200).json(response);
   }catch(error){
     next(error);
   }
@@ -135,4 +146,5 @@ module.exports = {
   getMemberByFirm,
   removeMemberByFirm,
   getFirmByRouteId,
+  updateMember
 };
