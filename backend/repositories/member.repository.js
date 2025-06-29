@@ -1,9 +1,21 @@
 const Member = require("../models/member.model");
 const User = require("../models/user.model");
 const Firm = require("../models/firm.model");
+const { findById } = require("./firm.repository");
 
 async function create(data){
     return await Member.create(data);
+}
+
+async function findMemberByIdMember(id_member) {
+    return await Member.findOne({
+        include: {
+            model: User,
+            required:true,
+            attributes: ['name', 'email']
+        },
+        where: { id_member }
+    });
 }
 
 async function findMemberByIdUser(fk_id_user) {
@@ -45,10 +57,17 @@ async function deleteMemberById(id_member){
     return await Member.destroy({where: {id_member}});
 }
 
+async function updateMember(id_member, updatadedData) {
+    await Member.update(updatadedData, { where: {id_member} });
+    return await findMemberByIdMember(id_member);
+}
+
 module.exports = {
     create,
     findMemberByIdUser,
     findByIdUserAndIdFirm,
     findMemberByFirm,
-    deleteMemberById
+    deleteMemberById,
+    findMemberByIdMember,
+    updateMember
 }
