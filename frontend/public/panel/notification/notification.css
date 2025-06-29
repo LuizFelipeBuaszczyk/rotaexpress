@@ -70,3 +70,121 @@
     margin-bottom: 10px;
 }
 
+#notification-table{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+#notification-table tr {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+    text-align: left;
+    border: 1px solid black;
+}
+
+td,th {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    border-left: 1px solid black;
+    padding: 5px;
+}
+
+.notificationSequenceColumn {
+    justify-content: center;
+}
+
+.dataNotificationLine:hover{
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.exitButton{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    padding: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.exitButton:hover{
+    background-color: rgb(145, 0, 0);
+}
+
+
+#notification-modal{
+    position: fixed;
+    margin: auto;
+    padding: 10px;
+    width: 50%;
+    height: 250px;
+    border-radius: 20px;
+}  
+
+.containerModal{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 20px;
+    height: 100%;
+}
+
+#notification-modal header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 20%;
+}
+
+.containerModal main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 80%;
+}  
+
+.buttonDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 20px;
+}
+
+.buttonDiv button {
+    height: 30px;
+    width: 150px;
+    font-weight: bold;
+}
+
+#notification-modal-decline-firm-invite-button{
+    background-color: red;
+    color: white;
+    border-radius: 5px;
+    border: none;
+}
+
+#notification-modal-decline-firm-invite-button:hover{
+    background-color: rgb(148, 0, 0);
+    cursor: pointer;
+}
+
+#notification-modal-accept-firm-invite-button{
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+    border: none;
+}
+
+
+#notification-modal-accept-firm-invite-button:hover{
+    background-color: rgb(0, 73, 0);
+    cursor: pointer;
+}
