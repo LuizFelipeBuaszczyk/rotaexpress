@@ -16,6 +16,7 @@ body {
     height: 100vh;
 }
 
+
 /* Barra lateral */
 .sidebar {
     width: 250px;
@@ -157,4 +158,37 @@ button:hover{
 
 #confirm-logout-button:hover {
     background-color: #60041A;
+}
+
+
+.Wellcome {
+    display: flex;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 40px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.Wellcome h1 {
+    display: flex;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 3em;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    text-decoration: dashed;
+    color: rgb(58, 58, 58);
+}
+
+.Wellcome img {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    width: 100%;
+    height: 40%;
 }
