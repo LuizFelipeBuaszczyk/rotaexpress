@@ -98,9 +98,8 @@
           return;
         }
 
-        document.getElementById("map").innerHTML = "";
-
         if (!mapInstance) {
+          document.getElementById("map").innerHTML = "";
           mapInstance = new google.maps.Map(document.getElementById("map"), {
             zoom: 15,
             center: decodedPath[0],
@@ -120,6 +119,7 @@
             }
           });
         }
+
         if (currentRoutePath) currentRoutePath.setMap(null);
         currentMarkers.forEach((marker) => marker.setMap(null));
         currentMarkers = [];
@@ -262,6 +262,9 @@
             selectedFirmId = event.target.value;
             document.getElementById("map").innerHTML =
               "<p>Clique em uma rota para ver o mapa.</p>";
+            mapInstance = null;
+            mapLoaded = false;
+
             if (currentRoutePath) currentRoutePath.setMap(null);
             currentMarkers.forEach((marker) => marker.setMap(null));
             currentMarkers = [];
