@@ -219,3 +219,193 @@ body {
   cursor: pointer;
   flex-grow: 1; /* Faz o label ocupar o espaço restante */
 }
+
+.action-buttons-container {
+  display: none;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+.action-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.action-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.create-btn {
+  background-color: #28a745;
+  color: white;
+}
+.edit-btn {
+  background-color: #ffc107;
+  color: black;
+}
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delivery-item {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+.delivery-item:hover {
+  background-color: #f0f0f0;
+}
+.delivery-item.selected {
+  background-color: #d1e7fd;
+  border-color: #0d6efd;
+}
+.delivery-item input[type="checkbox"] {
+  margin-right: 10px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.delivery-item .info-area {
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.status-badge {
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: bold;
+  display: inline-block;
+  text-transform: uppercase;
+}
+.status-badge.status-aguardando {
+  background-color: #ffc107;
+  color: black;
+}
+.status-badge.status-entregue {
+  background-color: #198754;
+  color: white;
+}
+.status-badge.status-cancelado {
+  background-color: #dc3545;
+  color: white;
+}
+.status-badge:hover {
+  opacity: 0.8;
+}
+.status-select-inline {
+  padding: 1px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+}
+@keyframes flash-green {
+  0% {
+    background-color: #d1e7dd;
+  }
+  100% {
+    background-color: inherit;
+  }
+}
+.flash-success {
+  animation: flash-green 1.5s ease-out;
+}
+@keyframes flash-red {
+  0% {
+    background-color: #f8d7da;
+  }
+  100% {
+    background-color: inherit;
+  }
+}
+.flash-error {
+  animation: flash-red 1.5s ease-out;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 8px;
+  position: relative;
+}
+.modal-close-btn {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.modal-form .form-group {
+  margin-bottom: 15px;
+}
+.modal-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+.modal-form input,
+.modal-form select,
+.modal-form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.modal-form-actions {
+  text-align: right;
+  margin-top: 20px;
+}
+.address-fieldset {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+.address-fieldset legend {
+  padding: 0 10px;
+  font-weight: bold;
+}
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.grid-col-span-2 {
+  grid-column: span 2;
+}
+.grid-col-span-3 {
+  grid-column: span 3;
+}
+.grid-col-span-4 {
+  grid-column: span 4;
+}
+.grid-col-span-6 {
+  grid-column: span 6;
+}

@@ -16,7 +16,9 @@ router.post(
   validateCreateDelivery,
   deliveryController.createDelivery
 );
-router.get("/:id", authMiddleware, deliveryController.getDeliveries);
+router.get("/firm/:id", authMiddleware, deliveryController.getDeliveries);
+router.get("/:id", authMiddleware, deliveryController.getDeliveriesById);
+
 router.put(
   "/:id",
   authMiddleware,

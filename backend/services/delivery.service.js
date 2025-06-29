@@ -54,6 +54,16 @@ async function updateDelivery(deliveryData, id_user, id_delivery) {
   return delivery;
 }
 
+async function getDeliveryById(id_user, id_delivery) {
+  const delivery = await deliveryRepository.findById(id_delivery);
+  if (!delivery) {
+    const error = new Error("Entrega não encontrada");
+    error.statusCode = 404;
+    throw error;
+  }
+  return delivery;
+}
+
 async function deleteDelivery(id_user, id_delivery) {
   const delivery = await deliveryRepository.findById(id_delivery, id_user);
   if (!delivery) {
@@ -79,4 +89,5 @@ module.exports = {
   updateDelivery,
   deleteDelivery,
   updateRoute,
+  getDeliveryById,
 };

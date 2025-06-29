@@ -8,22 +8,22 @@ async function create(deliveryData, fk_id_user) {
   return await Delivery.create(deliveryData, fk_id_user);
 }
 
-async function findById(id_delivery, fk_id_user) {
+async function findById(id_delivery) {
   return await Delivery.findOne({
-    where: { id_delivery, fk_id_user },
+    where: { id_delivery },
   });
 }
 
-async function updateById(id_delivery, updatedData, fk_id_user) {
+async function updateById(id_delivery, updatedData) {
   await Delivery.update(updatedData, {
-    where: { id_delivery, fk_id_user },
+    where: { id_delivery },
   });
-  return await findById(id_delivery, fk_id_user);
+  return await findById(id_delivery);
 }
 
-async function deleteById(id_delivery, fk_id_user) {
+async function deleteById(id_delivery) {
   const delivery = await Delivery.findOne({
-    where: { id_delivery, fk_id_user },
+    where: { id_delivery },
   });
   if (!delivery) {
     return 0;

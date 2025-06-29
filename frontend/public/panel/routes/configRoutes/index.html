@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Configurar Rotas</title>
+    <title>Configurar Rotas e Entregas</title>
     <link rel="stylesheet" href="configRoutes.css" />
     <link rel="icon" href="../images/logo.png" />
   </head>
@@ -35,18 +35,65 @@
             </div>
 
             <div class="TituloRotas">
-              <h1>SELECIONE UMA ROTA</h1>
+              <h1>ROTAS</h1>
+              <div
+                id="route-actions-container"
+                class="action-buttons-container"
+              >
+                <button id="create-route-btn" class="action-button create-btn">
+                  Criar Rota
+                </button>
+                <button
+                  id="edit-route-btn"
+                  class="action-button edit-btn"
+                  disabled
+                >
+                  Editar Rota
+                </button>
+                <button
+                  id="delete-route-btn"
+                  class="action-button delete-btn"
+                  disabled
+                >
+                  Excluir Rota
+                </button>
+              </div>
               <div id="listed-routes-container">
-                <p>Selecione uma empresa para ver as rotas.</p>
+                <p>Selecione uma empresa para ver e gerenciar as rotas.</p>
               </div>
             </div>
           </div>
 
           <div class="containerDireito">
             <div class="TituloEntregas">
-              <h1>MARQUE AS ENTREGAS</h1>
+              <h1>ENTREGAS</h1>
+              <div
+                id="delivery-actions-container"
+                class="action-buttons-container"
+              >
+                <button
+                  id="create-delivery-btn"
+                  class="action-button create-btn"
+                >
+                  Adicionar Entrega
+                </button>
+                <button
+                  id="edit-delivery-btn"
+                  class="action-button edit-btn"
+                  disabled
+                >
+                  Editar Entrega
+                </button>
+                <button
+                  id="delete-delivery-btn"
+                  class="action-button delete-btn"
+                  disabled
+                >
+                  Excluir Entrega
+                </button>
+              </div>
               <div id="listed-deliveries-container">
-                <p>Selecione uma empresa e uma rota para ver as entregas.</p>
+                <p>Selecione uma empresa para ver e gerenciar as entregas.</p>
               </div>
             </div>
             <div class="BotoesRotas">
@@ -65,10 +112,165 @@
       </div>
     </div>
 
+    <div id="route-modal" class="modal">
+      <div class="modal-content">
+        <span class="modal-close-btn" id="close-route-modal">&times;</span>
+        <h2 id="route-modal-title"></h2>
+        <form id="route-form" class="modal-form">
+          <input type="hidden" id="route-id-input" />
+          <div class="form-group">
+            <label for="route-name">Nome da Rota</label>
+            <input type="text" id="route-name" required />
+          </div>
+          <div class="form-group">
+            <label for="route-description">Descrição</label>
+            <textarea id="route-description" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="route-date">Data</label>
+            <input type="date" id="route-date" />
+          </div>
+          <div class="form-group">
+            <label for="route-delivery-guy">ID do Entregador (Opcional)</label>
+            <input type="text" id="route-delivery-guy" />
+          </div>
+          <div class="modal-form-actions">
+            <button
+              type="button"
+              id="cancel-route-btn"
+              class="action-button delete-btn"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="action-button create-btn">
+              Salvar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="delivery-modal" class="modal">
+      <div class="modal-content">
+        <span class="modal-close-btn" id="close-delivery-modal">&times;</span>
+        <h2 id="delivery-modal-title"></h2>
+        <form id="delivery-form" class="modal-form">
+          <input type="hidden" id="delivery-id-input" />
+
+          <fieldset class="address-fieldset">
+            <legend>Endereço de Entrega</legend>
+            <div class="address-grid">
+              <div class="form-group grid-col-span-2">
+                <label for="delivery-cep">CEP</label>
+                <input
+                  type="text"
+                  id="delivery-cep"
+                  maxlength="9"
+                  placeholder="00000-000"
+                />
+              </div>
+              <div class="form-group grid-col-span-4">
+                <label for="delivery-street">Rua / Logradouro</label>
+                <input type="text" id="delivery-street" required />
+              </div>
+              <div class="form-group grid-col-span-2">
+                <label for="delivery-number">Número</label>
+                <input type="text" id="delivery-number" required />
+              </div>
+              <div class="form-group grid-col-span-4">
+                <label for="delivery-complement">Complemento</label>
+                <input type="text" id="delivery-complement" />
+              </div>
+              <div class="form-group grid-col-span-6">
+                <label for="delivery-neighborhood">Bairro</label>
+                <input type="text" id="delivery-neighborhood" required />
+              </div>
+              <div class="form-group grid-col-span-4">
+                <label for="delivery-city">Cidade</label>
+                <input type="text" id="delivery-city" required />
+              </div>
+              <div class="form-group grid-col-span-2">
+                <label for="delivery-state">Estado</label>
+                <select id="delivery-state" required></select>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="form-group">
+            <label for="delivery-date">Data da Entrega</label>
+            <input type="date" id="delivery-date" required />
+          </div>
+          <div class="form-group">
+            <label for="delivery-status">Status</label>
+            <select id="delivery-status" required>
+              <option value="AGUARDANDO">AGUARDANDO</option>
+              <option value="ENTREGUE">ENTREGUE</option>
+              <option value="CANCELADO">CANCELADO</option>
+            </select>
+          </div>
+          <div class="modal-form-actions">
+            <button
+              type="button"
+              id="cancel-delivery-btn"
+              class="action-button delete-btn"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="action-button create-btn">
+              Salvar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script>
       let selectedFirmId = null;
       let selectedRouteId = null;
+      let selectedDeliveryId = null;
       let allDeliveries = [];
+
+      const routeActionsContainer = document.getElementById(
+        "route-actions-container"
+      );
+      const deliveryActionsContainer = document.getElementById(
+        "delivery-actions-container"
+      );
+
+      const createRouteBtn = document.getElementById("create-route-btn");
+      const editRouteBtn = document.getElementById("edit-route-btn");
+      const deleteRouteBtn = document.getElementById("delete-route-btn");
+
+      const createDeliveryBtn = document.getElementById("create-delivery-btn");
+      const editDeliveryBtn = document.getElementById("edit-delivery-btn");
+      const deleteDeliveryBtn = document.getElementById("delete-delivery-btn");
+
+      const routeModal = document.getElementById("route-modal");
+      const deliveryModal = document.getElementById("delivery-modal");
+      const routeForm = document.getElementById("route-form");
+      const deliveryForm = document.getElementById("delivery-form");
+      const deliveryCepInput = document.getElementById("delivery-cep");
+
+      async function getErrorMessage(response) {
+        try {
+          const err = await response.json();
+          return err.message || err.error || JSON.stringify(err);
+        } catch (e) {
+          return `${response.status} - ${response.statusText}`;
+        }
+      }
+
+      function toggleActionButtons(show) {
+        const display = show ? "flex" : "none";
+        routeActionsContainer.style.display = display;
+        deliveryActionsContainer.style.display = display;
+        if (!show) {
+          editRouteBtn.disabled = true;
+          deleteRouteBtn.disabled = true;
+          editDeliveryBtn.disabled = true;
+          deleteDeliveryBtn.disabled = true;
+        }
+      }
 
       async function fetchAndRenderFirms() {
         const container = document.getElementById("firm-selector-container");
@@ -78,43 +280,43 @@
           });
           if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
           const firms = await response.json();
-
           if (firms.length === 0) {
             container.innerHTML = "<p>Nenhuma empresa cadastrada.</p>";
             return;
           }
-
           const select = document.createElement("select");
           select.id = "firm-select";
-
           const defaultOption = document.createElement("option");
           defaultOption.value = "";
           defaultOption.textContent = "Selecione uma empresa...";
           select.appendChild(defaultOption);
-
           firms.forEach((firm) => {
             const option = document.createElement("option");
             option.value = firm.id_firm;
             option.textContent = firm.name;
             select.appendChild(option);
           });
-
           select.addEventListener("change", (event) => {
             selectedFirmId = event.target.value;
             selectedRouteId = null;
+            selectedDeliveryId = null;
             allDeliveries = [];
 
+            editDeliveryBtn.disabled = true;
+            deleteDeliveryBtn.disabled = true;
+
             if (selectedFirmId) {
+              toggleActionButtons(true);
               fetchAndRenderRoutes(selectedFirmId);
               fetchAndRenderDeliveries(selectedFirmId);
             } else {
+              toggleActionButtons(false);
               document.getElementById("listed-routes-container").innerHTML =
                 "<p>Selecione uma empresa para ver as rotas.</p>";
               document.getElementById("listed-deliveries-container").innerHTML =
                 "<p>Selecione uma empresa para ver as entregas.</p>";
             }
           });
-
           container.innerHTML = "";
           container.appendChild(select);
         } catch (error) {
@@ -126,9 +328,8 @@
       async function fetchAndRenderRoutes(firmId) {
         const container = document.getElementById("listed-routes-container");
         container.innerHTML = "<p>Buscando rotas...</p>";
-        document.getElementById("listed-deliveries-container").innerHTML =
-          "<p>Selecione uma rota para ver as entregas.</p>";
-
+        editRouteBtn.disabled = true;
+        deleteRouteBtn.disabled = true;
         try {
           const response = await fetch(`/api/routes/firm/${firmId}`, {
             credentials: "include",
@@ -136,26 +337,23 @@
           if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
           const routes = await response.json();
           container.innerHTML = "";
-
           if (routes.length === 0) {
             container.innerHTML =
               "<p>Nenhuma rota cadastrada para esta empresa.</p>";
             return;
           }
-
           routes.forEach((route) => {
             const button = document.createElement("button");
             button.className = "route-button";
             button.dataset.id = route.id_route;
 
-            let content = `<strong>${route.name}</strong>`;
+            let buttonTitle = `<strong>${route.name}</strong>`;
             if (route.description) {
-              content += ` - ${route.description}`;
+              buttonTitle += ` - <small>${route.description}</small>`;
             }
-            content += `<br><small>Última atualização: ${new Date(
+            button.innerHTML = `${buttonTitle}<br><small>Atualizado: ${new Date(
               route.updatedAt
             ).toLocaleDateString("pt-BR")}</small>`;
-            button.innerHTML = content;
 
             button.addEventListener("click", () => {
               document
@@ -163,6 +361,8 @@
                 .forEach((btn) => btn.classList.remove("selected"));
               button.classList.add("selected");
               selectedRouteId = route.id_route;
+              editRouteBtn.disabled = false;
+              deleteRouteBtn.disabled = false;
               updateDeliveryCheckboxes();
             });
             container.appendChild(button);
@@ -178,25 +378,19 @@
           "listed-deliveries-container"
         );
         container.innerHTML = "<p>Buscando entregas...</p>";
-
         try {
-          const response = await fetch(`/api/deliveries/${firmId}`, {
+          const response = await fetch(`/api/deliveries/firm/${firmId}`, {
             credentials: "include",
           });
-          if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
-          allDeliveries = await response.json();
-
-          if (allDeliveries.length === 0) {
-            container.innerHTML =
-              "<p>Nenhuma entrega cadastrada para esta empresa.</p>";
-            return;
+          if (!response.ok) {
+            const errorMessage = await getErrorMessage(response);
+            throw new Error(errorMessage);
           }
-
-          container.innerHTML =
-            "<p>Selecione uma rota para associar as entregas.</p>";
+          allDeliveries = await response.json();
+          updateDeliveryCheckboxes();
         } catch (error) {
           console.error("Erro ao buscar entregas:", error);
-          container.innerHTML = "<p>Erro ao carregar entregas.</p>";
+          container.innerHTML = `<p>Erro ao carregar entregas: ${error.message}</p>`;
           allDeliveries = [];
         }
       }
@@ -206,52 +400,72 @@
           "listed-deliveries-container"
         );
         container.innerHTML = "";
-
+        if (allDeliveries.length === 0) {
+          container.innerHTML = selectedFirmId
+            ? "<p>Nenhuma entrega cadastrada para esta empresa.</p>"
+            : "<p>Selecione uma empresa para ver as entregas.</p>";
+          return;
+        }
         if (!selectedRouteId) {
           container.innerHTML =
-            "<p>Selecione uma rota para associar entregas.</p>";
-          return;
+            "<p>Selecione uma rota para associar as entregas.</p>";
         }
-
         const availableDeliveries = allDeliveries.filter(
-          (delivery) =>
-            delivery.fk_id_route === null ||
-            delivery.fk_id_route === selectedRouteId
+          (d) => d.fk_id_route === null || d.fk_id_route === selectedRouteId
         );
-
         if (availableDeliveries.length === 0) {
           container.innerHTML =
-            "<p>Nenhuma entrega disponível para esta rota.</p>";
-          return;
+            "<p>Nenhuma entrega disponível para associação.</p>";
         }
-
         availableDeliveries.forEach((delivery) => {
-          const deliveryId = `delivery-${delivery.id_delivery}`;
           const item = document.createElement("div");
           item.className = "delivery-item";
+          item.dataset.id = delivery.id_delivery;
 
-          const isChecked = delivery.fk_id_route === selectedRouteId;
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.id = `delivery-${delivery.id_delivery}`;
+          checkbox.checked =
+            selectedRouteId !== null &&
+            delivery.fk_id_route === selectedRouteId;
+          item.appendChild(checkbox);
 
-          let deliveryDate = "Não informada";
-          if (delivery.date) {
-            const date = new Date(delivery.date);
-            deliveryDate = date.toLocaleDateString("pt-BR", {
-              timeZone: "UTC",
-            });
-          }
+          const infoArea = document.createElement("div");
+          infoArea.className = "info-area";
 
-          item.innerHTML = `
-            <input type="checkbox" id="${deliveryId}" data-id="${
+          const deliveryDate = delivery.date
+            ? new Date(delivery.date).toLocaleDateString("pt-BR", {
+                timeZone: "UTC",
+              })
+            : "Não informada";
+          const status = delivery.status || "N/A";
+          const statusClass = `status-${status
+            .toLowerCase()
+            .replace(" ", "-")}`;
+
+          infoArea.innerHTML = `
+            <div><strong>Endereço:</strong> ${
+              delivery.address || "Não informado"
+            }</div>
+            <div><small>Status: <span class="status-badge ${statusClass}" data-delivery-id="${
             delivery.id_delivery
-          }" ${isChecked ? "checked" : ""}>
-            <label for="${deliveryId}">
-              <strong>Endereço:</strong> ${delivery.address}
-              <br>
-              <small>Status: <strong>${
-                delivery.status
-              }</strong> | Data de entrega: ${deliveryDate}</small>
-            </label>
+          }" data-current-status="${status}">${status}</span> | Data: ${deliveryDate}</small></div>
           `;
+          item.appendChild(infoArea);
+
+          infoArea.addEventListener("click", () => {
+            document
+              .querySelectorAll(".delivery-item.selected")
+              .forEach((el) => el.classList.remove("selected"));
+            item.classList.add("selected");
+            selectedDeliveryId = item.dataset.id;
+            editDeliveryBtn.disabled = false;
+            deleteDeliveryBtn.disabled = false;
+          });
+
+          item
+            .querySelector(".status-badge")
+            .addEventListener("click", showInlineStatusEditor);
           container.appendChild(item);
         });
       }
@@ -261,59 +475,449 @@
           alert("Por favor, selecione uma rota antes de salvar.");
           return;
         }
-
         const checkboxes = document.querySelectorAll(
-          '#listed-deliveries-container input[type="checkbox"]'
+          '.delivery-item input[type="checkbox"]'
         );
         const associatedDeliveryIds = Array.from(checkboxes)
-          .filter((checkbox) => checkbox.checked)
-          .map((checkbox) => checkbox.dataset.id);
-
+          .filter((cb) => cb.checked)
+          .map((cb) => cb.id.replace("delivery-", ""));
         const button = document.getElementById("save-associations-button");
         button.textContent = "Salvando...";
         button.disabled = true;
-
         try {
           const response = await fetch(`/api/deliveries/${selectedRouteId}`, {
             method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ deliveryIds: associatedDeliveryIds }),
             credentials: "include",
           });
-
           if (!response.ok) {
-            const errorData = await response.json().catch(() => ({
-              message: "O servidor não retornou um erro JSON válido.",
-            }));
-            throw new Error(
-              `O servidor respondeu com o erro ${response.status}: ${errorData.message}`
-            );
+            const errorMessage = await getErrorMessage(response);
+            throw new Error(errorMessage);
           }
-
-          alert("Associações salvas com sucesso!");
-
           if (selectedFirmId) {
             await fetchAndRenderDeliveries(selectedFirmId);
           }
-          updateDeliveryCheckboxes();
         } catch (error) {
           console.error("Erro ao salvar associações:", error);
-          alert(`Falha ao salvar as associações: ${error.message}`);
+          alert(`Falha ao salvar: ${error.message}`);
         } finally {
           button.textContent = "Salvar Associações";
           button.disabled = false;
         }
       }
 
+      async function openRouteModal(routeId = null) {
+        routeForm.reset();
+        if (routeId) {
+          document.getElementById("route-modal-title").textContent =
+            "Editar Rota";
+          document.getElementById("route-id-input").value = routeId;
+          try {
+            const response = await fetch(`/api/routes/${routeId}`, {
+              credentials: "include",
+            });
+            if (!response.ok) {
+              const errorMessage = await getErrorMessage(response);
+              throw new Error(errorMessage);
+            }
+            const route = await response.json();
+            document.getElementById("route-name").value = route.name;
+            document.getElementById("route-description").value =
+              route.description || "";
+            if (route.date) {
+              document.getElementById("route-date").value =
+                route.date.split("T")[0];
+            }
+            document.getElementById("route-delivery-guy").value =
+              route.id_delivery_guy || "";
+          } catch (error) {
+            alert(`Erro ao carregar dados da rota: ${error.message}`);
+            return;
+          }
+        } else {
+          document.getElementById("route-modal-title").textContent =
+            "Criar Nova Rota";
+          document.getElementById("route-id-input").value = "";
+        }
+        routeModal.style.display = "block";
+      }
+
+      async function openDeliveryModal(deliveryId = null) {
+        deliveryForm.reset();
+
+        if (deliveryId) {
+          document.getElementById("delivery-modal-title").textContent =
+            "Editar Entrega";
+          document.getElementById("delivery-id-input").value = deliveryId;
+          try {
+            const response = await fetch(`/api/deliveries/${deliveryId}`, {
+              credentials: "include",
+            });
+            if (!response.ok) {
+              const errorMessage = await getErrorMessage(response);
+              throw new Error(errorMessage);
+            }
+            const delivery = await response.json();
+
+            if (delivery.date) {
+              document.getElementById("delivery-date").value =
+                delivery.date.split("T")[0];
+            }
+            document.getElementById("delivery-status").value = delivery.status;
+
+            const addressString = delivery.address || "";
+            const parts = addressString.split(",").map((p) => p.trim());
+
+            if (parts.length >= 6) {
+              document.getElementById("delivery-street").value = parts[0] || "";
+              document.getElementById("delivery-number").value = parts[1] || "";
+              document.getElementById("delivery-neighborhood").value =
+                parts[2] || "";
+              document.getElementById("delivery-city").value = parts[3] || "";
+              document.getElementById("delivery-state").value = parts[4] || "";
+              document.getElementById("delivery-cep").value = parts[5] || "";
+              document.getElementById("delivery-complement").value = "";
+            } else {
+              console.warn(
+                "Formato de endereço não reconhecido, campos não preenchidos:",
+                addressString
+              );
+            }
+          } catch (error) {
+            alert(`Erro ao carregar dados da entrega: ${error.message}`);
+            return;
+          }
+        } else {
+          document.getElementById("delivery-modal-title").textContent =
+            "Criar Nova Entrega";
+          document.getElementById("delivery-id-input").value = "";
+        }
+        deliveryModal.style.display = "block";
+      }
+
+      function closeRouteModal() {
+        routeModal.style.display = "none";
+      }
+      function closeDeliveryModal() {
+        deliveryModal.style.display = "none";
+      }
+
+      async function handleRouteFormSubmit(event) {
+        event.preventDefault();
+        const routeId = document.getElementById("route-id-input").value;
+        const firmSelect = document.getElementById("firm-select");
+        const firmName = firmSelect.options[firmSelect.selectedIndex].text;
+
+        const payload = {
+          name: document.getElementById("route-name").value,
+          description: document.getElementById("route-description").value,
+          date: document.getElementById("route-date").value || null,
+          id_delivery_guy:
+            document.getElementById("route-delivery-guy").value || null,
+          firm_name: firmName,
+        };
+
+        const url = routeId ? `/api/routes/${routeId}` : "/api/routes";
+        const method = routeId ? "PUT" : "POST";
+
+        try {
+          const response = await fetch(url, {
+            method: method,
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(payload),
+          });
+          if (!response.ok) {
+            const errorMessage = await getErrorMessage(response);
+            throw new Error(errorMessage);
+          }
+          alert(`Rota ${routeId ? "atualizada" : "criada"} com sucesso!`);
+          closeRouteModal();
+          fetchAndRenderRoutes(selectedFirmId);
+        } catch (error) {
+          alert(`Falha ao salvar rota: ${error.message}`);
+        }
+      }
+
+      async function handleDeliveryFormSubmit(event) {
+        event.preventDefault();
+        const deliveryId = document.getElementById("delivery-id-input").value;
+
+        const street = document.getElementById("delivery-street").value.trim();
+        const number = document.getElementById("delivery-number").value.trim();
+        const neighborhood = document
+          .getElementById("delivery-neighborhood")
+          .value.trim();
+        const city = document.getElementById("delivery-city").value.trim();
+        const state = document.getElementById("delivery-state").value.trim();
+        const cep = document.getElementById("delivery-cep").value.trim();
+
+        if (!street || !number || !neighborhood || !city || !state) {
+          alert(
+            "Por favor, preencha todos os campos de endereço obrigatórios (Rua, Número, Bairro, Cidade, Estado)."
+          );
+          return;
+        }
+
+        const addressParts = [street, number, neighborhood, city, state, cep];
+        const fullAddress = addressParts.filter(Boolean).join(", ");
+
+        const payload = {
+          address: fullAddress,
+          date: document.getElementById("delivery-date").value,
+          status: document.getElementById("delivery-status").value,
+          fk_id_firm: selectedFirmId,
+        };
+
+        const url = deliveryId
+          ? `/api/deliveries/${deliveryId}`
+          : "/api/deliveries";
+        const method = deliveryId ? "PUT" : "POST";
+
+        try {
+          const response = await fetch(url, {
+            method: method,
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(payload),
+          });
+          if (!response.ok) {
+            const errorMessage = await getErrorMessage(response);
+            throw new Error(errorMessage);
+          }
+          alert(`Entrega ${deliveryId ? "atualizada" : "criada"} com sucesso!`);
+          closeDeliveryModal();
+          fetchAndRenderDeliveries(selectedFirmId);
+        } catch (error) {
+          alert(`Falha ao salvar entrega: ${error.message}`);
+        }
+      }
+
+      async function handleDeleteRoute() {
+        if (!selectedRouteId) return;
+        if (
+          confirm(
+            `Tem certeza que deseja excluir a rota selecionada? Esta ação não pode ser desfeita.`
+          )
+        ) {
+          try {
+            const response = await fetch(`/api/routes/${selectedRouteId}`, {
+              method: "DELETE",
+              credentials: "include",
+            });
+            if (response.status !== 204) {
+              const errorMessage = await getErrorMessage(response);
+              throw new Error(errorMessage);
+            }
+            alert("Rota excluída com sucesso!");
+            selectedRouteId = null;
+            fetchAndRenderRoutes(selectedFirmId);
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+      }
+
+      async function handleDeleteDelivery() {
+        if (!selectedDeliveryId) return;
+        if (confirm("Tem certeza que deseja excluir esta entrega?")) {
+          try {
+            const response = await fetch(
+              `/api/deliveries/${selectedDeliveryId}`,
+              { method: "DELETE", credentials: "include" }
+            );
+            if (!response.ok) {
+              const errorMessage = await getErrorMessage(response);
+              throw new Error(errorMessage);
+            }
+            alert("Entrega excluída com sucesso!");
+            selectedDeliveryId = null;
+            editDeliveryBtn.disabled = true;
+            deleteDeliveryBtn.disabled = true;
+            fetchAndRenderDeliveries(selectedFirmId);
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+      }
+
+      function showInlineStatusEditor(event) {
+        event.stopPropagation();
+        const badge = event.target;
+        const parent = badge.parentNode;
+
+        const select = document.createElement("select");
+        select.className = "status-select-inline";
+        select.dataset.deliveryId = badge.dataset.deliveryId;
+        select.dataset.currentStatus = badge.dataset.currentStatus;
+        select.dataset.processing = "false";
+
+        const statuses = ["AGUARDANDO", "ENTREGUE", "CANCELADO"];
+        statuses.forEach((status) => {
+          const option = document.createElement("option");
+          option.value = status;
+          option.textContent = status;
+          if (status === select.dataset.currentStatus) {
+            option.selected = true;
+          }
+          select.appendChild(option);
+        });
+
+        const updateStatus = async () => {
+          if (select.dataset.processing === "true") return;
+          select.dataset.processing = "true";
+
+          const newStatus = select.value;
+          const deliveryId = select.dataset.deliveryId;
+          const parentItem = select.closest(".delivery-item");
+
+          if (newStatus === select.dataset.currentStatus) {
+            fetchAndRenderDeliveries(selectedFirmId);
+            return;
+          }
+
+          try {
+            const response = await fetch(`/api/deliveries/${deliveryId}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ status: newStatus }),
+            });
+            if (!response.ok) {
+              const errorMessage = await getErrorMessage(response);
+              throw new Error(errorMessage);
+            }
+            parentItem.classList.add("flash-success");
+          } catch (error) {
+            console.error(`Falha ao atualizar status: ${error.message}`);
+            parentItem.classList.add("flash-error");
+          } finally {
+            setTimeout(() => fetchAndRenderDeliveries(selectedFirmId), 400);
+          }
+        };
+
+        select.addEventListener("change", updateStatus);
+        select.addEventListener("blur", updateStatus);
+
+        parent.replaceChild(select, badge);
+        select.focus();
+      }
+
+      function populateStateSelect() {
+        const states = [
+          "AC",
+          "AL",
+          "AP",
+          "AM",
+          "BA",
+          "CE",
+          "DF",
+          "ES",
+          "GO",
+          "MA",
+          "MT",
+          "MS",
+          "MG",
+          "PA",
+          "PB",
+          "PR",
+          "PE",
+          "PI",
+          "RJ",
+          "RN",
+          "RS",
+          "RO",
+          "RR",
+          "SC",
+          "SP",
+          "SE",
+          "TO",
+        ];
+        const select = document.getElementById("delivery-state");
+        select.innerHTML = '<option value="">Selecione...</option>';
+        states.forEach((state) => {
+          const option = document.createElement("option");
+          option.value = state;
+          option.textContent = state;
+          select.appendChild(option);
+        });
+      }
+
+      async function fetchAddressFromCEP() {
+        let cep = deliveryCepInput.value.replace(/\D/g, "");
+        if (cep.length === 8) {
+          deliveryCepInput.disabled = true;
+          try {
+            const response = await fetch(
+              `https://viacep.com.br/ws/${cep}/json/`
+            );
+            const data = await response.json();
+            if (data.erro) {
+              alert("CEP não encontrado.");
+            } else {
+              document.getElementById("delivery-street").value =
+                data.logradouro || "";
+              document.getElementById("delivery-neighborhood").value =
+                data.bairro || "";
+              document.getElementById("delivery-city").value =
+                data.localidade || "";
+              document.getElementById("delivery-state").value = data.uf || "";
+              document.getElementById("delivery-number").focus();
+            }
+          } catch (error) {
+            alert("Não foi possível buscar o CEP.");
+          } finally {
+            deliveryCepInput.disabled = false;
+          }
+        }
+      }
+
       document.addEventListener("DOMContentLoaded", () => {
         fetchAndRenderFirms();
+        populateStateSelect();
       });
 
       document
         .getElementById("save-associations-button")
         .addEventListener("click", saveAssociations);
+
+      createRouteBtn.addEventListener("click", () => openRouteModal());
+      editRouteBtn.addEventListener("click", () =>
+        openRouteModal(selectedRouteId)
+      );
+      deleteRouteBtn.addEventListener("click", handleDeleteRoute);
+
+      createDeliveryBtn.addEventListener("click", () => openDeliveryModal());
+      editDeliveryBtn.addEventListener("click", () =>
+        openDeliveryModal(selectedDeliveryId)
+      );
+      deleteDeliveryBtn.addEventListener("click", handleDeleteDelivery);
+
+      routeForm.addEventListener("submit", handleRouteFormSubmit);
+      deliveryForm.addEventListener("submit", handleDeliveryFormSubmit);
+
+      document
+        .getElementById("close-route-modal")
+        .addEventListener("click", closeRouteModal);
+      document
+        .getElementById("cancel-route-btn")
+        .addEventListener("click", closeRouteModal);
+      document
+        .getElementById("close-delivery-modal")
+        .addEventListener("click", closeDeliveryModal);
+      document
+        .getElementById("cancel-delivery-btn")
+        .addEventListener("click", closeDeliveryModal);
+
+      deliveryCepInput.addEventListener("blur", fetchAddressFromCEP);
+
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeRouteModal();
+          closeDeliveryModal();
+        }
+      });
     </script>
   </body>
 </html>

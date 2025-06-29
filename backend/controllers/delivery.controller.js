@@ -13,6 +13,20 @@ async function createDelivery(req, res, next) {
   }
 }
 
+async function getDeliveriesById(req, res, next) {
+  try {
+    const { id } = ParamsSchema.parse(req.params);
+    const { id_user } = req.user;
+    const delivery = await deliveryService.getDeliveryById(id_user, id);
+    if (!delivery) {
+      return res.status(404).json({ message: "Entrega não encontrada" });
+    }
+    res.status(200).json(delivery);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function getDeliveries(req, res, next) {
   try {
     const { id_user } = req.user;
@@ -82,4 +96,5 @@ module.exports = {
   updateDelivery,
   deleteDelivery,
   updateRoute,
+  getDeliveriesById,
 };

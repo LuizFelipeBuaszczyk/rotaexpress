@@ -5,9 +5,9 @@ const createRouteSchema = z.object({
     .string({ required_error: "O campo firm_name é obrigatório" })
     .nonempty(),
   date: z
-    .string({ required_error: "O campo date é obrigatório (YYYY-MM-DD)" })
-    .transform((val) => new Date(val))
-    .refine((val) => !isNaN(val.getTime()), {
+    .string()
+    .transform((val) => (val === "" ? undefined : new Date(val)))
+    .refine((val) => val === undefined || !isNaN(val.getTime()), {
       message: "O formato da data deve ser YYYY-MM-DD",
     })
     .optional(),
@@ -18,8 +18,8 @@ const updateRouteSchema = z.object({
   firm_name: z.string().optional(),
   date: z
     .string()
-    .transform((val) => new Date(val))
-    .refine((val) => !isNaN(val.getTime()), {
+    .transform((val) => (val === "" ? undefined : new Date(val)))
+    .refine((val) => val === undefined || !isNaN(val.getTime()), {
       message: "O formato da data deve ser YYYY-MM-DD",
     })
     .optional(),
