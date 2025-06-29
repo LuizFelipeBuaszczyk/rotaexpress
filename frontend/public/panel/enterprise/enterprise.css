@@ -131,6 +131,24 @@ table {
     box-sizing: border-box; 
 }
 
+.dataFirmLine{
+    width: 411px;
+}
+
+.dataFirmLine:hover{
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.dataMemberLine{
+    width: 1052px;
+}
+
+.dataMemberLine:hover{
+    background-color: lightgray;
+    cursor: pointer;
+}
+
 .firmSequenceColumn{
     width: 110px;
     text-align: center;
@@ -231,13 +249,72 @@ table {
     width: 100%;
 }
 
+.containerModal{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 #member-modal {
     position: fixed;
     margin: auto;
     padding: 10px;
-    width: 50%;
-    height: 60%;
+    width: 25%;
+    height: 150px;
     border-radius: 20px;
+}
+
+.containerModal header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.containerModal main {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    height: 50%;
+    width: 100%;
+    gap: 10px;
+}
+
+.containerModal select {
+    width: 40%;
+    height: 30px;
+}
+
+.buttonDivModal{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttonDivModal button {
+    border: none;
+    padding: 10px;
+    height: 35px;
+    border-radius: 5px;
+    color: white;
+}
+
+#remove-member-button {
+    background-color: red;
+}
+
+#remove-member-button:hover {
+    background-color: rgb(156, 0, 0);
+}
+
+#update-member-button{
+    background-color: green;
+}
+
+#update-member-button:hover{
+    background-color: rgb(0, 75, 0);
 }
 
 #add-member-modal {
@@ -275,3 +352,25 @@ table {
     padding: 12px 16px;
     text-align: left;
 }
+
+.exitButton{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    padding: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.exitButton:hover{
+    background-color: rgb(145, 0, 0);
+}
+
+input {
+    height: 30px;
+    padding: 10px;
+} 

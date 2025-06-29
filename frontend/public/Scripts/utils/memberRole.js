@@ -1,5 +1,5 @@
 const roles = {
-    0: "Member",
+    0: "Membro",
     1: "Administrador"
 }
 
