@@ -2,6 +2,8 @@ const Member = require("../models/member.model");
 const memberRepository = require("../repositories/member.repository");
 const firmRepository = require("../repositories/firm.repository");
 const userRepository = require("../repositories/user.repository");
+const notificationService = require("./notification.service");
+const notificationRepository = require("../repositories/notification.repository");
 const email = require("../modules/gmail/sendEmail");
 const oAuth2 = require("../modules/auth/oAuth2");
 
@@ -67,6 +69,15 @@ async function addMember(id_user, id_firm, data){
     const memberInvited = await memberRepository.findMemberByIdMember(createdMember.dataValues.id_member);
 
     sendFirmInviteEmail(memberInvited.dataValues, firm);
+
+    const notificationData = {
+        fk_id_user: user.id_user,
+        table: "member",
+        fk_id_table: memberInvited.dataValues.id_member,
+        title: `Convite para entrar na organização ${firm.name}.`
+    }
+
+    notificationService.createNotification(notificationData);
 
     return memberInvited.dataValues;   
 }
@@ -177,7 +188,8 @@ async function confirmFirmMemberInvite(id_member, inviteAnswer) {
     if(!inviteAnswer){
         // Deletar o membro
         const deletedMember = await memberRepository.deleteMemberById(id_member);
-        if (deletedMember){
+        if (deletedMember){ 
+            notificationRepository.deleteNotification(id_member);
             return ({message: "Convite recusado!", accept: false});
         }else {
             const error = new Error("Ocorreu um erro interno ao recusar o convite.");
@@ -194,7 +206,7 @@ async function confirmFirmMemberInvite(id_member, inviteAnswer) {
         error.statusCode = 400;
         throw error;     
     }
-
+    notificationRepository.deleteNotification(id_member);
     return ({message: "Convite aceito!", accept: true});    
 }
 

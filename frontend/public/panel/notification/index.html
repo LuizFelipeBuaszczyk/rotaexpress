@@ -31,7 +31,7 @@
         <!-- Conteúdo principal -->
         <div class="main-content">
             <h1>Notificações</h1>
-
+            <table id="notification-table"></table>
             <!-- pop-up para realizar logout-->
             <div id="logout-modal" class="modal">
                 <div class="content-modal">
@@ -40,6 +40,15 @@
                     <button id="confirm-logout-button">Confirmar</button>
                 </div>
             </div>
+
+            <dialog id="notification-modal">
+                <header>
+                    <h1 id="notification-modal-title"></h1>
+                    <button class="exitButton" id="exit-notification-modal">X</button>
+                    <main id="notification-modal-main"></main>
+                </header>
+
+            </dialog>
 
         </div>
     </div>
