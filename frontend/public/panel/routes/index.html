@@ -42,12 +42,16 @@
               </div>
             </div>
 
-            <div class="BotaoConfigRotas">
+            <div class="BotaoAcoes">
               <button
+                id="config-route-btn"
                 onclick="window.location.href='./configRoutes/index.html'"
               >
                 Configurar Rotas
               </button>
+              <div id="share-button-container" style="display: none">
+                <button id="share-route-btn">Compartilhar Rota</button>
+              </div>
             </div>
           </div>
 
@@ -75,22 +79,14 @@
       let currentMarkers = [];
       let selectedFirmId = null;
 
-      function initMap(routeDataToLoad) {
-        if (
-          !routeDataToLoad ||
-          !routeDataToLoad.polyline ||
-          !routeDataToLoad.origin
-        ) {
-          console.error(
-            "Dados da rota, polyline ou origem ausentes.",
-            routeDataToLoad
-          );
+      function initMap(routeData) {
+        if (!routeData || !routeData.polyline || !routeData.origin) {
           document.getElementById("map").innerHTML =
             "<p>Ocorreu um erro ao gerar a rota. Faltam informações essenciais.</p>";
           return;
         }
         const decodedPath = google.maps.geometry.encoding.decodePath(
-          routeDataToLoad.polyline
+          routeData.polyline
         );
         if (decodedPath.length === 0) {
           document.getElementById("map").innerHTML =
@@ -106,20 +102,7 @@
             streetViewControl: false,
           });
           mapLoaded = true;
-          document.getElementById("map").addEventListener("click", (event) => {
-            if (event.target.matches(".streetview-button")) {
-              const lat = parseFloat(event.target.getAttribute("data-lat"));
-              const lng = parseFloat(event.target.getAttribute("data-lng"));
-              const location = { lat, lng };
-              const panorama = mapInstance.getStreetView();
-              panorama.setPosition(location);
-              panorama.setPov({ heading: 34, pitch: 10 });
-              panorama.setVisible(true);
-              if (window.infoWindow) window.infoWindow.close();
-            }
-          });
         }
-
         if (currentRoutePath) currentRoutePath.setMap(null);
         currentMarkers.forEach((marker) => marker.setMap(null));
         currentMarkers = [];
@@ -138,7 +121,7 @@
         const originMarker = new google.maps.Marker({
           position: decodedPath[0],
           map: mapInstance,
-          title: routeDataToLoad.origin,
+          title: routeData.origin,
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
             scale: 8,
@@ -151,16 +134,32 @@
         currentMarkers.push(originMarker);
 
         originMarker.addListener("click", () => {
-          const contentString = `<div><h4>Origem</h4><p>${
-            routeDataToLoad.origin
-          }</p><button class="streetview-button" data-lat="${decodedPath[0].lat()}" data-lng="${decodedPath[0].lng()}">Ver Fachada</button></div>`;
+          const contentString = `<div><h4>Origem</h4><p>${routeData.origin}</p></div>`;
           window.infoWindow.setContent(contentString);
           window.infoWindow.open(mapInstance, originMarker);
         });
 
         const geocoder = new google.maps.Geocoder();
-        if (routeDataToLoad.deliveries) {
-          routeDataToLoad.deliveries.forEach((delivery, index) => {
+        const deliveries = routeData.deliveries || [];
+
+        let waypointOrderArray = null;
+        if (routeData.waypoint_order) {
+          if (typeof routeData.waypoint_order === "string") {
+            try {
+              waypointOrderArray = JSON.parse(routeData.waypoint_order);
+            } catch (e) {
+              waypointOrderArray = [];
+            }
+          } else if (Array.isArray(routeData.waypoint_order)) {
+            waypointOrderArray = routeData.waypoint_order;
+          }
+        }
+        const orderedDeliveries = waypointOrderArray
+          ? waypointOrderArray.map((i) => deliveries[i]).filter(Boolean)
+          : deliveries;
+
+        if (orderedDeliveries.length > 0) {
+          orderedDeliveries.forEach((delivery, index) => {
             geocoder.geocode(
               { address: delivery.address },
               (results, status) => {
@@ -173,20 +172,13 @@
                     title: delivery.address,
                   });
                   currentMarkers.push(marker);
-
                   marker.addListener("click", () => {
                     const contentString = `<div><h4>Entrega ${
                       index + 1
-                    }</h4><p>${
-                      delivery.address
-                    }</p><button class="streetview-button" data-lat="${markerPosition.lat()}" data-lng="${markerPosition.lng()}">Ver Fachada</button></div>`;
+                    }</h4><p>${delivery.address}</p></div>`;
                     window.infoWindow.setContent(contentString);
                     window.infoWindow.open(mapInstance, marker);
                   });
-                } else {
-                  console.error(
-                    `Geocoding para ${delivery.address} falhou: ${status}`
-                  );
                 }
               }
             );
@@ -195,6 +187,49 @@
         const bounds = new google.maps.LatLngBounds();
         decodedPath.forEach((point) => bounds.extend(point));
         mapInstance.fitBounds(bounds);
+
+        const shareBtnContainer = document.getElementById(
+          "share-button-container"
+        );
+        shareBtnContainer.style.display = "none";
+
+        if (orderedDeliveries.length > 0) {
+          const shareBtn = document.getElementById("share-route-btn");
+          const baseUrl = "https://www.google.com/maps/dir/";
+          const allStops = [
+            routeData.origin,
+            ...orderedDeliveries.map((d) => d.address),
+            routeData.origin,
+          ];
+          const encodedStops = allStops
+            .map((stop) => encodeURIComponent(stop))
+            .join("/");
+          const finalUrl = `${baseUrl}${encodedStops}`;
+
+          shareBtn.onclick = () => {
+            if (navigator.share) {
+              navigator
+                .share({
+                  title: `RotaExpress - Rota ${
+                    routeData.name || "Personalizada"
+                  }`,
+                  text: "Confira a rota de entrega otimizada.",
+                  url: finalUrl,
+                })
+                .catch(console.error);
+            } else {
+              navigator.clipboard.writeText(finalUrl).then(
+                () => {
+                  alert("Link da rota copiado para a área de transferência!");
+                },
+                () => {
+                  prompt("Copie o link manualmente:", finalUrl);
+                }
+              );
+            }
+          };
+          shareBtnContainer.style.display = "block";
+        }
       }
 
       function loadGoogleMapsScript(callback) {
@@ -204,39 +239,29 @@
         }
         window.googleMapsLoaded = callback;
         const script = document.createElement("script");
+        script.loading = "async";
         script.src = `https://maps.googleapis.com/maps/api/js?key=${Maps_API_KEY}&libraries=geometry,places&callback=googleMapsLoaded`;
         script.async = true;
         script.defer = true;
         document.head.appendChild(script);
       }
 
-      async function callBackendToGenerateRoute(payload, buttonElement) {
-        buttonElement.textContent = "Gerando Rota...";
-        try {
-          const generateResponse = await fetch(`/api/routes/generate-route`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(payload),
-          });
-
-          if (!generateResponse.ok) {
-            const errorData = await generateResponse
-              .json()
-              .catch(() => ({ message: "Erro desconhecido no servidor." }));
-            throw new Error(
-              `Erro ao gerar a rota. Status: ${generateResponse.status}. Mensagem: ${errorData.message}`
-            );
-          }
-          const newlyGeneratedRoute = await generateResponse.json();
-          initMap(newlyGeneratedRoute);
-        } catch (error) {
-          console.error("Falha ao chamar o backend para gerar a rota:", error);
-          document.getElementById(
-            "map"
-          ).innerHTML = `<p>Ocorreu um erro ao gerar a rota: ${error.message}.</p>`;
-          alert(`Não foi possível gerar a rota: ${error.message}`);
+      async function callBackendToGenerateRoute(payload) {
+        const generateResponse = await fetch(`/api/routes/generate-route`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(payload),
+        });
+        if (!generateResponse.ok) {
+          const errorData = await generateResponse
+            .json()
+            .catch(() => ({ message: "Erro desconhecido no servidor." }));
+          throw new Error(
+            `Erro: ${generateResponse.status}. ${errorData.message}`
+          );
         }
+        return await generateResponse.json();
       }
 
       async function fetchAndRenderFirms() {
@@ -262,9 +287,10 @@
             selectedFirmId = event.target.value;
             document.getElementById("map").innerHTML =
               "<p>Clique em uma rota para ver o mapa.</p>";
+            document.getElementById("share-button-container").style.display =
+              "none";
             mapInstance = null;
             mapLoaded = false;
-
             if (currentRoutePath) currentRoutePath.setMap(null);
             currentMarkers.forEach((marker) => marker.setMap(null));
             currentMarkers = [];
@@ -279,7 +305,6 @@
           container.innerHTML = "";
           container.appendChild(select);
         } catch (error) {
-          console.error("Erro ao buscar empresas:", error);
           container.innerHTML = "<p>Erro ao carregar empresas.</p>";
         }
       }
@@ -308,7 +333,6 @@
             button.type = "button";
             button.classList.add("route-button");
             button.dataset.routeId = route.id_route;
-
             let buttonTitle = `<strong>Rota - ${route.name}</strong>`;
             if (route.description) {
               buttonTitle += ` - <small>${route.description}</small>`;
@@ -316,7 +340,7 @@
             button.dataset.originalHtml = buttonTitle;
             button.innerHTML = button.dataset.originalHtml;
 
-            button.addEventListener("click", async (event) => {
+            button.addEventListener("click", (event) => {
               const clickedButton = event.currentTarget;
               const allButtons =
                 buttonsContainer.querySelectorAll(".route-button");
@@ -330,98 +354,81 @@
 
               allButtons.forEach((btn) => (btn.disabled = true));
               clickedButton.textContent = "Carregando...";
+              document.getElementById("share-button-container").style.display =
+                "none";
 
-              try {
-                const detailsResponse = await fetch(
-                  `/api/routes/${route.id_route}`,
-                  { method: "GET", credentials: "include" }
-                );
-                if (!detailsResponse.ok)
-                  throw new Error(
-                    `HTTP error! status: ${detailsResponse.status}`
+              loadGoogleMapsScript(async () => {
+                try {
+                  const detailsResponse = await fetch(
+                    `/api/routes/${route.id_route}`,
+                    { method: "GET", credentials: "include" }
                   );
-                const routeDetails = await detailsResponse.json();
+                  if (!detailsResponse.ok)
+                    throw new Error(
+                      `HTTP error! status: ${detailsResponse.status}`
+                    );
+                  const routeDetails = await detailsResponse.json();
 
-                await new Promise((resolve, reject) => {
-                  loadGoogleMapsScript(async () => {
-                    try {
-                      if (routeDetails.polyline) {
-                        const firmResponse = await fetch(
-                          `/api/firms/route/${route.id_route}`,
-                          { method: "GET", credentials: "include" }
-                        );
-                        if (!firmResponse.ok)
-                          throw new Error(
-                            "Não foi possível buscar os dados da empresa."
-                          );
-                        const firmDetails = await firmResponse.json();
-                        routeDetails.origin = firmDetails.address;
-                        initMap(routeDetails);
-                      } else {
-                        if (
-                          !routeDetails.deliveries ||
-                          routeDetails.deliveries.length === 0
-                        ) {
-                          document.getElementById(
-                            "map"
-                          ).innerHTML = `<p>Esta rota não possui entregas. Associe ao menos uma entrega na página "Configurar Rotas" para gerar o mapa.</p>`;
-                          mapInstance = null;
-                          mapLoaded = false;
+                  const firmResponse = await fetch(
+                    `/api/firms/route/${route.id_route}`,
+                    { method: "GET", credentials: "include" }
+                  );
+                  if (!firmResponse.ok)
+                    throw new Error(
+                      "Não foi possível buscar os dados da empresa."
+                    );
+                  const firmDetails = await firmResponse.json();
+                  routeDetails.origin = firmDetails.address;
+                  routeDetails.name = route.name;
 
-                          reject(new Error("Rota sem entregas"));
-                          return;
-                        }
-                        clickedButton.textContent = "Buscando origem...";
-                        const firmResponse = await fetch(
-                          `/api/firms/route/${route.id_route}`,
-                          { credentials: "include" }
-                        );
-                        if (!firmResponse.ok)
-                          throw new Error(
-                            "Não foi possível buscar os dados da empresa."
-                          );
-                        const firmDetails = await firmResponse.json();
-
-                        const payload = {
-                          id_route: route.id_route,
-                          deliveryIds: routeDetails.deliveries.map(
-                            (d) => d.id_delivery
-                          ),
-                          originAddress: firmDetails.address,
-                          routeName: routeDetails.name,
-                          id_delivery_guy: routeDetails.id_delivery_guy,
-                        };
-                        await callBackendToGenerateRoute(
-                          payload,
-                          clickedButton
-                        );
-                      }
-                      resolve();
-                    } catch (err) {
-                      reject(err);
+                  if (routeDetails.polyline) {
+                    initMap(routeDetails);
+                  } else {
+                    if (
+                      !routeDetails.deliveries ||
+                      routeDetails.deliveries.length === 0
+                    ) {
+                      throw new Error("Rota sem entregas");
                     }
-                  });
-                });
-              } catch (error) {
-                console.error(
-                  "Erro no processo de carregar ou gerar rota:",
-                  error
-                );
-                alert(`Ocorreu um erro: ${error.message}`);
-                document.getElementById("map").innerHTML =
-                  "<p>Clique em uma rota para ver o mapa.</p>";
-                mapInstance = null;
-                mapLoaded = false;
-              } finally {
-                resetButtons();
-              }
+                    clickedButton.textContent = "Gerando Rota...";
+                    const payload = {
+                      id_route: route.id_route,
+                      deliveryIds: routeDetails.deliveries.map(
+                        (d) => d.id_delivery
+                      ),
+                      originAddress: firmDetails.address,
+                      routeName: routeDetails.name,
+                      id_delivery_guy: routeDetails.id_delivery_guy,
+                    };
+                    const newlyGeneratedRoute =
+                      await callBackendToGenerateRoute(payload);
+                    const finalRouteData = {
+                      ...routeDetails,
+                      ...newlyGeneratedRoute,
+                    };
+                    initMap(finalRouteData);
+                  }
+                } catch (error) {
+                  if (error.message === "Rota sem entregas") {
+                    document.getElementById(
+                      "map"
+                    ).innerHTML = `<p>Esta rota não possui entregas.</p>`;
+                  } else {
+                    document.getElementById(
+                      "map"
+                    ).innerHTML = `<p>Ocorreu um erro ao carregar a rota.</p><p><small>${error.message}</small></p>`;
+                  }
+                  mapInstance = null;
+                  mapLoaded = false;
+                } finally {
+                  resetButtons();
+                }
+              });
             });
             buttonsContainer.appendChild(button);
           });
         } catch (error) {
-          console.error("Erro ao buscar lista de rotas:", error);
-          buttonsContainer.innerHTML =
-            "<p>Erro ao carregar rotas. Verifique sua conexão ou tente novamente.</p>";
+          buttonsContainer.innerHTML = "<p>Erro ao carregar rotas.</p>";
         }
       }
 

@@ -22,7 +22,6 @@ body {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .sidebar .profile {
@@ -37,6 +36,7 @@ body {
 
 .menu {
   list-style: none;
+  margin-top: auto;
 }
 
 .menu li {
@@ -50,7 +50,6 @@ body {
   display: block;
   padding: 10px;
   border-radius: 4px;
-  transition: background-color 0.3s;
 }
 
 .menu li a:hover {
@@ -160,8 +159,7 @@ body {
 }
 
 .SelecionarEmpresa,
-.SelecionarRotas,
-.BotaoConfigRotas {
+.SelecionarRotas {
   width: 100%;
 }
 
@@ -169,9 +167,8 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  border: 1px solid #ecf0f1;
-  border-radius: 8px;
-  padding: 10px;
+  border-top: 1px solid #ecf0f1;
+  padding-top: 15px;
   min-height: 0;
 }
 
@@ -180,9 +177,17 @@ body {
   padding-right: 5px;
 }
 
-.BotaoConfigRotas button {
+.BotaoAcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding-top: 10px;
+  border-top: 1px solid #ecf0f1;
+}
+
+.BotaoAcoes button {
   padding: 10px 20px;
-  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 8px;
@@ -193,9 +198,22 @@ body {
   width: 100%;
 }
 
-.BotaoConfigRotas button:hover {
-  background-color: #0056b3;
+.BotaoAcoes button:hover {
   transform: translateY(-2px);
+}
+
+#config-route-btn {
+  background-color: #007bff;
+}
+#config-route-btn:hover {
+  background-color: #0056b3;
+}
+
+#share-route-btn {
+  background-color: #28a745;
+}
+#share-route-btn:hover {
+  background-color: #218838;
 }
 
 #route-buttons-container .route-button {
