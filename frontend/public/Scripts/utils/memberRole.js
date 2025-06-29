@@ -5,12 +5,12 @@ const roles = {
 
 
 export function getRole(level){
-    return roles[level]
+    return roles[level];
 }
 
 export function getRoleOptionHTML(){
     return  `
-                <option value="member">Membro</option>
-                <option value="adm">Administrador</option>
+                <option value="0">Membro</option>
+                <option value="1">Administrador</option>
             `;
 }

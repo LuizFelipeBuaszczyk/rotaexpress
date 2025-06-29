@@ -22,7 +22,9 @@ document.getElementById('exit-create-firm-modal').addEventListener('click', () =
 document.getElementById('remove-member-button').addEventListener('click', removeMember); 
 document.getElementById('save-create-firm-button').addEventListener('click', createFirm);
 document.getElementById('delete-firm-button').addEventListener('click', deleteFirm);
-document.getElementById('save-uploaded-firm-button').addEventListener('click', saveFirm);
+document.getElementById('allow-edit-firm-button').addEventListener('click', allowEditFirmFields);
+document.getElementById('save-updated-firm-button').addEventListener('click', saveFirm);
+document.getElementById('update-member-button').addEventListener('click', updateMember);
 
 document.getElementById('send-firm-invite-to-user').addEventListener('click', sendFirmInvite);
 document.getElementById('add-member-button').addEventListener('click', showAddMemberModal);
@@ -33,6 +35,7 @@ let firms = [];
 let selectedFirm;
 let members = [];
 let selectedMember;
+let editFirmFields = false;
 
 window.onload = () => {
     getDataFirms();
@@ -175,8 +178,29 @@ function showFirmModal(cells) {
     modal.showModal();
 }
 
-function updateFirm(){
+function allowEditFirmFields () {
+    
+    if(editFirmFields){
+        editFirmFields = false;
 
+        const nameField = document.getElementById('name');
+        nameField.setAttribute('readonly', true);
+        nameField.style.backgroundColor = "rgba(182, 182, 182, 0.288)";
+
+        const addressField = document.getElementById('address');
+        addressField.setAttribute('readonly', true);
+        addressField.style.backgroundColor = "rgba(182, 182, 182, 0.288)";
+    }else {
+        editFirmFields = true;
+
+        const nameField = document.getElementById('name');
+        nameField.removeAttribute('readonly');
+        nameField.style.backgroundColor = "white";
+
+        const addressField = document.getElementById('address');
+        addressField.removeAttribute('readonly');
+        addressField.style.backgroundColor = "white";
+    }
 }
 
 function deleteFirm () {
@@ -253,7 +277,6 @@ function saveFirm(){
             }
         })
         .then(data => { 
-            console.log(data);
             getDataFirms()
         })
         .catch(error => {
@@ -309,7 +332,7 @@ function updateMemberTable(data){
 
     const tdHeaderSequence = document.createElement('th');
     tdHeaderSequence.className = 'memberSequenceColumn';
-    tdHeaderSequence.textContent = 'Sequencia';
+    tdHeaderSequence.textContent = '#';
 
     const tdHeaderName = document.createElement('th');
     tdHeaderName.className = 'memberNameColumn';
@@ -323,14 +346,20 @@ function updateMemberTable(data){
     tdHeaderRole.className = 'memberRoleColumn';
     tdHeaderRole.textContent = 'Permissão';
 
+    const tdHeaderActive = document.createElement('th');
+    tdHeaderActive.className = 'memberActiveColumn';
+    tdHeaderActive.textContent = 'Status';
+
     headerLine.appendChild(tdHeaderSequence);
     headerLine.appendChild(tdHeaderName);
     headerLine.appendChild(tdHeaderEmail);
     headerLine.appendChild(tdHeaderRole);
+    headerLine.appendChild(tdHeaderActive);
     table.appendChild(headerLine);
 
     // Guardar os valores das empresas ?
     data.forEach(member => {
+        member.sequence = sequence;
         sequence++;
         members.push(member);
 
@@ -353,10 +382,15 @@ function updateMemberTable(data){
         tdRoles.className = 'memberRoleColumn';
         tdRoles.textContent = getRole(member.role);
 
+        const tdActive = document.createElement('td');
+        tdActive.className = 'memberActiveColumn';
+        tdActive.textContent = (member.active ? 'Ativo': 'Pendente');
+
         line.appendChild(tdSequence);
         line.appendChild(tdName);
         line.appendChild(tdEmail);
         line.appendChild(tdRoles);
+        line.appendChild(tdActive);
         
         line.addEventListener("dblclick", () => {
             let cells = line.querySelectorAll("td");
@@ -368,15 +402,15 @@ function updateMemberTable(data){
 }
 
 function showMemberModal(cells){
+    let sequence = (cells[0].innerText) - 1;
+    selectedMember = members[sequence]; 
 
     const modal = document.getElementById("member-modal");
     const memberName =  document.getElementById("member-name");
     const selectMemberOptions = document.getElementById("select-roles-member");
 
     selectMemberOptions.innerHTML = getRoleOptionHTML();
-
-    let sequence = (cells[0].innerText) - 1; 
-    selectedMember = members[sequence]; 
+    selectMemberOptions.selectedIndex = selectedMember.role;
 
     memberName.textContent = selectedMember.user.name;
 
@@ -403,13 +437,57 @@ function removeMember(){
                 return response.json(); 
         }
     })
-    .then(data => { updateMemberTable(data) })
+    .then(data => { 
+        getDataMemberByFirm(); 
+    })
     .catch(error => {
         if (error.status === 401) {
             const refreshed = refreshAuthToken();
-            if (refreshed){
-                getDataMemberByFirm();
-            }
+
+        }
+    })
+}
+
+function updateMember(){
+    const role = document.getElementById('select-roles-member').value;
+
+    const data = {
+        id_member: selectedMember.id_member,
+        id_firm: selectedFirm.id_firm,
+        role: role
+    }
+
+    fetch(`/api/firms/member/${selectedFirm.id_firm}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        const status_code = response.status;        
+        switch (Math.floor(status_code / 100)) {
+            case 4: // Caso tiver algum erro ele pula direto para o .catch
+                return response.json().then(err => {
+                    return Promise.reject({
+                        status: response.status,
+                        body: err
+                    });
+                });
+            default:
+                return response.json(); 
+        }
+    })
+    .then(data => {  
+        members[selectedMember.sequence] = data;
+        selectedMember = members[selectedMember.sequence];
+        updateMemberTable(members);
+    })
+    .catch(error => {
+        console.log(error)
+        if (error.status === 401) {
+            const refreshed = refreshAuthToken();
         }
     })
 }
@@ -450,7 +528,10 @@ function sendFirmInvite(){
                 return response.json(); 
         }
     })
-    .then(data => { console.log(data)})
+    .then(data => { 
+        members.push(data);
+        updateMemberTable(members)
+    })
     .catch(error => {
         console.log(error)
         if (error.status === 401) {
