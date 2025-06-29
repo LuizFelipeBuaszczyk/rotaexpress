@@ -332,6 +332,7 @@ function updateMemberTable(data){
 
     const tdHeaderSequence = document.createElement('th');
     tdHeaderSequence.className = 'memberSequenceColumn';
+    tdHeaderSequence.style.width = "50px";
     tdHeaderSequence.textContent = '#';
 
     const tdHeaderName = document.createElement('th');
@@ -367,6 +368,7 @@ function updateMemberTable(data){
 
         const tdSequence = document.createElement('td');
         tdSequence.className = 'memberSequenceColumn';
+        tdSequence.style.width = "50px";
         tdSequence.textContent = sequence;
 
         const tdName = document.createElement('td');

@@ -16,7 +16,7 @@
         <ul class="menu">
           <li><a href="/panel">Página Inicial</a></li>
           <li><a href="/panel/profile">Minha Conta</a></li>
-          <li><a href="/panel/enterprise">Empresa</a></li>
+          <li><a href="/panel/enterprise">Organizações</a></li>
           <li><a href="/panel/routes">Rotas</a></li>
           <li><a href="/panel/config">Configurações</a></li>
           <li><a href="/panel/notification">Notificações</a></li>
@@ -132,7 +132,7 @@
           </div>
           <div class="form-group">
             <label for="route-delivery-guy">ID do Entregador (Opcional)</label>
-            <input type="text" id="route-delivery-guy" />
+            <select name="route-delivery-guy" id="route-delivery-guy"></select>
           </div>
           <div class="modal-form-actions">
             <button
@@ -229,6 +229,7 @@
       let selectedRouteId = null;
       let selectedDeliveryId = null;
       let allDeliveries = [];
+      let firmMembers = [{"sequence": 0, "name": null}];
 
       const routeActionsContainer = document.getElementById(
         "route-actions-container"
@@ -309,6 +310,7 @@
               toggleActionButtons(true);
               fetchAndRenderRoutes(selectedFirmId);
               fetchAndRenderDeliveries(selectedFirmId);
+              fetchMembers(selectedFirmId);
             } else {
               toggleActionButtons(false);
               document.getElementById("listed-routes-container").innerHTML =
@@ -918,6 +920,59 @@
           closeDeliveryModal();
         }
       });
+
+
+        function fetchMembers(selectedFirmId) {
+        const selectMembers = document.getElementById('route-delivery-guy');
+        selectMembers.innerHTML = '';
+
+        firmMembers = [{"id_member": null, "name": null}];
+        const firstOption = document.createElement('option');
+        firstOption.value = '';
+        firstOption.textContent = '';
+        selectMembers.appendChild(firstOption);
+
+        fetch(`/api/firms/member/${selectedFirmId}`, {
+        method: 'GET',
+        credentials: 'include'
+        })
+        .then(response => {
+            const status_code = response.status;        
+            switch (Math.floor(status_code / 100)) {
+                case 4: // Caso tiver algum erro ele pula direto para o .catch
+                    return response.json().then(err => {
+                        return Promise.reject({
+                            status: response.status,
+                            body: err
+                        });
+                    });
+                default:
+                    return response.json(); 
+            }
+        })
+        .then(data => {
+          let sequence = 1; 
+          data.forEach(member => {
+            member.sequence = sequence;
+            sequence++;
+            firmMembers.push(member);
+
+            const option = document.createElement('option');
+            option.value = member.user.id_user;
+            option.textContent = member.user.name;
+            selectMembers.appendChild(option);
+          })
+        })
+        .catch(error => {
+            if (error.status === 401) {
+                const refreshed = refreshAuthToken();
+                if (refreshed){
+                    getDataMemberByFirm();
+                    sele
+                }
+            }
+        })
+      }
     </script>
   </body>
 </html>
