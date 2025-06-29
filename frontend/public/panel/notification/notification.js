@@ -48,50 +48,61 @@ function updateNotificationTable(data){
     notifications = [];
 
     const table = document.getElementById('notification-table');
-
+    const headerLine = document.createElement('tr');
     table.innerHTML = '';
     let sequence = 0;
 
-    const headerLine = document.createElement('tr');
 
-    const tdHeaderSequence = document.createElement('th');
-    tdHeaderSequence.className = 'notificationSequenceColumn';
-    tdHeaderSequence.style.width = "50px";
-    tdHeaderSequence.textContent = '#';
-
-    const tdHeaderTitle = document.createElement('th');
-    tdHeaderTitle.className = 'notificationTitleColumn';
-    tdHeaderTitle.textContent = 'Sobre';
-
-    headerLine.appendChild(tdHeaderSequence);
-    headerLine.appendChild(tdHeaderTitle);
-    table.appendChild(headerLine);
-
-    // Guardar os valores das empresas ?
-    data.forEach(notification => {
-        sequence++;
-        notifications.push(notification);
-
-        const line = document.createElement('tr');
-
-        const tdSequence = document.createElement('td');
-        tdSequence.className = 'notificationSSequenceColumn';
-        tdSequence.textContent = sequence;
-
-        const tdTitle = document.createElement('td');
-        tdTitle.className = 'notificationTitleColumn';
-        tdTitle.textContent = notification.title;
-
-        line.appendChild(tdSequence);
-        line.appendChild(tdTitle);
+    if(data = []){
+        const tdHeaderNoData = document.createElement('th');
+        tdHeaderNoData.textContent = `Você não possui nenhuma notificação!`;
+        headerLine.appendChild(tdHeaderNoData);
+        table.appendChild(headerLine);
+    }
+    else{
         
-        line.addEventListener("dblclick", () => {
-            let cells = line.querySelectorAll("td");
-            showNotificationModal (cells)
-        });
+        const tdHeaderSequence = document.createElement('th');
+        tdHeaderSequence.className = 'notificationSequenceColumn';
+        tdHeaderSequence.style.width = "50px";
+        tdHeaderSequence.textContent = '#';
 
-        table.appendChild(line);
-    });
+        const tdHeaderTitle = document.createElement('th');
+        tdHeaderTitle.className = 'notificationTitleColumn';
+        tdHeaderTitle.textContent = 'Sobre';
+
+        headerLine.appendChild(tdHeaderSequence);
+        headerLine.appendChild(tdHeaderTitle);
+        table.appendChild(headerLine);
+
+        // Guardar os valores das empresas ?
+        data.forEach(notification => {
+            sequence++;
+            notifications.push(notification);
+
+            const line = document.createElement('tr');
+            line.className = 'dataNotificationLine';
+
+            const tdSequence = document.createElement('td');
+            tdSequence.className = 'notificationSequenceColumn';
+            tdSequence.textContent = sequence;
+            tdSequence.style.width = "50px";
+
+            const tdTitle = document.createElement('td');
+            tdTitle.className = 'notificationTitleColumn';
+            tdTitle.textContent = notification.title;
+            tdTitle.style.width = "350px";
+
+            line.appendChild(tdSequence);
+            line.appendChild(tdTitle);
+            
+            line.addEventListener("dblclick", () => {
+                let cells = line.querySelectorAll("td");
+                showNotificationModal (cells)
+            });
+
+            table.appendChild(line);
+        });
+    }
 }
 
 function showNotificationModal(cells){
@@ -115,8 +126,10 @@ function createMainNotificationModal(table){
     switch(table){
         case "member":
             main.innerHTML =    `<p>Deseja aceitar o convite para se juntar a organização?</p>
+                                <div class="buttonDiv">
                                 <button id = "notification-modal-accept-firm-invite-button">Aceitar</button>
-                                <button id = "notification-modal-decline-firm-invite-button">Recusar</button>`
+                                <button id = "notification-modal-decline-firm-invite-button">Recusar</button>
+                                </div>`
             document.getElementById('notification-modal-accept-firm-invite-button').addEventListener('click', () => {
                 sendAnswerToFirmInvite(true);
             });

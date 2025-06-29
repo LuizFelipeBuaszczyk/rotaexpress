@@ -135,6 +135,7 @@ function updateFirmTable(data){
         firms.push(firm);
 
         const line = document.createElement('tr');
+        line.className = 'dataFirmLine';
 
         const tdSequence = document.createElement('td');
         tdSequence.className = 'firmSequenceColumn';
@@ -365,6 +366,7 @@ function updateMemberTable(data){
         members.push(member);
 
         const line = document.createElement('tr');
+        line.className = 'dataMemberLine';
 
         const tdSequence = document.createElement('td');
         tdSequence.className = 'memberSequenceColumn';

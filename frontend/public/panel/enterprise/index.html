@@ -72,17 +72,19 @@
                     </div>
                 </div>
                 <dialog id="member-modal">
-                    <header>
-                        <h1 id="member-name"></h1>
-                        <button class="exitButton" id="exit-member-modal">X</button>
-                    </header>
-                    <main>
-                        <div>
-                            <select name="select-roles-member" id="select-roles-member"></select>
-                            <button type="button" id="remove-member-button">Remover Membro</button>
-                            <button type="button" id="update-member-button">Salvar Alterações</button>
-                        </div>
-                    </main>
+                    <div class="containerModal">
+                        <header>
+                            <h1 id="member-name"></h1>
+                            <button class="exitButton" id="exit-member-modal">X</button>
+                        </header>
+                        <main>
+                                <select name="select-roles-member" id="select-roles-member"></select>
+                            <div class="buttonDivModal">
+                                <button type="button" id="remove-member-button">Remover Membro</button>
+                                <button type="button" id="update-member-button">Salvar Alterações</button>
+                            </div>
+                        </main>
+                    </div>
                     </dialog>
                 <dialog id="add-member-modal">
                     <header>
