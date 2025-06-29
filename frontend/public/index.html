@@ -5,18 +5,18 @@
     <link rel="icon" href="images/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <link rel="stylesheet" href="Styles/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="Styles/style.css" />
     <title>Portal de rastreamento</title>
   </head>
 
   <body>
-
-
-    
     <div class="navigation">
       <div class="left-section">
-        <img src="images/logo.png" alt="Logo da empresa">
+        <img src="images/logo.png" alt="Logo da empresa" />
         <h1>RotaExpress</h1>
         <a href="/about-us" class="nav-link">Sobre nós</a>
       </div>
@@ -25,28 +25,129 @@
         <a href="/signup" class="sign_up">Sign Up</a>
       </div>
     </div>
-    
-    <!-- Conteúdo principal -->
-    <div class="imagemPrincipal">
-      <input type="text" class="search-box" placeholder=" Track your order...">
-      <h1 class="textoPrincipal">
-        Track your package simply  <br>
-        and effectively</h1>
-      <p class="textoSecundario"> Developed by the WhileTrue group <br>
-        Computer Science - URI Erechim</p>
-    </div>
-    
-    <div class="footer">
-      <div class="footerSuperior">   <h1>RotaExpress</h1>
-        <img src="images/logo.png" alt="Logo da empresa">
+
+    <div class="main-content-area">
+      <div class="imagemPrincipal">
+        <div class="hero-content">
+          <h1 class="textoPrincipal">
+            Rastreie seu pacote de forma simples <br />
+            e eficaz
+          </h1>
+          <p class="textoSecundario">
+            Desenvolvido pelo grupo WhileTrue <br />
+            Ciência da Computação - URI Erechim
+          </p>
+          <div class="search-container">
+            <input
+              type="text"
+              id="tracking-id-input"
+              class="search-box"
+              placeholder="Digite o código de rastreio..."
+            />
+            <button id="search-button">Rastrear</button>
+          </div>
+        </div>
       </div>
 
-      <div class="textoFooter"><p>Obrigado por utilizar nossos serviços! <br> 
-        Acesse nossas redes sociais</p></div>
-        
+      <div id="tracking-results-container"></div>
     </div>
 
+    <div class="footer">
+      <div class="footerSuperior">
+        <h1>RotaExpress</h1>
+        <img src="images/logo.png" alt="Logo da empresa" />
+      </div>
 
+      <div class="textoFooter">
+        <p>
+          Obrigado por utilizar nossos serviços! <br />
+          Acesse nossas redes sociais
+        </p>
+      </div>
+    </div>
 
+    <script>
+      const trackingInput = document.getElementById("tracking-id-input");
+      const searchButton = document.getElementById("search-button");
+      const resultsContainer = document.getElementById(
+        "tracking-results-container"
+      );
+
+      function renderDeliveryInfo(delivery) {
+        const deliveryDate = new Date(delivery.date).toLocaleDateString(
+          "pt-BR",
+          {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            timeZone: "UTC",
+          }
+        );
+
+        const cardHTML = `
+            <div class="tracking-card">
+                <h3>Detalhes da Entrega</h3>
+                <p><strong>Código:</strong> ${delivery.id_delivery}</p>
+                <p><strong>Status:</strong> ${delivery.status}</p>
+                <p><strong>Endereço:</strong> ${delivery.address}</p>
+                <p><strong>Data Prevista:</strong> ${deliveryDate}</p>
+            </div>
+        `;
+        resultsContainer.innerHTML = cardHTML;
+        resultsContainer.style.display = "block";
+      }
+
+      function showMessage(message) {
+        resultsContainer.style.display = "block";
+        resultsContainer.innerHTML = `<p style="text-align: center; font-size: 1.2em;">${message}</p>`;
+      }
+
+      async function performSearch() {
+        const deliveryId = trackingInput.value.trim();
+        if (!deliveryId) {
+          showMessage("Por favor, digite um código de rastreio.");
+          return;
+        }
+
+        showMessage("Buscando...");
+
+        try {
+          const response = await fetch(`/api/deliveries/home/${deliveryId}`);
+
+          if (!response.ok) {
+            if (response.status === 400) {
+              showMessage(
+                "ID de rastreio inválido. Verifique o código e tente novamente."
+              );
+            } else if (response.status === 404) {
+              showMessage(
+                "Entrega não encontrada. Verifique o código e tente novamente."
+              );
+            } else {
+              showMessage(
+                "Ocorreu um erro no servidor. Por favor, tente novamente mais tarde."
+              );
+            }
+            return;
+          }
+
+          const delivery = await response.json();
+          renderDeliveryInfo(delivery);
+        } catch (error) {
+          console.error("Erro de comunicação ao buscar entrega:", error);
+          showMessage(
+            "Falha na comunicação. Verifique sua conexão e tente novamente."
+          );
+        }
+      }
+
+      searchButton.addEventListener("click", performSearch);
+
+      trackingInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          performSearch();
+        }
+      });
+    </script>
   </body>
 </html>

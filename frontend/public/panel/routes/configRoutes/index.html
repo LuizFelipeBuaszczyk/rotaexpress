@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Configurar Rotas e Entregas</title>
-    <link rel="stylesheet" href="configRoutes.css" />
     <link rel="icon" href="../images/logo.png" />
+    <link rel="stylesheet" href="./configRoutes.css" />
   </head>
   <body>
     <div class="container">
@@ -25,16 +25,25 @@
       </div>
 
       <div class="main-content">
+        <div class="page-header">
+          <h1>SELECIONE UMA EMPRESA</h1>
+          <div id="firm-selector-container">
+            <p>Carregando empresas...</p>
+          </div>
+        </div>
+
+        <div class="main-actions">
+          <button class="salvar" id="save-associations-button">
+            Salvar Associações
+          </button>
+          <button class="voltar" onclick="window.location.href='/panel/routes'">
+            Voltar
+          </button>
+        </div>
+
         <div class="containerCentro">
           <div class="containerEsquerdo">
-            <div class="TituloEmpresas">
-              <h1>SELECIONE UMA EMPRESA</h1>
-              <div id="firm-selector-container">
-                <p>Carregando empresas...</p>
-              </div>
-            </div>
-
-            <div class="TituloRotas">
+            <div class="content-box">
               <h1>ROTAS</h1>
               <div
                 id="route-actions-container"
@@ -65,7 +74,7 @@
           </div>
 
           <div class="containerDireito">
-            <div class="TituloEntregas">
+            <div class="content-box">
               <h1>ENTREGAS</h1>
               <div
                 id="delivery-actions-container"
@@ -95,17 +104,6 @@
               <div id="listed-deliveries-container">
                 <p>Selecione uma empresa para ver e gerenciar as entregas.</p>
               </div>
-            </div>
-            <div class="BotoesRotas">
-              <button class="salvar" id="save-associations-button">
-                Salvar Associações
-              </button>
-              <button
-                class="voltar"
-                onclick="window.location.href='/panel/routes'"
-              >
-                Voltar
-              </button>
             </div>
           </div>
         </div>
@@ -156,7 +154,6 @@
         <h2 id="delivery-modal-title"></h2>
         <form id="delivery-form" class="modal-form">
           <input type="hidden" id="delivery-id-input" />
-
           <fieldset class="address-fieldset">
             <legend>Endereço de Entrega</legend>
             <div class="address-grid">
@@ -195,15 +192,15 @@
               </div>
             </div>
           </fieldset>
-
           <div class="form-group">
             <label for="delivery-date">Data da Entrega</label>
             <input type="date" id="delivery-date" required />
           </div>
-          <div class="form-group">
+          <div class="form-group" id="delivery-status-form-group">
             <label for="delivery-status">Status</label>
             <select id="delivery-status" required>
               <option value="AGUARDANDO">AGUARDANDO</option>
+              <option value="EM ROTA DE ENTREGA">EM ROTA DE ENTREGA</option>
               <option value="ENTREGUE">ENTREGUE</option>
               <option value="CANCELADO">CANCELADO</option>
             </select>
@@ -229,7 +226,7 @@
       let selectedRouteId = null;
       let selectedDeliveryId = null;
       let allDeliveries = [];
-      let firmMembers = [{"sequence": 0, "name": null}];
+      let firmMembers = [];
 
       const routeActionsContainer = document.getElementById(
         "route-actions-container"
@@ -237,15 +234,12 @@
       const deliveryActionsContainer = document.getElementById(
         "delivery-actions-container"
       );
-
       const createRouteBtn = document.getElementById("create-route-btn");
       const editRouteBtn = document.getElementById("edit-route-btn");
       const deleteRouteBtn = document.getElementById("delete-route-btn");
-
       const createDeliveryBtn = document.getElementById("create-delivery-btn");
       const editDeliveryBtn = document.getElementById("edit-delivery-btn");
       const deleteDeliveryBtn = document.getElementById("delete-delivery-btn");
-
       const routeModal = document.getElementById("route-modal");
       const deliveryModal = document.getElementById("delivery-modal");
       const routeForm = document.getElementById("route-form");
@@ -287,10 +281,8 @@
           }
           const select = document.createElement("select");
           select.id = "firm-select";
-          const defaultOption = document.createElement("option");
-          defaultOption.value = "";
-          defaultOption.textContent = "Selecione uma empresa...";
-          select.appendChild(defaultOption);
+          select.innerHTML =
+            '<option value="">Selecione uma empresa...</option>';
           firms.forEach((firm) => {
             const option = document.createElement("option");
             option.value = firm.id_firm;
@@ -302,10 +294,8 @@
             selectedRouteId = null;
             selectedDeliveryId = null;
             allDeliveries = [];
-
             editDeliveryBtn.disabled = true;
             deleteDeliveryBtn.disabled = true;
-
             if (selectedFirmId) {
               toggleActionButtons(true);
               fetchAndRenderRoutes(selectedFirmId);
@@ -348,7 +338,6 @@
             const button = document.createElement("button");
             button.className = "route-button";
             button.dataset.id = route.id_route;
-
             let buttonTitle = `<strong>${route.name}</strong>`;
             if (route.description) {
               buttonTitle += ` - <small>${route.description}</small>`;
@@ -356,7 +345,6 @@
             button.innerHTML = `${buttonTitle}<br><small>Atualizado: ${new Date(
               route.updatedAt
             ).toLocaleDateString("pt-BR")}</small>`;
-
             button.addEventListener("click", () => {
               document
                 .querySelectorAll(".route-button.selected")
@@ -423,7 +411,6 @@
           const item = document.createElement("div");
           item.className = "delivery-item";
           item.dataset.id = delivery.id_delivery;
-
           const checkbox = document.createElement("input");
           checkbox.type = "checkbox";
           checkbox.id = `delivery-${delivery.id_delivery}`;
@@ -431,10 +418,8 @@
             selectedRouteId !== null &&
             delivery.fk_id_route === selectedRouteId;
           item.appendChild(checkbox);
-
           const infoArea = document.createElement("div");
           infoArea.className = "info-area";
-
           const deliveryDate = delivery.date
             ? new Date(delivery.date).toLocaleDateString("pt-BR", {
                 timeZone: "UTC",
@@ -443,10 +428,9 @@
           const status = delivery.status || "N/A";
           const statusClass = `status-${status
             .toLowerCase()
-            .replace(" ", "-")}`;
-
+            .replace(/\s+/g, "-")}`;
           infoArea.innerHTML = `
-            <div><strong>Endereço:</strong> ${
+            <div><strong>Endereço: </strong>${
               delivery.address || "Não informado"
             }</div>
             <div><small>Status: <span class="status-badge ${statusClass}" data-delivery-id="${
@@ -454,7 +438,6 @@
           }" data-current-status="${status}">${status}</span> | Data: ${deliveryDate}</small></div>
           `;
           item.appendChild(infoArea);
-
           infoArea.addEventListener("click", () => {
             document
               .querySelectorAll(".delivery-item.selected")
@@ -464,7 +447,6 @@
             editDeliveryBtn.disabled = false;
             deleteDeliveryBtn.disabled = false;
           });
-
           item
             .querySelector(".status-badge")
             .addEventListener("click", showInlineStatusEditor);
@@ -502,7 +484,6 @@
           }
         } catch (error) {
           console.error("Erro ao salvar associações:", error);
-          alert(`Falha ao salvar: ${error.message}`);
         } finally {
           button.textContent = "Salvar Associações";
           button.disabled = false;
@@ -511,6 +492,7 @@
 
       async function openRouteModal(routeId = null) {
         routeForm.reset();
+        const deliveryGuySelect = document.getElementById("route-delivery-guy");
         if (routeId) {
           document.getElementById("route-modal-title").textContent =
             "Editar Rota";
@@ -531,8 +513,7 @@
               document.getElementById("route-date").value =
                 route.date.split("T")[0];
             }
-            document.getElementById("route-delivery-guy").value =
-              route.id_delivery_guy || "";
+            deliveryGuySelect.value = route.id_delivery_guy || "";
           } catch (error) {
             alert(`Erro ao carregar dados da rota: ${error.message}`);
             return;
@@ -541,17 +522,21 @@
           document.getElementById("route-modal-title").textContent =
             "Criar Nova Rota";
           document.getElementById("route-id-input").value = "";
+          deliveryGuySelect.value = "";
         }
         routeModal.style.display = "block";
       }
 
       async function openDeliveryModal(deliveryId = null) {
         deliveryForm.reset();
-
+        const statusGroup = document.getElementById(
+          "delivery-status-form-group"
+        );
         if (deliveryId) {
           document.getElementById("delivery-modal-title").textContent =
             "Editar Entrega";
           document.getElementById("delivery-id-input").value = deliveryId;
+          statusGroup.style.display = "block";
           try {
             const response = await fetch(`/api/deliveries/${deliveryId}`, {
               credentials: "include",
@@ -561,16 +546,13 @@
               throw new Error(errorMessage);
             }
             const delivery = await response.json();
-
             if (delivery.date) {
               document.getElementById("delivery-date").value =
                 delivery.date.split("T")[0];
             }
             document.getElementById("delivery-status").value = delivery.status;
-
             const addressString = delivery.address || "";
             const parts = addressString.split(",").map((p) => p.trim());
-
             if (parts.length >= 6) {
               document.getElementById("delivery-street").value = parts[0] || "";
               document.getElementById("delivery-number").value = parts[1] || "";
@@ -582,7 +564,7 @@
               document.getElementById("delivery-complement").value = "";
             } else {
               console.warn(
-                "Formato de endereço não reconhecido, campos não preenchidos:",
+                "Formato de endereço não reconhecido:",
                 addressString
               );
             }
@@ -594,6 +576,7 @@
           document.getElementById("delivery-modal-title").textContent =
             "Criar Nova Entrega";
           document.getElementById("delivery-id-input").value = "";
+          statusGroup.style.display = "none";
         }
         deliveryModal.style.display = "block";
       }
@@ -610,7 +593,6 @@
         const routeId = document.getElementById("route-id-input").value;
         const firmSelect = document.getElementById("firm-select");
         const firmName = firmSelect.options[firmSelect.selectedIndex].text;
-
         const payload = {
           name: document.getElementById("route-name").value,
           description: document.getElementById("route-description").value,
@@ -619,10 +601,8 @@
             document.getElementById("route-delivery-guy").value || null,
           firm_name: firmName,
         };
-
         const url = routeId ? `/api/routes/${routeId}` : "/api/routes";
         const method = routeId ? "PUT" : "POST";
-
         try {
           const response = await fetch(url, {
             method: method,
@@ -634,7 +614,6 @@
             const errorMessage = await getErrorMessage(response);
             throw new Error(errorMessage);
           }
-          alert(`Rota ${routeId ? "atualizada" : "criada"} com sucesso!`);
           closeRouteModal();
           fetchAndRenderRoutes(selectedFirmId);
         } catch (error) {
@@ -645,7 +624,6 @@
       async function handleDeliveryFormSubmit(event) {
         event.preventDefault();
         const deliveryId = document.getElementById("delivery-id-input").value;
-
         const street = document.getElementById("delivery-street").value.trim();
         const number = document.getElementById("delivery-number").value.trim();
         const neighborhood = document
@@ -654,29 +632,26 @@
         const city = document.getElementById("delivery-city").value.trim();
         const state = document.getElementById("delivery-state").value.trim();
         const cep = document.getElementById("delivery-cep").value.trim();
-
         if (!street || !number || !neighborhood || !city || !state) {
           alert(
             "Por favor, preencha todos os campos de endereço obrigatórios (Rua, Número, Bairro, Cidade, Estado)."
           );
           return;
         }
-
         const addressParts = [street, number, neighborhood, city, state, cep];
         const fullAddress = addressParts.filter(Boolean).join(", ");
-
         const payload = {
           address: fullAddress,
           date: document.getElementById("delivery-date").value,
-          status: document.getElementById("delivery-status").value,
+          status: deliveryId
+            ? document.getElementById("delivery-status").value
+            : "AGUARDANDO",
           fk_id_firm: selectedFirmId,
         };
-
         const url = deliveryId
           ? `/api/deliveries/${deliveryId}`
           : "/api/deliveries";
         const method = deliveryId ? "PUT" : "POST";
-
         try {
           const response = await fetch(url, {
             method: method,
@@ -688,7 +663,6 @@
             const errorMessage = await getErrorMessage(response);
             throw new Error(errorMessage);
           }
-          alert(`Entrega ${deliveryId ? "atualizada" : "criada"} com sucesso!`);
           closeDeliveryModal();
           fetchAndRenderDeliveries(selectedFirmId);
         } catch (error) {
@@ -700,7 +674,7 @@
         if (!selectedRouteId) return;
         if (
           confirm(
-            `Tem certeza que deseja excluir a rota selecionada? Esta ação não pode ser desfeita.`
+            "Tem certeza que deseja excluir a rota selecionada? Esta ação não pode ser desfeita."
           )
         ) {
           try {
@@ -712,7 +686,6 @@
               const errorMessage = await getErrorMessage(response);
               throw new Error(errorMessage);
             }
-            alert("Rota excluída com sucesso!");
             selectedRouteId = null;
             fetchAndRenderRoutes(selectedFirmId);
           } catch (error) {
@@ -733,7 +706,6 @@
               const errorMessage = await getErrorMessage(response);
               throw new Error(errorMessage);
             }
-            alert("Entrega excluída com sucesso!");
             selectedDeliveryId = null;
             editDeliveryBtn.disabled = true;
             deleteDeliveryBtn.disabled = true;
@@ -748,14 +720,17 @@
         event.stopPropagation();
         const badge = event.target;
         const parent = badge.parentNode;
-
         const select = document.createElement("select");
         select.className = "status-select-inline";
         select.dataset.deliveryId = badge.dataset.deliveryId;
         select.dataset.currentStatus = badge.dataset.currentStatus;
         select.dataset.processing = "false";
-
-        const statuses = ["AGUARDANDO", "ENTREGUE", "CANCELADO"];
+        const statuses = [
+          "AGUARDANDO",
+          "EM ROTA DE ENTREGA",
+          "ENTREGUE",
+          "CANCELADO",
+        ];
         statuses.forEach((status) => {
           const option = document.createElement("option");
           option.value = status;
@@ -765,20 +740,16 @@
           }
           select.appendChild(option);
         });
-
         const updateStatus = async () => {
           if (select.dataset.processing === "true") return;
           select.dataset.processing = "true";
-
           const newStatus = select.value;
           const deliveryId = select.dataset.deliveryId;
           const parentItem = select.closest(".delivery-item");
-
           if (newStatus === select.dataset.currentStatus) {
             fetchAndRenderDeliveries(selectedFirmId);
             return;
           }
-
           try {
             const response = await fetch(`/api/deliveries/${deliveryId}`, {
               method: "PUT",
@@ -798,10 +769,8 @@
             setTimeout(() => fetchAndRenderDeliveries(selectedFirmId), 400);
           }
         };
-
         select.addEventListener("change", updateStatus);
         select.addEventListener("blur", updateStatus);
-
         parent.replaceChild(select, badge);
         select.focus();
       }
@@ -875,6 +844,28 @@
         }
       }
 
+      function fetchMembers(selectedFirmId) {
+        const selectMembers = document.getElementById("route-delivery-guy");
+        selectMembers.innerHTML = '<option value="">Sem entregador</option>';
+        fetch(`/api/firms/member/${selectedFirmId}`, { credentials: "include" })
+          .then((response) => {
+            if (!response.ok) return Promise.reject(response);
+            return response.json();
+          })
+          .then((data) => {
+            firmMembers = data;
+            data.forEach((member) => {
+              const option = document.createElement("option");
+              option.value = member.user.id_user;
+              option.textContent = member.user.name;
+              selectMembers.appendChild(option);
+            });
+          })
+          .catch((error) =>
+            console.error("Falha ao buscar membros da empresa:", error)
+          );
+      }
+
       document.addEventListener("DOMContentLoaded", () => {
         fetchAndRenderFirms();
         populateStateSelect();
@@ -883,22 +874,18 @@
       document
         .getElementById("save-associations-button")
         .addEventListener("click", saveAssociations);
-
       createRouteBtn.addEventListener("click", () => openRouteModal());
       editRouteBtn.addEventListener("click", () =>
         openRouteModal(selectedRouteId)
       );
       deleteRouteBtn.addEventListener("click", handleDeleteRoute);
-
       createDeliveryBtn.addEventListener("click", () => openDeliveryModal());
       editDeliveryBtn.addEventListener("click", () =>
         openDeliveryModal(selectedDeliveryId)
       );
       deleteDeliveryBtn.addEventListener("click", handleDeleteDelivery);
-
       routeForm.addEventListener("submit", handleRouteFormSubmit);
       deliveryForm.addEventListener("submit", handleDeliveryFormSubmit);
-
       document
         .getElementById("close-route-modal")
         .addEventListener("click", closeRouteModal);
@@ -911,68 +898,13 @@
       document
         .getElementById("cancel-delivery-btn")
         .addEventListener("click", closeDeliveryModal);
-
       deliveryCepInput.addEventListener("blur", fetchAddressFromCEP);
-
       window.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
           closeRouteModal();
           closeDeliveryModal();
         }
       });
-
-
-        function fetchMembers(selectedFirmId) {
-        const selectMembers = document.getElementById('route-delivery-guy');
-        selectMembers.innerHTML = '';
-
-        firmMembers = [{"id_member": null, "name": null}];
-        const firstOption = document.createElement('option');
-        firstOption.value = '';
-        firstOption.textContent = '';
-        selectMembers.appendChild(firstOption);
-
-        fetch(`/api/firms/member/${selectedFirmId}`, {
-        method: 'GET',
-        credentials: 'include'
-        })
-        .then(response => {
-            const status_code = response.status;        
-            switch (Math.floor(status_code / 100)) {
-                case 4: // Caso tiver algum erro ele pula direto para o .catch
-                    return response.json().then(err => {
-                        return Promise.reject({
-                            status: response.status,
-                            body: err
-                        });
-                    });
-                default:
-                    return response.json(); 
-            }
-        })
-        .then(data => {
-          let sequence = 1; 
-          data.forEach(member => {
-            member.sequence = sequence;
-            sequence++;
-            firmMembers.push(member);
-
-            const option = document.createElement('option');
-            option.value = member.user.id_user;
-            option.textContent = member.user.name;
-            selectMembers.appendChild(option);
-          })
-        })
-        .catch(error => {
-            if (error.status === 401) {
-                const refreshed = refreshAuthToken();
-                if (refreshed){
-                    getDataMemberByFirm();
-                    sele
-                }
-            }
-        })
-      }
     </script>
   </body>
 </html>

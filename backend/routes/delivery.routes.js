@@ -18,7 +18,7 @@ router.post(
 );
 router.get("/firm/:id", authMiddleware, deliveryController.getDeliveries);
 router.get("/:id", authMiddleware, deliveryController.getDeliveriesById);
-
+router.get("/home/:id", deliveryController.getDeliveryById);
 router.put(
   "/:id",
   authMiddleware,

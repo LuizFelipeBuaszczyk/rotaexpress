@@ -5,7 +5,7 @@ const createDeliverySchema = z.object({
     .string({ required_error: "O campo fk_id_firm é obrigatório" })
     .nonempty()
     .uuid({ message: "O id deve ser um UUID válido" }),
-  status: z.enum(["AGUARDANDO", "ENTREGUE", "CANCELADO"]),
+  status: z.enum(["AGUARDANDO", "ENTREGUE", "CANCELADO", "EM ROTA DE ENTREGA"]),
   address: z.string().max(200),
   date: z
     .string({ required_error: "O campo date é obrigatório (YYYY-MM-DD)" })
@@ -20,7 +20,9 @@ const updateDeliverySchema = z.object({
     .nonempty()
     .uuid({ message: "O id deve ser um UUID válido" })
     .optional(),
-  status: z.enum(["AGUARDANDO", "ENTREGUE", "CANCELADO"]).optional(),
+  status: z
+    .enum(["AGUARDANDO", "ENTREGUE", "CANCELADO", "EM ROTA DE ENTREGA"])
+    .optional(),
   address: z.string().max(200).optional(),
   date: z
     .string({ required_error: "O campo date é obrigatório (YYYY-MM-DD)" })

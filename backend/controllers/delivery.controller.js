@@ -27,6 +27,19 @@ async function getDeliveriesById(req, res, next) {
   }
 }
 
+async function getDeliveryById(req, res, next) {
+  try {
+    const { id } = ParamsSchema.parse(req.params);
+    const delivery = await deliveryService.getDeliveryById(null, id);
+    if (!delivery) {
+      return res.status(404).json({ message: "Entrega não encontrada" });
+    }
+    res.status(200).json(delivery);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function getDeliveries(req, res, next) {
   try {
     const { id_user } = req.user;
@@ -97,4 +110,5 @@ module.exports = {
   deleteDelivery,
   updateRoute,
   getDeliveriesById,
+  getDeliveryById,
 };
