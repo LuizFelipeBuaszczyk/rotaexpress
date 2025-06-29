@@ -44,7 +44,7 @@ async function findMemberByFirm(fk_id_firm) {
         include: {
             model: User,
             required: true,
-            attributes: ['name', 'email', 'phone_number']
+            attributes: ['id_user', 'name', 'email', 'phone_number']
         },
         where: { 
             fk_id_firm,
