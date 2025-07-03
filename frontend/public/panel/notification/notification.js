@@ -52,16 +52,17 @@ function updateNotificationTable(data){
     table.innerHTML = '';
     let sequence = 0;
 
+    const tdHeaderNoData = document.createElement('th');
+    tdHeaderNoData.textContent = `Você não possui nenhuma notificação!`;
+    headerLine.appendChild(tdHeaderNoData);
+    table.appendChild(headerLine);
 
-    if(data = []){
-        const tdHeaderNoData = document.createElement('th');
-        tdHeaderNoData.textContent = `Você não possui nenhuma notificação!`;
-        headerLine.appendChild(tdHeaderNoData);
-        table.appendChild(headerLine);
-    }
-    else{
-        
-        const tdHeaderSequence = document.createElement('th');
+    let hasNotification = false; 
+
+    // Guardar os valores das empresas ?
+    data.forEach(notification => {
+        if(!hasNotification){
+            const tdHeaderSequence = document.createElement('th');
         tdHeaderSequence.className = 'notificationSequenceColumn';
         tdHeaderSequence.style.width = "50px";
         tdHeaderSequence.textContent = '#';
@@ -73,36 +74,38 @@ function updateNotificationTable(data){
         headerLine.appendChild(tdHeaderSequence);
         headerLine.appendChild(tdHeaderTitle);
         table.appendChild(headerLine);
+        }
+        hasNotification = true;
+        if(hasNotification){
+            tdHeaderNoData.remove();
+        }
 
-        // Guardar os valores das empresas ?
-        data.forEach(notification => {
-            sequence++;
-            notifications.push(notification);
+        sequence++;
+        notifications.push(notification);
 
-            const line = document.createElement('tr');
-            line.className = 'dataNotificationLine';
+        const line = document.createElement('tr');
+        line.className = 'dataNotificationLine';
 
-            const tdSequence = document.createElement('td');
-            tdSequence.className = 'notificationSequenceColumn';
-            tdSequence.textContent = sequence;
-            tdSequence.style.width = "50px";
+        const tdSequence = document.createElement('td');
+        tdSequence.className = 'notificationSequenceColumn';
+        tdSequence.textContent = sequence;
+        tdSequence.style.width = "50px";
 
-            const tdTitle = document.createElement('td');
-            tdTitle.className = 'notificationTitleColumn';
-            tdTitle.textContent = notification.title;
-            tdTitle.style.width = "350px";
+        const tdTitle = document.createElement('td');
+        tdTitle.className = 'notificationTitleColumn';
+        tdTitle.textContent = notification.title;
+        tdTitle.style.width = "350px";
 
-            line.appendChild(tdSequence);
-            line.appendChild(tdTitle);
-            
-            line.addEventListener("dblclick", () => {
-                let cells = line.querySelectorAll("td");
-                showNotificationModal (cells)
-            });
-
-            table.appendChild(line);
+        line.appendChild(tdSequence);
+        line.appendChild(tdTitle);
+        
+        line.addEventListener("dblclick", () => {
+            let cells = line.querySelectorAll("td");
+            showNotificationModal (cells)
         });
-    }
+
+        table.appendChild(line);
+    });
 }
 
 function showNotificationModal(cells){

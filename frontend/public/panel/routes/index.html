@@ -11,14 +11,13 @@
     <div class="container">
       <div class="sidebar">
         <div class="profile">
-          <h2>Nome da Pessoa</h2>
+          <h2>RotaExpress</h2>
         </div>
         <ul class="menu">
           <li><a href="/panel">Página Inicial</a></li>
           <li><a href="/panel/profile">Minha Conta</a></li>
           <li><a href="/panel/enterprise">Organizações</a></li>
           <li><a href="/panel/routes">Rotas</a></li>
-          <li><a href="/panel/config">Configurações</a></li>
           <li><a href="/panel/notification">Notificações</a></li>
           <li><a href="#" data-logout>Sair</a></li>
         </ul>
@@ -102,6 +101,18 @@
             streetViewControl: false,
           });
           mapLoaded = true;
+          document.getElementById("map").addEventListener("click", (event) => {
+            if (event.target.matches(".streetview-button")) {
+              const lat = parseFloat(event.target.getAttribute("data-lat"));
+              const lng = parseFloat(event.target.getAttribute("data-lng"));
+              const location = { lat, lng };
+              const panorama = mapInstance.getStreetView();
+              panorama.setPosition(location);
+              panorama.setPov({ heading: 34, pitch: 10 });
+              panorama.setVisible(true);
+              if (window.infoWindow) window.infoWindow.close();
+            }
+          });
         }
         if (currentRoutePath) currentRoutePath.setMap(null);
         currentMarkers.forEach((marker) => marker.setMap(null));
@@ -134,7 +145,9 @@
         currentMarkers.push(originMarker);
 
         originMarker.addListener("click", () => {
-          const contentString = `<div><h4>Origem</h4><p>${routeData.origin}</p></div>`;
+          const contentString = `<div><h4>Origem</h4><p>${
+            routeDataToLoad.origin
+          }</p><button class="streetview-button" data-lat="${decodedPath[0].lat()}" data-lng="${decodedPath[0].lng()}">Ver Fachada</button></div>`;
           window.infoWindow.setContent(contentString);
           window.infoWindow.open(mapInstance, originMarker);
         });
@@ -175,7 +188,9 @@
                   marker.addListener("click", () => {
                     const contentString = `<div><h4>Entrega ${
                       index + 1
-                    }</h4><p>${delivery.address}</p></div>`;
+                    }</h4><p>${
+                      delivery.address
+                    }</p><button class="streetview-button" data-lat="${markerPosition.lat()}" data-lng="${markerPosition.lng()}">Ver Fachada</button></div>`;
                     window.infoWindow.setContent(contentString);
                     window.infoWindow.open(mapInstance, marker);
                   });
