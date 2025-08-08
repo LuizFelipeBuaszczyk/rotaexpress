@@ -28,6 +28,11 @@ async function updateUser(updateData, id_user) {
   let userExistsCPF = false;
   if (updateData.cpf) {
     userExistsCPF = await userRepository.findByCPF(updateData.cpf);
+    if (updateData.cpf && !isValidCPF(updateData.cpf)) {
+      const error = new Error("CPF inválido.");
+      error.statusCode = 400;
+      throw error;
+    }
   }
 
   if (updateData.cpf && userExistsCPF) {
@@ -44,11 +49,7 @@ async function updateUser(updateData, id_user) {
     }
     
   }
-  if (updateData.cpf && !isValidCPF(updateData.cpf)) {
-    const error = new Error("CPF inválido.");
-    error.statusCode = 400;
-    throw error;
-  }
+  
   const user = await userRepository.updateById(id_user, updateData);
   if (user) return user;
   const error = new Error("Usuário não encontrado.");
